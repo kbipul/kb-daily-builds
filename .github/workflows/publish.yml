@@ -1,0 +1,153 @@
+name: Publish daily project
+
+# ── kb-daily-builds fan-out ─────────────────────────────────────────────
+# Runs on GitHub's servers whenever a project is pushed to this hub repo.
+# For every project in state/state.json with status "built":
+#   1. Creates a standalone repo on github.com/kbipul
+#   2. Pushes the project folder as that repo's contents
+#   3. Sets topics + enables GitHub Pages (if the project has a live demo)
+#   4. Marks it "published" in state.json
+# Then regenerates the profile README (kbipul/kbipul) with streak + table.
+# Requires: Actions secret PUBLISH_TOKEN (classic PAT, scopes: repo, workflow)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "projects/**"
+      - "state/**"
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+env:
+  OWNER: kbipul
+  GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+  GIT_AUTHOR_NAME: Kumar Bipul
+  GIT_AUTHOR_EMAIL: kbipul@users.noreply.github.com
+  TZ: Asia/Kolkata
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hub
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PUBLISH_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Publish pending projects
+        id: fanout
+        run: |
+          set -euo pipefail
+          git config user.name  "$GIT_AUTHOR_NAME"
+          git config user.email "$GIT_AUTHOR_EMAIL"
+
+          PENDING=$(node -e '
+            const s = require("./state/state.json");
+            console.log(s.projects.filter(p => p.status === "built").map(p => p.folder).join(" "));
+          ')
+          if [ -z "$PENDING" ]; then echo "Nothing pending."; exit 0; fi
+
+          for FOLDER in $PENDING; do
+            echo "── Publishing $FOLDER ─────────────────────────"
+            DIR="projects/$FOLDER"
+            [ -f "$DIR/project.json" ] || { echo "::error::$DIR missing project.json"; exit 1; }
+
+            REPO=$(node -p "require('./$DIR/project.json').repo")
+            TITLE=$(node -p "require('./$DIR/project.json').title")
+            DESC=$(node -p "require('./$DIR/project.json').description")
+            DAY=$(node -p "require('./$DIR/project.json').day")
+            DEMO=$(node -p "require('./$DIR/project.json').demo || 'none'")
+
+            # 1. Create repo if it doesn't exist (append -kb on name collision)
+            if gh api "repos/$OWNER/$REPO" --silent 2>/dev/null; then
+              if [ "$(node -p "require('./state/state.json').projects.some(p=>p.repo==='$REPO'&&p.status==='published')")" = "false" ]; then
+                REPO="${REPO}-kb"
+                gh api user/repos -f name="$REPO" -f description="$DESC" \
+                  -f homepage="https://www.kumarbipul.com" \
+                  -F has_wiki=false -F has_projects=false --silent
+              else
+                echo "$REPO already published; skipping create."
+              fi
+            else
+              gh api user/repos -f name="$REPO" -f description="$DESC" \
+                -f homepage="https://www.kumarbipul.com" \
+                -F has_wiki=false -F has_projects=false --silent
+              echo "Created repo $OWNER/$REPO"
+            fi
+
+            # 2. Enable Pages (GitHub Actions source) BEFORE code lands, so
+            #    the project's own CI can deploy on first run.
+            if [ "$DEMO" = "pages" ]; then
+              gh api -X POST "repos/$OWNER/$REPO/pages" -f build_type=workflow --silent 2>/dev/null \
+                || echo "Pages already enabled."
+            fi
+
+            # 3. Push folder contents as the repo
+            TMP=$(mktemp -d)
+            cp -r "$DIR"/. "$TMP/"
+            rm -f "$TMP/project.json"           # manifest is loop plumbing, not product
+            pushd "$TMP" >/dev/null
+              git init -b main -q
+              git config user.name  "$GIT_AUTHOR_NAME"
+              git config user.email "$GIT_AUTHOR_EMAIL"
+              git add -A
+              git commit -q -m "Day $DAY: $TITLE" \
+                -m "Part of the kb-daily-builds series — one project a day. https://github.com/$OWNER/kb-daily-builds"
+              git push -q "https://x-access-token:${GH_TOKEN}@github.com/$OWNER/$REPO.git" main --force
+            popd >/dev/null
+            rm -rf "$TMP"
+
+            # 4. Topics
+            TOPICS=$(node -p "JSON.stringify({names: require('./$DIR/project.json').topics || []})")
+            echo "$TOPICS" | gh api -X PUT "repos/$OWNER/$REPO/topics" --input - --silent || true
+
+            # 5. Mark published in state.json
+            DEMO_URL=""
+            [ "$DEMO" = "pages" ] && DEMO_URL="https://$OWNER.github.io/$REPO/"
+            node -e "
+              const fs = require('fs');
+              const s = JSON.parse(fs.readFileSync('state/state.json','utf8'));
+              const p = s.projects.find(p => p.folder === '$FOLDER');
+              p.status = 'published';
+              p.repo = '$REPO';
+              p.repoUrl = 'https://github.com/$OWNER/$REPO';
+              if ('$DEMO_URL') p.demoUrl = '$DEMO_URL';
+              p.publishedAt = new Date().toISOString();
+              fs.writeFileSync('state/state.json', JSON.stringify(s, null, 2) + '\n');
+            "
+            echo "✅ Published https://github.com/$OWNER/$REPO"
+          done
+
+          git add state/state.json
+          git commit -q -m "chore: mark published [skip ci]" || true
+          git push -q
+
+      - name: Update profile README (kbipul/kbipul)
+        run: |
+          set -euo pipefail
+          # Create the profile repo on first run if needed
+          gh api "repos/$OWNER/$OWNER" --silent 2>/dev/null || \
+            gh api user/repos -f name="$OWNER" -f description="Kumar Bipul — daily AI/ML builds" -F auto_init=true --silent
+
+          git clone -q "https://x-access-token:${GH_TOKEN}@github.com/$OWNER/$OWNER.git" /tmp/profile
+          node scripts/generate-profile.mjs > /tmp/profile/README.md
+          # copy brand assets if present
+          if [ -d brand ] && ls brand/*.svg >/dev/null 2>&1; then
+            mkdir -p /tmp/profile/brand && cp brand/*.svg /tmp/profile/brand/
+          fi
+          cd /tmp/profile
+          git config user.name  "$GIT_AUTHOR_NAME"
+          git config user.email "$GIT_AUTHOR_EMAIL"
+          git add -A
+          git diff --cached --quiet || { git commit -q -m "Update daily-builds board"; git push -q; }
+          echo "✅ Profile README updated"
