@@ -4,7 +4,7 @@
 
 **The engine behind one AI project a day.**
 
-Designed and run by [Kumar Bipul](https://www.kumarbipul.com) — IT Director → AI/ML.
+Designed and run by [Kumar Bipul](https://www.kumarbipul.com) — 15 + IT Exp → AI/ML.
 
 </div>
 
