@@ -10,9 +10,12 @@
       "repo": "neural-notes",
       "title": "Neural Notes — AI Search That Understands Meaning",
       "tagline": "Semantic note search running 100% in your browser — no server, no API key, your notes never leave the tab.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-06",
-      "demo": "pages"
+      "demo": "pages",
+      "repoUrl": "https://github.com/kbipul/neural-notes",
+      "demoUrl": "https://kbipul.github.io/neural-notes/",
+      "publishedAt": "2026-07-07T22:28:46.878Z"
     }
   ]
 }
