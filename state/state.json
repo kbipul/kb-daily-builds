@@ -23,12 +23,15 @@
       "repo": "mood-of-the-room",
       "title": "Mood of the Room — Per-Sentence Sentiment in Your Browser",
       "tagline": "Paste any text or chat export and watch its emotional temperature light up sentence by sentence — 100% client-side, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-09",
       "demo": "pages",
       "valueScore": 10,
       "signal": "transformers.js v4 released on NPM (browser-ML week momentum)",
-      "rationale": "Per-sentence heatmap turns a flat whole-doc score into a visible emotional arc — fast 10s demo; won the day-2 slot as the backlog item on a tie with the signal-derived idea."
+      "rationale": "Per-sentence heatmap turns a flat whole-doc score into a visible emotional arc — fast 10s demo; won the day-2 slot as the backlog item on a tie with the signal-derived idea.",
+      "repoUrl": "https://github.com/kbipul/mood-of-the-room",
+      "demoUrl": "https://kbipul.github.io/mood-of-the-room/",
+      "publishedAt": "2026-07-09T00:47:20.368Z"
     },
     {
       "day": 3,
@@ -36,12 +39,15 @@
       "repo": "zero-shot-tagger",
       "title": "Zero-Shot Tagger — Classify Anything Into Your Own Labels",
       "tagline": "Invent labels, paste text, get an instant classification with no training data — a zero-shot NLI model running 100% in your browser.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-09",
       "demo": "pages",
       "valueScore": 11,
       "signal": "transformers.js v4 + zero-shot NLI interest",
-      "rationale": "Highest slate score (11/12): user-defined labels with zero training is a genuinely distinctive in-browser wow that few ship client-side."
+      "rationale": "Highest slate score (11/12): user-defined labels with zero training is a genuinely distinctive in-browser wow that few ship client-side.",
+      "repoUrl": "https://github.com/kbipul/zero-shot-tagger",
+      "demoUrl": "https://kbipul.github.io/zero-shot-tagger/",
+      "publishedAt": "2026-07-09T00:47:25.215Z"
     }
   ]
 }
