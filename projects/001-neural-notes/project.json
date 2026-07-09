@@ -3,7 +3,7 @@
   "repo": "neural-notes",
   "title": "Neural Notes — AI Search That Understands Meaning",
   "tagline": "Semantic note search running 100% in your browser — no server, no API key, your notes never leave the tab.",
-  "description": "Semantic note search in the browser with transformers.js — no server, no API keys. Day 1 of kb-daily-builds.",
+  "description": "Semantic note search in the browser with transformers.js. No server, no API keys. Day 1 of kb-daily-builds.",
   "topics": ["ai", "machine-learning", "transformers-js", "semantic-search", "embeddings", "react", "typescript", "daily-builds"],
   "demo": "pages",
   "stack": ["React 18", "TypeScript 5", "transformers.js", "Vite", "Vitest"]

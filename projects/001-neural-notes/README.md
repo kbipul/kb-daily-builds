@@ -2,33 +2,25 @@
 
 # Neural Notes — AI Search That Understands Meaning
 
-**Semantic note search running 100% in your browser — no server, no API key, your notes never leave the tab.**
+**Semantic note search running 100% in your browser. No server, no API key, your notes never leave the tab.**
 
 [![CI](https://github.com/kbipul/neural-notes/actions/workflows/ci.yml/badge.svg)](https://github.com/kbipul/neural-notes/actions/workflows/ci.yml)
 [![Live demo](https://img.shields.io/badge/demo-live-9B0000)](https://kbipul.github.io/neural-notes/)
 
-`Day 001` of **[kb-daily-builds](https://github.com/kbipul/kb-daily-builds)** — one AI project a day.
+`Day 001` of **[kb-daily-builds](https://github.com/kbipul/kb-daily-builds)**, one AI project a day.
 
 </div>
 
 ## What it does
 
-Search "car trouble" and it finds your note about squeaking brake pads — zero
-shared words. Neural Notes embeds every note into a 384-dimensional vector
-using MiniLM running *inside your browser tab* via transformers.js, then ranks
-notes by cosine similarity to your query. A compare toggle shows plain keyword
-search side-by-side, so you can watch semantic search win. Notes persist in
-localStorage; nothing is ever sent anywhere.
+Search for "car trouble" and it finds your note about squeaking brake pads, even though the two share no words. Neural Notes embeds each note into a 384-dimension vector with MiniLM (running in the browser tab via transformers.js) and ranks notes by cosine similarity to your query. There's a toggle that shows plain keyword search next to the semantic results so you can compare the two directly. Notes are kept in localStorage; nothing is sent anywhere.
 
 ![Neural Notes screenshot](docs/demo.png)
-<sub>*Screenshot is auto-captured by CI on every push — if it's missing, the
-workflow is still running.*</sub>
+<sub>The screenshot is captured by CI on push. If it's missing here, the workflow probably hasn't finished yet.</sub>
 
 ## Try it
 
-**[Live demo →](https://kbipul.github.io/neural-notes/)** — first load fetches
-the ~23 MB quantized model once, then it's cached. Try `feeling stressed`,
-`car trouble`, or `money planning` against the seed notes.
+**[Live demo →](https://kbipul.github.io/neural-notes/)**. The first load pulls the ~23 MB quantized model once and caches it after that. Try `feeling stressed`, `car trouble`, or `money planning` against the seed notes.
 
 ```bash
 git clone https://github.com/kbipul/neural-notes.git
@@ -46,32 +38,17 @@ your note ──▶ MiniLM-L6-v2 (ONNX, WASM/WebGPU) ──▶ 384-dim vector
 query ──▶ same model ──▶ query vector ──▶ cosine similarity ──▶ ranked results
 ```
 
-Three decisions worth stealing:
+A few things I settled on while building it:
 
-1. **The model is a lazy import.** The app paints instantly; transformers.js
-   and the ONNX model load in the background with progress surfaced in the UI.
-   If the download fails, the app degrades to keyword search instead of dying.
-2. **The search core is pure TypeScript** — no React, no model, no I/O — so
-   it's fully unit-testable. The embedder hides behind a one-method interface;
-   tests use vectors directly.
-3. **Vectors are never persisted.** localStorage keeps only text (tiny,
-   private); embeddings are recomputed on load. Model versions can change —
-   stale vectors are a silent-corruption bug waiting to happen.
+1. **The model is a lazy import.** The app paints immediately and transformers.js plus the ONNX model load in the background, with progress shown in the UI. If the download fails, it falls back to keyword search rather than breaking.
+2. **The search core is plain TypeScript**, with no React, no model, and no I/O, so it can be unit-tested on its own. The embedder sits behind a one-method interface and the tests feed it vectors directly.
+3. **Vectors aren't persisted.** localStorage holds only the note text (small and private) and embeddings are recomputed on load. Model versions change, and stale vectors on disk are the kind of silent-corruption bug you don't notice until it's a problem.
 
-## Build notes — what I learned
+## Build notes
 
-Quantized `q8` MiniLM is a quarter of the full model's size and, for
-note-search, indistinguishable in quality. The interesting failure mode was
-scoring: normalized MiniLM cosine similarities cluster roughly between 0.1
-and 0.8, so a raw score of 0.45 *feels* low while actually being a strong
-match. Mapping `(cos+1)/2` into a visual bar keeps the UI honest without
-pretending to be a percentage-match oracle.
+Quantized `q8` MiniLM is about a quarter the size of the full model and, for note search, I couldn't tell the difference in quality. The part that tripped me up was scoring. Normalized MiniLM cosine similarities mostly land between 0.1 and 0.8, so a raw 0.45 looks weak on screen when it's actually a solid match. Mapping `(cos+1)/2` onto a bar keeps the display honest without pretending it's a percentage match.
 
-The other lesson is architectural: putting the entire pipeline client-side
-isn't just a privacy story, it deletes three operational problems — no
-inference server to scale, no key to rotate, no user data to secure. For a
-whole class of enterprise tools (this app is day one of a series exploring
-them), "ship the model to the browser" is now a serious design option.
+The bigger takeaway was architectural. Moving the whole pipeline into the browser isn't only a privacy angle; it removes three operational headaches at once: no inference server to scale, no key to rotate, no user data to store. For a lot of internal tooling (this is day one of a series poking at exactly that), shipping the model to the browser is a real option worth considering.
 
 ## Stack
 
@@ -80,7 +57,7 @@ them), "ship the model to the browser" is now a serious design option.
 | UI | React 18 + TypeScript 5 |
 | Inference | transformers.js (`Xenova/all-MiniLM-L6-v2`, q8 ONNX) |
 | Build / test | Vite 6, Vitest |
-| Hosting | GitHub Pages (static — there is no backend) |
+| Hosting | GitHub Pages (static, no backend) |
 
 ---
 

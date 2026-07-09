@@ -3,7 +3,7 @@
   "repo": "zero-shot-tagger",
   "title": "Zero-Shot Tagger — Classify Anything Into Your Own Labels",
   "tagline": "Invent labels, paste text, get an instant classification with no training data — a zero-shot NLI model running 100% in your browser.",
-  "description": "In-browser zero-shot text classification with transformers.js — your labels, no training, no keys. Day 3 of kb-daily-builds.",
+  "description": "In-browser zero-shot text classification with transformers.js. Your labels, no training, no keys. Day 3 of kb-daily-builds.",
   "topics": ["ai", "machine-learning", "zero-shot-classification", "transformers-js", "nlp", "react", "typescript", "daily-builds"],
   "demo": "pages",
   "stack": ["React 18", "TypeScript 5", "transformers.js", "Vite", "Vitest"]
