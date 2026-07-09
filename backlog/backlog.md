@@ -78,5 +78,10 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 ## Week 13 — Capstones
 85 `ai-portfolio-site` — this series as a generated website (pages) · 86 `kb-daily-builds-cli` — scaffold-a-day CLI others can use (cli) · 87 `agent-vs-agent-arena` — tournament w/ leaderboard (pages) · 88 `enterprise-rag-reference` — the definitive .NET RAG reference impl (byok) · 89 `ai-maturity-assessor` — org AI-readiness assessment tool (pages) · 90 [F] `ninety-days-of-ai` — interactive retrospective: every build, metric, lesson (pages)
 
+## Signal-derived candidates (appended by the loop — score ≥8, lost the day)
+| Idea | Repo | Scope | Demo | From |
+|---|---|---|---|---|
+| Token Cost Lab | `token-cost-lab` | Client-side tokenizer + live cost comparison across GPT-5.6 (Terra/Luna), Claude, GLM-5.2 using current July-2026 pricing; paste a prompt, see per-provider cost | pages | 2026-07-09 signal: GPT-5.6 broad-release + Fable-5 usage-credit pricing (scored 10/12, tied → lost to backlog item) |
+
 ## Refill rule
 When ≤14 days remain, the weekly audit generates the next 30 ideas following the same arc: browser-demoable, Microsoft-stack, increasing ambition.
