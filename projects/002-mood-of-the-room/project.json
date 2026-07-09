@@ -1,0 +1,10 @@
+{
+  "day": 2,
+  "repo": "mood-of-the-room",
+  "title": "Mood of the Room — Per-Sentence Sentiment in Your Browser",
+  "tagline": "Paste any text or chat export and watch its emotional temperature light up sentence by sentence — 100% client-side, no API key.",
+  "description": "In-browser per-sentence sentiment heatmap with transformers.js — no server, no keys. Day 2 of kb-daily-builds.",
+  "topics": ["ai", "machine-learning", "sentiment-analysis", "transformers-js", "nlp", "react", "typescript", "daily-builds"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "transformers.js", "Vite", "Vitest"]
+}
