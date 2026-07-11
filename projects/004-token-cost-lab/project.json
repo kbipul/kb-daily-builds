@@ -1,0 +1,10 @@
+{
+  "day": 4,
+  "repo": "token-cost-lab",
+  "title": "Token Cost Lab — See What a Prompt Actually Costs",
+  "tagline": "Paste a prompt, pick your models, and watch the per-request cost light up across GPT-5.6, Claude Sonnet 5, Grok 4.5 and more — tokenized 100% in your browser, no API key.",
+  "description": "In-browser LLM cost calculator: real tokenizer + editable July-2026 pricing across GPT-5.6, Sonnet 5, Grok 4.5. Day 4 of kb-daily-builds.",
+  "topics": ["ai", "llm", "tokenizer", "finops", "cost-estimation", "react", "typescript", "daily-builds"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "gpt-tokenizer", "Vite", "Vitest"]
+}
