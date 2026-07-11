@@ -1,0 +1,10 @@
+{
+  "day": 5,
+  "repo": "similar-or-not",
+  "title": "Similar or Not — Watch Meaning Become Geometry",
+  "tagline": "Type a handful of sentences and see them embed, cluster on a 2D map, and light up a cosine-similarity heatmap — an embeddings playground running 100% in your browser.",
+  "description": "In-browser embeddings playground: cosine-similarity heatmap + live 2D PCA map of any sentences, powered by transformers.js. Day 5 of kb-daily-builds.",
+  "topics": ["ai", "machine-learning", "embeddings", "semantic-similarity", "transformers-js", "react", "typescript", "daily-builds"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "transformers.js", "Vite", "Vitest"]
+}

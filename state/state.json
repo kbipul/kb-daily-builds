@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 3,
+  "dayCounter": 5,
   "projects": [
     {
       "day": 1,
@@ -48,6 +48,36 @@
       "repoUrl": "https://github.com/kbipul/zero-shot-tagger",
       "demoUrl": "https://kbipul.github.io/zero-shot-tagger/",
       "publishedAt": "2026-07-09T00:47:25.215Z"
+    },
+    {
+      "day": 4,
+      "folder": "004-token-cost-lab",
+      "repo": "token-cost-lab",
+      "title": "Token Cost Lab — See What a Prompt Actually Costs",
+      "tagline": "Paste a prompt, pick your models, and watch the per-request cost light up across GPT-5.6, Claude Sonnet 5, Grok 4.5 and more — tokenized 100% in your browser, no API key.",
+      "status": "built",
+      "date": "2026-07-11",
+      "demo": "pages",
+      "valueScore": 11,
+      "signal": "Grok 4.5 launched 2026-07-09 + GPT-5.6 Terra/Luna GA mid-July 2026; new price tiers churning this week",
+      "rationale": "Top slate score (11/12): rides live model-pricing news, 10-second paste-and-see-cost demo, and a genuinely distinctive tokenizer-multiplier angle (Sonnet 5's ~42% token inflation) that shows real depth.",
+      "repoUrl": "https://github.com/kbipul/token-cost-lab",
+      "demoUrl": "https://kbipul.github.io/token-cost-lab/"
+    },
+    {
+      "day": 5,
+      "folder": "005-similar-or-not",
+      "repo": "similar-or-not",
+      "title": "Similar or Not — Watch Meaning Become Geometry",
+      "tagline": "Type a handful of sentences and see them embed, cluster on a 2D map, and light up a cosine-similarity heatmap — an embeddings playground running 100% in your browser.",
+      "status": "built",
+      "date": "2026-07-11",
+      "demo": "pages",
+      "valueScore": 9,
+      "signal": "none (evergreen browser-ML; transformers.js ecosystem momentum)",
+      "rationale": "Catch-up second build (2 days behind). Reliable, visual transformers.js embeddings demo that pairs a from-scratch power-iteration PCA with a cosine heatmap; adds topic variety (tokenizer + embeddings) alongside the day-4 winner.",
+      "repoUrl": "https://github.com/kbipul/similar-or-not",
+      "demoUrl": "https://kbipul.github.io/similar-or-not/"
     }
   ]
 }

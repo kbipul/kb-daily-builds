@@ -81,7 +81,8 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 ## Signal-derived candidates (appended by the loop — score ≥8, lost the day)
 | Idea | Repo | Scope | Demo | From |
 |---|---|---|---|---|
-| Token Cost Lab | `token-cost-lab` | Client-side tokenizer + live cost comparison across GPT-5.6 (Terra/Luna), Claude, GLM-5.2 using current July-2026 pricing; paste a prompt, see per-provider cost | pages | 2026-07-09 signal: GPT-5.6 broad-release + Fable-5 usage-credit pricing (scored 10/12, tied → lost to backlog item) |
+| ~~Token Cost Lab~~ (BUILT day 4, 2026-07-11) | `token-cost-lab` | Client-side tokenizer + live cost comparison across GPT-5.6 (Terra/Luna), Claude Sonnet 5, Grok 4.5 using current July-2026 pricing; paste a prompt, see per-provider cost | pages | Won day 4 at 11/12 riding Grok 4.5 launch + GPT-5.6 GA |
+| Prompt Compressor | `prompt-compressor` | Client-side prompt "token diet": paste a prompt, get a losslessly-compressed version with measured before/after token count + $ saved across models; serious counterpart to the trending "caveman" skill | pages | 2026-07-11 signal: `JuliusBrussee/caveman` #1 trending (82k★, token-efficiency meme); scored 10/12, lost to Token Cost Lab (overlap) |
 
 ## Refill rule
 When ≤14 days remain, the weekly audit generates the next 30 ideas following the same arc: browser-demoable, Microsoft-stack, increasing ambition.
