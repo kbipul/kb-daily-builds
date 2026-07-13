@@ -103,14 +103,15 @@
       "repo": "mcp-auditor",
       "title": "MCP Auditor — Audit Your MCP Server Config Before Your Agent Does",
       "tagline": "Paste your Claude Desktop / Cursor / VS Code mcpServers config and get an instant security report: hardcoded secrets, unpinned remote execution, root filesystem access, and dangerous capability combos like filesystem+network exfiltration paths — 100% in your browser.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-13",
       "demo": "pages",
       "valueScore": 10,
       "signal": "ChromeDevTools/chrome-devtools-mcp still trending today (404 stars today) alongside agentskills/agentskills going trending as the new formal Agent Skills spec — MCP tool sprawl remains a live, undernourished story. This exact idea was appended to the backlog on day 6 after losing to SkillScan at 9/12; today's rescan puts it back on top.",
       "rationale": "Highest score in today's slate (10/12: Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 2) — beat the two next backlog items (Lingua Detect, Ask My Docs) and two other fresh signal ideas (a skill-spec conformance linter riding today's agentskills/agentskills trend, and a Foundry model comparison board riding Claude-on-Azure-Foundry news), both of which scored 8/12 and risked overlapping with prior builds (SkillScan and Token Cost Lab respectively). MCP Auditor is the direct sibling to Day 006's SkillScan — same rule-engine architecture, same scoring model — completing a two-day 'AI agent supply-chain security' arc: Day 6 audited the skills an agent loads, Day 7 audits the servers it talks to. Coherent, Director-shaped, and rides a signal that is still fresh two days later.",
       "repoUrl": "https://github.com/kbipul/mcp-auditor",
-      "demoUrl": "https://kbipul.github.io/mcp-auditor/"
+      "demoUrl": "https://kbipul.github.io/mcp-auditor/",
+      "publishedAt": "2026-07-13T00:54:44.990Z"
     }
   ]
 }
