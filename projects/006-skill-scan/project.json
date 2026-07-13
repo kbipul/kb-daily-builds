@@ -1,0 +1,19 @@
+{
+  "day": 6,
+  "repo": "skill-scan",
+  "title": "SkillScan — X-ray an AI Agent Skill Before You Install It",
+  "tagline": "Paste any agent skill file and get an instant security report: prompt injection, data exfiltration, dangerous commands, permission creep and context cost — 100% in your browser.",
+  "description": "Client-side security scanner for AI agent skill files: injection, exfiltration, permissions, context cost.",
+  "topics": [
+    "ai",
+    "ai-security",
+    "prompt-injection",
+    "agent-skills",
+    "supply-chain-security",
+    "typescript",
+    "react",
+    "static-analysis"
+  ],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "Vite 6", "Vitest 2"]
+}

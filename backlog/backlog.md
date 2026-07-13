@@ -83,6 +83,7 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 |---|---|---|---|---|
 | ~~Token Cost Lab~~ (BUILT day 4, 2026-07-11) | `token-cost-lab` | Client-side tokenizer + live cost comparison across GPT-5.6 (Terra/Luna), Claude Sonnet 5, Grok 4.5 using current July-2026 pricing; paste a prompt, see per-provider cost | pages | Won day 4 at 11/12 riding Grok 4.5 launch + GPT-5.6 GA |
 | Prompt Compressor | `prompt-compressor` | Client-side prompt "token diet": paste a prompt, get a losslessly-compressed version with measured before/after token count + $ saved across models; serious counterpart to the trending "caveman" skill | pages | 2026-07-11 signal: `JuliusBrussee/caveman` #1 trending (82k★, token-efficiency meme); scored 10/12, lost to Token Cost Lab (overlap) |
+| MCP Server Auditor | `mcp-auditor` | Paste an MCP server manifest/config: audit declared tool scopes, flag over-broad permissions, dangerous tool combos (filesystem+network = exfil path) and missing consent gates; the MCP-layer sibling to SkillScan | pages | 2026-07-12 signal: `ChromeDevTools/chrome-devtools-mcp` trending + MCP tool sprawl; scored 9/12, lost to SkillScan (12/12) |
 
 ## Refill rule
 When ≤14 days remain, the weekly audit generates the next 30 ideas following the same arc: browser-demoable, Microsoft-stack, increasing ambition.

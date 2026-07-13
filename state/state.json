@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 5,
+  "dayCounter": 6,
   "projects": [
     {
       "day": 1,
@@ -80,6 +80,21 @@
       "repoUrl": "https://github.com/kbipul/similar-or-not",
       "demoUrl": "https://kbipul.github.io/similar-or-not/",
       "publishedAt": "2026-07-11T01:48:41.783Z"
+    },
+    {
+      "day": 6,
+      "folder": "006-skill-scan",
+      "repo": "skill-scan",
+      "title": "SkillScan — X-ray an AI Agent Skill Before You Install It",
+      "tagline": "Paste any agent skill file and get an instant security report: prompt injection, data exfiltration, dangerous commands, permission creep and context cost — 100% in your browser.",
+      "status": "built",
+      "date": "2026-07-12",
+      "demo": "pages",
+      "valueScore": 12,
+      "signal": "Agent-skill supply chain is this week's story: GitHub trending is stacked with installable skills (obra/superpowers, safishamsi/graphify, JuliusBrussee/caveman, openai/codex-plugin-cc, ChromeDevTools/chrome-devtools-mcp) — all distributed as 'drop this markdown into your agent' with no review step. usestrix/strix (AI pentest) trending alongside signals the security counter-current.",
+      "rationale": "Only perfect 12/12 of the run. Rides the hottest live trend with the angle nobody has shipped — everyone is publishing skills, nobody is auditing them. Demo-ability is exceptional (opens on a hostile fixture, grade F in one second, zero setup), and it positions Bipul as the security-minded adult in the agent-skills room — the single most Director-shaped stance available this week.",
+      "repoUrl": "https://github.com/kbipul/skill-scan",
+      "demoUrl": "https://kbipul.github.io/skill-scan/"
     }
   ]
 }
