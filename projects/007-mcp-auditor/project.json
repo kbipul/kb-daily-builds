@@ -1,0 +1,19 @@
+{
+  "day": 7,
+  "repo": "mcp-auditor",
+  "title": "MCP Auditor — Audit Your MCP Server Config Before Your Agent Does",
+  "tagline": "Paste your Claude Desktop / Cursor / VS Code mcpServers config and get an instant security report: hardcoded secrets, unpinned remote execution, root filesystem access, and dangerous capability combos like filesystem+network exfiltration paths — 100% in your browser.",
+  "description": "Client-side security auditor for MCP server configs: secrets, unpinned execution, capability combos.",
+  "topics": [
+    "ai",
+    "ai-security",
+    "mcp",
+    "model-context-protocol",
+    "agent-skills",
+    "supply-chain-security",
+    "typescript",
+    "react"
+  ],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "Vite 6", "Vitest 2"]
+}
