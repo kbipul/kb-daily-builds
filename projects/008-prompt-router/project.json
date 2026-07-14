@@ -1,0 +1,10 @@
+{
+  "day": 8,
+  "repo": "prompt-router",
+  "title": "Prompt Router — Stop Sending Every Prompt to Your Most Expensive Model",
+  "tagline": "Paste a day's worth of prompts and watch each one get routed to the cheapest model tier that can actually handle it — an embedding + feature classifier running 100% in your browser, with a live savings ledger.",
+  "description": "In-browser LLM router: classifies each prompt and sends it to the cheapest capable model tier, with a live cost-savings ledger. Day 8 of kb-daily-builds.",
+  "topics": ["ai", "machine-learning", "llm", "llm-routing", "cost-optimization", "transformers-js", "embeddings", "react", "typescript", "daily-builds"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "transformers.js", "Vite", "Vitest"]
+}

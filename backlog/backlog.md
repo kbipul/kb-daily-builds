@@ -89,3 +89,9 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 
 ## Refill rule
 When ≤14 days remain, the weekly audit generates the next 30 ideas following the same arc: browser-demoable, Microsoft-stack, increasing ambition.
+
+## Appended by the selection protocol (signal-derived ideas that scored >=8 but lost)
+| Day added | Idea | Repo | Scope | Demo | Score |
+|---|---|---|---|---|---|
+| 8 | Open Model Passport | `open-model-passport` | Pick an open/hosted model, get an instant "can I actually ship this?" report: licence terms, commercial use, weight availability, data residency, EU AI Act GPAI obligations. Rides the Chinese-open-weights enterprise-adoption story. | pages | 11/12 |
+| 8 | AI Risk Tier Classifier | `ai-risk-tier` | Describe an AI use case, get its EU AI Act risk tier + the obligations that attach, fully client-side. Rides the UN Global Dialogue on AI Governance (Geneva, 6-7 Jul 2026) and China's CAC companion-AI rules (effective 15 Jul 2026). | pages | 9/12 |
