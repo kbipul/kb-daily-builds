@@ -1,1 +1,0 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/lib/embed.ts","./src/lib/exemplars.ts","./src/lib/features.ts","./src/lib/ledger.ts","./src/lib/models.ts","./src/lib/route.ts","./src/lib/vec.ts","./src/lib/workloads.ts","./src/lib/__tests__/features.test.ts","./src/lib/__tests__/ledger.test.ts","./src/lib/__tests__/route.test.ts"],"version":"5.9.3"}
