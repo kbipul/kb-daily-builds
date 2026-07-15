@@ -1,0 +1,10 @@
+{
+  "day": 9,
+  "repo": "open-model-passport",
+  "title": "Open Model Passport",
+  "tagline": "Pick an AI model, declare what you intend to do with it, and get an instant shipping-clearance report — licence, weights, residency and EU AI Act exposure, with a source link on every claim.",
+  "description": "Can you actually ship that model? Licence, weights, residency + EU AI Act clearance report, 100% in-browser.",
+  "topics": ["ai", "governance", "eu-ai-act", "open-weights", "llm", "licensing", "compliance", "typescript", "react", "client-side"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "Vite", "Vitest"]
+}
