@@ -56,26 +56,6 @@ export function App() {
       <div className="layout">
         <div>
           <div className="panel">
-            <h2>Model</h2>
-            <p className="hint">{MODELS.length} models, facts compiled 2026-07-15.</p>
-            <div className="model-list">
-              {MODELS.map((m) => (
-                <button
-                  key={m.id}
-                  className="model-btn"
-                  aria-pressed={m.id === modelId}
-                  onClick={() => setModelId(m.id)}
-                >
-                  <div className="m-name">{m.name}</div>
-                  <div className="m-meta">
-                    {m.vendor} · {m.licence.name}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel" style={{ marginTop: 16 }}>
             <h2>I intend to…</h2>
             <p className="hint">The verdict is intent × facts. Change the intent, change the answer.</p>
             <div className="intents">
@@ -94,6 +74,26 @@ export function App() {
                     </span>
                   </span>
                 </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="panel" style={{ marginTop: 16 }}>
+            <h2>Model</h2>
+            <p className="hint">{MODELS.length} models, facts compiled 2026-07-15.</p>
+            <div className="model-list">
+              {MODELS.map((m) => (
+                <button
+                  key={m.id}
+                  className="model-btn"
+                  aria-pressed={m.id === modelId}
+                  onClick={() => setModelId(m.id)}
+                >
+                  <div className="m-name">{m.name}</div>
+                  <div className="m-meta">
+                    {m.vendor} · {m.licence.name}
+                  </div>
+                </button>
               ))}
             </div>
           </div>
