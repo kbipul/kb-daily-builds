@@ -1,0 +1,10 @@
+{
+  "day": 10,
+  "repo": "blast-radius",
+  "title": "Blast Radius",
+  "tagline": "Paste the command your agent wants to run and watch it destroy a virtual machine instead of yours — what dies, what comes back, and a safer way to say it.",
+  "description": "Simulate a shell command's blast radius against a virtual filesystem: what dies, what's recoverable, safer rewrite.",
+  "topics": ["ai", "agents", "shell", "safety", "developer-tools", "simulation", "typescript", "react", "client-side", "devsecops"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "Vite", "Vitest"]
+}
