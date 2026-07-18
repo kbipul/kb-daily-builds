@@ -1,0 +1,10 @@
+{
+  "day": 11,
+  "repo": "prompt-compressor",
+  "title": "Prompt Compressor — What Token Savings Actually Cost You",
+  "tagline": "The most-starred AI coding skill on GitHub promises 65% fewer tokens. Paste your own text and measure what it actually saves — and what meaning it quietly drops.",
+  "description": "Segment-aware prompt compression lab: measures real token savings on YOUR text plus in-browser embedding fidelity. Day 11 of kb-daily-builds.",
+  "topics": ["ai", "llm", "tokenizer", "prompt-engineering", "finops", "transformers-js", "react", "typescript", "daily-builds"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "gpt-tokenizer", "transformers.js", "Vite", "Vitest"]
+}
