@@ -1,0 +1,10 @@
+{
+  "day": 12,
+  "repo": "context-packer",
+  "title": "Context Window Packer — Fit the Best Context Into N Tokens",
+  "tagline": "Inkling just shipped a 1M-token window — but you still can't afford to fill it with junk. Paste your sources, set a token budget, and watch a 0/1-knapsack packer choose the highest-value context that fits.",
+  "description": "Client-side context optimizer: BM25 relevance + real tokenizer + a from-scratch 0/1-knapsack packer that beats naive truncation. Day 12 of kb-daily-builds.",
+  "topics": ["ai", "llm", "rag", "context-engineering", "knapsack", "tokenizer", "bm25", "react", "typescript", "daily-builds"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "gpt-tokenizer", "Vite", "Vitest"]
+}

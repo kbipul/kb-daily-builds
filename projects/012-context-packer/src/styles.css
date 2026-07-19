@@ -1,0 +1,100 @@
+:root {
+  --bg: #0b0f1a;
+  --panel: #131a2a;
+  --panel2: #0f1524;
+  --line: #24304a;
+  --ink: #e8edf7;
+  --muted: #93a0bd;
+  --accent: #6ea8fe;
+  --good: #4ade80;
+  --warn: #fbbf24;
+  --bad: #f87171;
+  --drop: #46536e;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 70% -10%, #16203a 0%, var(--bg) 60%);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+
+header h1 { font-size: 1.9rem; margin: 0 0 6px; letter-spacing: -0.02em; }
+header .tag { color: var(--muted); max-width: 62ch; margin: 0 0 4px; }
+header .signal {
+  color: var(--accent); font-size: 0.86rem; margin-top: 10px;
+  border-left: 2px solid var(--accent); padding-left: 10px;
+}
+.daybadge {
+  display: inline-block; font-size: 0.72rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; margin-bottom: 14px;
+}
+
+.controls {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 14px; padding: 18px; margin: 22px 0;
+}
+.controls .full { grid-column: 1 / -1; }
+label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+textarea, input[type="text"] {
+  width: 100%; background: var(--panel2); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+  font-family: inherit; font-size: 0.92rem; resize: vertical;
+}
+textarea { min-height: 150px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.82rem; }
+.hint { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+
+.budget-row { display: flex; align-items: center; gap: 14px; }
+input[type="range"] { flex: 1; accent-color: var(--accent); }
+.budget-val { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 92px; text-align: right; }
+
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 8px 0 26px; }
+.card {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 14px; padding: 16px;
+}
+.card.best { border-color: var(--good); box-shadow: 0 0 0 1px rgba(74,222,128,0.25); }
+.card h3 { margin: 0 0 10px; font-size: 0.95rem; }
+.card .metric { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.card .metric small { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+.card .sub { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+.badge-best {
+  display: inline-block; font-size: 0.68rem; color: var(--good);
+  border: 1px solid var(--good); border-radius: 999px; padding: 1px 8px; margin-left: 6px;
+}
+.uplift { color: var(--good); font-weight: 600; }
+
+.meter { height: 8px; border-radius: 6px; background: var(--panel2); overflow: hidden; margin-top: 12px; border: 1px solid var(--line); }
+.meter > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), #a78bfa); }
+.meter.over > span { background: var(--warn); }
+
+.section-title { font-size: 0.95rem; margin: 26px 0 12px; color: var(--muted); }
+.chunks { display: flex; flex-direction: column; gap: 8px; }
+.chunk {
+  display: grid; grid-template-columns: 68px 1fr auto; gap: 12px; align-items: center;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 10px 14px; transition: opacity 0.15s;
+}
+.chunk.kept { border-left: 3px solid var(--good); }
+.chunk.dropped { opacity: 0.5; border-left: 3px solid var(--drop); }
+.chunk .state { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.chunk.kept .state { color: var(--good); }
+.chunk.dropped .state { color: var(--muted); }
+.chunk .txt { font-size: 0.85rem; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chunk .nums { font-size: 0.76rem; color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.dbar { height: 4px; background: var(--panel2); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+.dbar > span { display: block; height: 100%; background: var(--accent); }
+
+footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 0.8rem; }
+a { color: var(--accent); }
+@media (max-width: 780px) {
+  .controls, .cards { grid-template-columns: 1fr; }
+}
