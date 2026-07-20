@@ -1,0 +1,10 @@
+{
+  "day": 13,
+  "repo": "hybrid-search-ts",
+  "title": "Hybrid Search — BM25 + Vectors, Fused with RRF",
+  "tagline": "Watch a keyword ranker and a semantic ranker disagree on the same query, then fuse them with Reciprocal Rank Fusion into a list that is rarely wrong on either — 100% in your browser, no API key.",
+  "description": "In-browser hybrid search: BM25 + MiniLM vectors fused with Reciprocal Rank Fusion, all client-side.",
+  "topics": ["ai", "ml", "rag", "search", "bm25", "embeddings", "reciprocal-rank-fusion", "typescript", "react", "transformers-js"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest", "transformers.js"]
+}
