@@ -1,0 +1,10 @@
+{
+  "day": 14,
+  "repo": "bhasha-detect",
+  "title": "Bhasha Detect — Identify India's 22 Scheduled Languages In Your Browser",
+  "tagline": "Paste text in any of India's 22 scheduled languages — plus Hinglish — and watch it get identified by Unicode script and character n-grams, with an honest confusion-matrix explorer. 100% client-side, no API key.",
+  "description": "In-browser language ID for India's 22 scheduled languages + Hinglish: script detection + char n-grams, with a confusion matrix. No API key.",
+  "topics": ["ai", "ml", "nlp", "language-identification", "indian-languages", "india", "devanagari", "typescript", "react", "client-side"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+}
