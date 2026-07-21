@@ -215,14 +215,15 @@
       "repo": "bhasha-detect",
       "title": "Bhasha Detect — Identify India's 22 Scheduled Languages In Your Browser",
       "tagline": "Paste text in any of India's 22 scheduled languages — plus Hinglish — and watch it get identified by Unicode script and character n-grams, with an honest confusion-matrix explorer. 100% client-side, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-21",
       "demo": "pages",
       "valueScore": 12,
       "signal": "India flagship day (day 14 — pool-only slate). Live signal: BharatGen's sovereign-AI milestone of covering all 22 scheduled Indian languages is landing now (targeted mid-2026), alongside Sarvam's 30B/105B and Gnani.ai's 5B voice model — India's differentiation is language coverage, not raw scale, while the global frontier commoditises (Inkling ~1T open-weight Jul 15, Kimi K3 Jul 16).",
       "rationale": "Only 12/12 of the India Flagship Pool slate (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). It is the definitional 'AI voice of India' build: a client-side identifier for all 22 Eighth-Schedule languages + Hinglish, riding the exact BharatGen-22-languages milestone in the news. Beat Indic OCR Lab (11, feasibility-flagged: multi-MB runtime traineddata and OCR quality is UNVERIFIABLE without a browser this run), Hinglish Bridge (10, Roman→Devanagari is ambiguous without a model), India AI Pulse (9, 'live/auto-updated' can't be delivered honestly one-run), Kisan Sahayak (9, RAG again — overlaps days 12-13), and UPI Guard (7, CLI/no live wow + sandbox .NET risk). Won partly BECAUSE it is honest: a two-stage script+n-gram design with explicit capability tiers (content-profiled / script-identified / script-only) that shows exactly which of the 22 it can confirm and which it can only narrow to a script — the Director-shaped stance. Deterministic, instant-load, zero model download, and fully Vitest-testable in the sandbox: 88 tests pass and the built-in confusion matrix scores 87.5% leave-one-out (56/64) with every error inside a shared script.",
       "repoUrl": "https://github.com/kbipul/bhasha-detect",
-      "demoUrl": "https://kbipul.github.io/bhasha-detect/"
+      "demoUrl": "https://kbipul.github.io/bhasha-detect/",
+      "publishedAt": "2026-07-21T00:54:55.015Z"
     }
   ]
 }
