@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 14,
+  "dayCounter": 15,
   "projects": [
     {
       "day": 1,
@@ -224,6 +224,21 @@
       "repoUrl": "https://github.com/kbipul/bhasha-detect",
       "demoUrl": "https://kbipul.github.io/bhasha-detect/",
       "publishedAt": "2026-07-21T00:54:55.015Z"
+    },
+    {
+      "day": 15,
+      "folder": "015-will-it-fit",
+      "repo": "will-it-fit",
+      "title": "Will It Fit? — Can You Actually Run That Open-Weight Model?",
+      "tagline": "Pick an open-weight LLM (Kimi K3, LongCat-2.0, GPT-OSS…), a quantization, and your GPU or Azure VM — instantly see if it fits in VRAM and how fast it decodes. 100% in your browser, no API key.",
+      "status": "built",
+      "date": "2026-07-22",
+      "demo": "pages",
+      "valueScore": 12,
+      "signal": "Kimi K3 (2.8T, 1M ctx) released 2026-07-16 with open weights promised 27 Jul + LongCat-2.0 (1.6T MoE); AMD 'Advancing AI 2026' conference 22-23 Jul + Microsoft-AMD Helios/EPYC Azure expansion (20 Jul) — 'can I run these giant open models, and on what Azure VM' is this week's live question.",
+      "rationale": "Perfect 12/12. Opens a brand-new axis for the series — the infra/deployment reality of the Microsoft-stack AI leader — that none of the prior 14 browser-NLP toys touched. Rides two concurrent <7-day signals (Kimi K3 weights drop + AMD/Azure hardware week), demos in <1s with zero model download, and teaches the genuinely misread MoE 'total-vs-active VRAM' gap (weights sized by 2.8T total, decode by 32B active).",
+      "repoUrl": "https://github.com/kbipul/will-it-fit",
+      "demoUrl": "https://kbipul.github.io/will-it-fit/"
     }
   ]
 }

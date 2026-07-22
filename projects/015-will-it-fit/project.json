@@ -1,0 +1,10 @@
+{
+  "day": 15,
+  "repo": "will-it-fit",
+  "title": "Will It Fit? — Can You Actually Run That Open-Weight Model?",
+  "tagline": "Pick an open-weight LLM (Kimi K3, LongCat-2.0, GPT-OSS…), a quantization, and your GPU or Azure VM — instantly see if it fits in VRAM and how fast it decodes. 100% in your browser, no API key.",
+  "description": "In-browser VRAM & throughput calculator for open-weight LLMs: quantization + KV cache math vs real GPUs and Azure VMs. No API key.",
+  "topics": ["ai", "ml", "llm", "quantization", "vram", "gpu", "inference", "azure", "typescript", "react"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+}
