@@ -1,0 +1,10 @@
+{
+  "day": 16,
+  "repo": "tool-caller-ts",
+  "title": "Tool Caller — Validate & Repair an LLM's Function Calls Before They Run",
+  "tagline": "Paste the tool call a model just produced and watch it get checked against the tool's JSON Schema — hallucinated tool names, wrong types, bad enums, malformed JSON — then auto-repaired into a call that would actually run. 100% in your browser, no API key.",
+  "description": "In-browser validator + repairer for LLM function/tool calls: JSON-Schema checks mapped to the tool-use failure taxonomy, with safe auto-repair. No API key.",
+  "topics": ["ai", "ml", "llm", "agents", "tool-use", "function-calling", "json-schema", "typescript", "react", "validation"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+}
