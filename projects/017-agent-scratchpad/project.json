@@ -1,0 +1,10 @@
+{
+  "day": 17,
+  "repo": "agent-scratchpad",
+  "title": "Agent Scratchpad — Watch a ReAct Agent Think, and Catch Where It Breaks",
+  "tagline": "Replay an LLM agent's Thought → Action → Observation loop step by step and get an instant loop-health report — stuck loops, oscillation, out-of-toolset calls, ungrounded answers, error thrash — 100% in your browser, no API key.",
+  "description": "In-browser ReAct trace player + loop-health analyzer: parses an agent transcript and flags the tool-use failure classes across the whole loop. No API key.",
+  "topics": ["ai", "ml", "llm", "agents", "react-agent", "tool-use", "reliability", "typescript", "react", "observability"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+}
