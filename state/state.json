@@ -263,14 +263,15 @@
       "repo": "agent-scratchpad",
       "title": "Agent Scratchpad — Watch a ReAct Agent Think, and Catch Where It Breaks",
       "tagline": "Replay an LLM agent's Thought → Action → Observation loop step by step and get an instant loop-health report — stuck loops, oscillation, out-of-toolset calls, ungrounded answers, error thrash — 100% in your browser, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-24",
       "demo": "pages",
       "valueScore": 11,
       "signal": "DeepSeek V4 stable lands today (2026-07-24, ~$0.44/M) capping the largest open-weight release week of the year (Kimi K3 weights 27 Jul, Gemini 3.6 Flash 21 Jul); GitHub trending is still dominated by agent tooling (usestrix/strix #1 at 2.8k stars today, openai/codex-plugin-cc, obra/superpowers, agentskills/agentskills, herdr), and last week's OpenAI sandbox-escape disclosure keeps agent tool-use reliability the live subtext.",
       "rationale": "Top of a 5-candidate slate (11/12: Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 3). Opens the Week-3 'agents & tool use' arc one level up from Day 16's Tool Caller: Day 16 validated a SINGLE function call against its schema; Day 17 analyzes the WHOLE think-act-observe loop for eight failure classes (stuck-loop, unknown-tool, oscillation, error-thrash, no-progress, budget-overrun, no-final-answer, ungrounded-answer). Timeliness is an honest 2 — it rides the ongoing agent-reliability trend and last week's sandbox-escape story rather than a single <48h release; the biggest single signal (DeepSeek V4 today) only supports cost/infra ideas that overlap Day 4 Token Cost Lab and Day 15 Will It Fit. Beat: a fresh 'DeepSeek V4 Price-Floor Board' (8/12 — rides today's release but overlaps Token Cost Lab so Distinctiveness 1, appended to backlog); the carried Agent Tool-Call Firewall (10/12 — strong but would be the 4th paste-and-get-a-report-card security engine after SkillScan/MCP-Auditor/Blast-Radius); and the two next backlog items prompt-chain-runner (6/12, no signal, LangChain-flavoured) and agent-scratchpad's plain form. Distinctiveness earns a clean 3: it is a step-through visual PLAYER (Blast-Radius-style simulator, not a static report card) and draws a hard honesty line on the ungrounded-answer check — it only flags concrete numbers/quoted spans absent from every observation, never claims to verify meaning. Deterministic, zero model download, 43 Vitest cases pass.",
       "repoUrl": "https://github.com/kbipul/agent-scratchpad",
-      "demoUrl": "https://kbipul.github.io/agent-scratchpad/"
+      "demoUrl": "https://kbipul.github.io/agent-scratchpad/",
+      "publishedAt": "2026-07-24T00:45:16.250Z"
     }
   ]
 }
