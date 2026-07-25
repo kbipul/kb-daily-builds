@@ -1,0 +1,10 @@
+{
+  "day": 18,
+  "repo": "handoff-inspector",
+  "title": "Handoff — Inspect a Multi-Agent Run for Coordination Failures",
+  "tagline": "Paste a multi-agent orchestration trace (supervisor + sub-agents) and watch it on a swimlane timeline while it flags the coordination failures single-agent tools miss — dropped handoffs, delegation loops, context lost between agents, duplicated work. 100% in your browser, no API key.",
+  "description": "In-browser multi-agent trace inspector: swimlane timeline + deterministic coordination-failure detectors (dropped handoff, delegation loop, context loss, duplicated work). No API key.",
+  "topics": ["ai", "ml", "llm", "agents", "multi-agent", "orchestration", "tool-use", "reliability", "typescript", "react", "observability"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+}

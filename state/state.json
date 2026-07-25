@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 17,
+  "dayCounter": 18,
   "projects": [
     {
       "day": 1,
@@ -272,6 +272,22 @@
       "repoUrl": "https://github.com/kbipul/agent-scratchpad",
       "demoUrl": "https://kbipul.github.io/agent-scratchpad/",
       "publishedAt": "2026-07-24T00:45:16.250Z"
+    },
+    {
+      "day": 18,
+      "folder": "018-handoff-inspector",
+      "repo": "handoff-inspector",
+      "title": "Handoff — Inspect a Multi-Agent Run for Coordination Failures",
+      "tagline": "Paste a multi-agent orchestration trace (supervisor + sub-agents) and watch it on a swimlane timeline while it flags the coordination failures single-agent tools miss — dropped handoffs, delegation loops, context lost between agents, duplicated work. 100% in your browser, no API key.",
+      "status": "built",
+      "date": "2026-07-25",
+      "demo": "pages",
+      "valueScore": 11,
+      "signal": "Agent tooling still owns GitHub trending: usestrix/strix (AI pen-test agent) is #1 at ~34k stars / 2.8k today, ogulcancelik/herdr bills itself an 'agent multiplexer that lives in your terminal' (10.6k), obra/superpowers agentic-skills framework (+1.2k/day), safishamsi/graphify and the agentskills/agentskills spec are all trending, and last week's OpenAI sandbox-escape disclosure keeps agent reliability the live subtext. Backdrop: DeepSeek V4 wave + Chinese open-weight dominance (SLAI T-Rex full-param post-training, 41% of HF downloads) and the AMD x Microsoft Azure Helios/EPYC deal (20-21 Jul).",
+      "rationale": "Top of the slate at 11/12 (Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 3). Opens the multi-agent COORDINATION axis — a clean progression none of the prior 17 touched: Day 16 validated ONE tool call, Day 17 analyzed ONE agent's ReAct loop, Day 18 analyzes the space BETWEEN many agents (dropped handoffs, delegation loops, context loss, duplicated work, out-of-role tools, idle agents, no-convergence). Timeliness an honest 2: rides the ongoing agent-orchestration/multi-agent trend (herdr multiplexer, strix, superpowers) and last week's sandbox-escape story rather than a single <48h release. Beat carried Agent Tool-Call Firewall (10/12 — capped on Distinctiveness as the 4th paste-and-get-a-security-report-card after SkillScan/MCP-Auditor/Blast-Radius), Foundry Residency Advisor (9/12 — overlaps Day 9 governance), DeepSeek V4 Price-Floor Board (8/12 — overlaps Day 4 Token Cost Lab) and the next backlog items multi-agent-debate (needs an LLM for a real debate; as a pages replay analyzer it overlaps Day 17's transcript analysis, ~9), agent-memory-store (cli, no signal, ~7) and prompt-chain-runner (6, no signal). Distinctiveness earns a clean 3: a swimlane trace PLAYER + graph-based coordination-failure engine, not another report card; draws the same honesty line as Days 16-17 — 'context loss' only reasons about artifacts the trace explicitly marks as required/handed-off, never inferring intent. Deterministic, zero model download, instant load, 52 Vitest cases pass and the six sample runs (incl. a messy run that trips 4 detectors and never converges) double as parser round-trip fixtures.",
+      "repoUrl": "https://github.com/kbipul/handoff-inspector",
+      "demoUrl": "https://kbipul.github.io/handoff-inspector/",
+      "builtAt": "2026-07-25T00:00:00.000Z"
     }
   ]
 }
