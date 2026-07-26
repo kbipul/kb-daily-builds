@@ -1,0 +1,10 @@
+{
+  "day": 19,
+  "repo": "agent-memory-inspector",
+  "title": "Agent Memory Inspector — Audit What Your Agent Remembers",
+  "tagline": "Microsoft Foundry just shipped editable agent memory to production. Paste an agent's memory store (procedural / user / session scopes) and get an instant hygiene report — expired TTLs, contradictions, scope leaks, candidate PII, duplicates — plus a retrieval simulation showing which memories a query would actually recall. 100% in your browser, no API key.",
+  "description": "In-browser agent-memory hygiene inspector: deterministic detectors (expired TTL, contradictions, scope leaks, candidate PII, duplicates) + BM25 retrieval sim that shows poisoned recall. No API key.",
+  "topics": ["ai", "ml", "llm", "agents", "agent-memory", "memory", "governance", "foundry", "typescript", "react", "observability"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+}

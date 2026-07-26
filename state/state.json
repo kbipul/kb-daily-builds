@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 18,
+  "dayCounter": 19,
   "projects": [
     {
       "day": 1,
@@ -289,6 +289,23 @@
       "demoUrl": "https://kbipul.github.io/handoff-inspector/",
       "builtAt": "2026-07-25T00:00:00.000Z",
       "publishedAt": "2026-07-25T00:48:22.817Z"
+    },
+    {
+      "day": 19,
+      "folder": "019-agent-memory-inspector",
+      "repo": "agent-memory-inspector",
+      "title": "Agent Memory Inspector — Audit What Your Agent Remembers",
+      "tagline": "Microsoft Foundry just shipped editable agent memory to production. Paste an agent's memory store (procedural / user / session scopes) and get an instant hygiene report — expired TTLs, contradictions, scope leaks, candidate PII, duplicates — plus a retrieval simulation showing which memories a query would actually recall. 100% in your browser, no API key.",
+      "description": "In-browser agent-memory hygiene inspector: deterministic detectors (expired TTL, contradictions, scope leaks, candidate PII, duplicates) + BM25 retrieval sim that shows poisoned recall. No API key.",
+      "status": "built",
+      "date": "2026-07-26",
+      "demo": "pages",
+      "valueScore": 12,
+      "signal": "Microsoft Foundry's Agent Service reached GA for hosted agents this month (July 2026) and shipped a memory-management view: production agent memory now spans procedural / user / session scopes each with a TTL, inspectable and editable in the Foundry portal. GitHub trending is still owned by agent tooling (ogulcancelik/herdr 'agent multiplexer' +513 today, obra/superpowers agentic-skills framework +1,205, agentskills/agentskills spec, usestrix/strix, openai/codex-plugin-cc, anthropics/claude-code), and last week's OpenAI sandbox-escape disclosure keeps agent reliability the live subtext. Claude Opus 5 (Jul 24) and Gemini 3.6 Flash (Jul 21) shipped this week, but the week's operative story is agents in production, not raw model quality.",
+      "rationale": "Only 12/12 of the slate (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). Opens the agent-MEMORY axis — the state an agent carries BETWEEN runs — that none of the prior 18 touched: Day 16 validated one tool call, Day 17 replayed one agent's ReAct loop, Day 18 traced coordination between many agents, Day 19 inspects the memory store itself. Rides the freshest Microsoft-stack signal available: Foundry just made agent memory a first-class, editable production primitive (procedural/user/session + TTL) and nobody has shipped the hygiene tool for it — everyone builds memory stores, nobody audits them. The schema deliberately mirrors Foundry's exact primitive so findings are actionable. Beat the carried Agent Tool-Call Firewall (10/12 — would be the 4th paste-and-get-a-security-report-card after SkillScan/MCP-Auditor/Blast-Radius), the next backlog items agent-memory-store (8/12 — cli, no live 10-second wow) and browser-agent-sandbox (8/12 — needs a live LLM for a real wow, fails the zero-key feasibility gate), and prompt-chain-runner (6/12, no signal). Distinctiveness earns a clean 3: not another report card — the retrieval simulation (BM25 over the store) turns abstract findings into consequences by showing when the memories the agent would actually recall are expired or contradict each other, i.e. the answer is poisoned before the model runs. Draws the same honesty line as Days 16-18: contradiction detection is structural (subject is/=/prefers value, subject-normalized), labelled a pattern match, and cites the memory ids that fired it — it never claims to understand meaning. Deterministic, zero model download, instant load; 58 Vitest cases pass and the messy fixture grades a dramatic F (score 1) while the healthy store grades A.",
+      "repoUrl": "https://github.com/kbipul/agent-memory-inspector",
+      "demoUrl": "https://kbipul.github.io/agent-memory-inspector/",
+      "builtAt": "2026-07-26T00:00:00.000Z"
     }
   ]
 }
