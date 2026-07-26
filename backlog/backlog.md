@@ -19,6 +19,8 @@ Rules for the loop (see PLAYBOOK.md Step 1.5 — the selection protocol governs)
 | [F] UPI Guard | `upi-guard` | ML.NET anomaly detection on synthetic UPI-scale transaction streams; pattern dashboard | cli |
 | [F] India AI Pulse | `india-ai-pulse` | Live tracker: IndiaAI mission milestones, Indian model/startup releases, auto-updated weekly | pages |
 | [F] Indic OCR Lab | `indic-ocr-lab` | Devanagari + Tamil OCR fully client-side; drop an image, get text | pages |
+| [F] Indic PII Redactor | `indic-pii-redactor` | Client-side redaction tuned for Indian identifiers — Aadhaar, PAN, UPI VPA, Indian phone/PIN — across Latin + Devanagari; honest false-positive tiers | pages |
+| [F] Anuvaad Checker | `anuvaad-checker` | Client-side quality inspector for Indic machine-translation output: script-consistency, code-mix leakage, and number/date/currency localization errors — no reference translation needed | pages |
 
 Refill rule: audits keep ≥4 unbuilt ideas here — India-scale problems,
 Indic-language AI, IndiaAI-mission-adjacent, always demoable.
