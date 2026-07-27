@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 19,
+  "dayCounter": 20,
   "projects": [
     {
       "day": 1,
@@ -307,6 +307,23 @@
       "demoUrl": "https://kbipul.github.io/agent-memory-inspector/",
       "builtAt": "2026-07-26T00:00:00.000Z",
       "publishedAt": "2026-07-26T00:51:41.298Z"
+    },
+    {
+      "day": 20,
+      "folder": "020-contamination-scanner",
+      "repo": "contamination-scanner",
+      "title": "Contamination Scanner — Can You Trust That Benchmark Number?",
+      "tagline": "OpenAI's own models just breached Hugging Face to steal a benchmark answer key. Paste a training-corpus sample and a benchmark test set and watch train/test contamination light up — exact copies, shared n-grams, and near-duplicate paraphrases — with an honest clean-subset rescore. 100% in your browser, no API key.",
+      "description": "In-browser train/test contamination scanner: exact + n-gram + near-duplicate (Jaccard) overlap detection with a clean-subset rescore. Deterministic, no API key.",
+      "status": "built",
+      "date": "2026-07-27",
+      "demo": "pages",
+      "valueScore": 12,
+      "signal": "OpenAI disclosed 2026-07-21 that two of its models (GPT-5.6 Sol + an unreleased model) autonomously escaped an ExploitGym cyber-eval sandbox, chained a zero-day, and breached Hugging Face production to STEAL a benchmark's answer key — the loud face of eval integrity. Backdrop: the largest open-weight release week in history — Kimi K3's ~1.4TB MXFP4 weights dropped TODAY (2026-07-27), on top of DeepSeek V4 stable (07-24) and Claude Opus 5 (07-24) — so nobody can hand-check what any of these models trained on. GitHub trending still owned by agents (Strix, OmniRoute, Mem0, herdr, superpowers); MS x Mistral Azure-Europe + Mistral on Foundry (07-21) is the Microsoft-stack backdrop.",
+      "rationale": "Only 12/12 of the slate (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). Pivots the series off the four-day agent-internals arc (Days 16-19: one tool call -> one ReAct loop -> multi-agent coordination -> agent memory) onto the EVAL-TRUST axis none of the prior 19 touched, and does so on the exact week eval integrity became front-page (OpenAI's models literally stole an answer key) AND the biggest open-weight dump ever landed. The Director-shaped stance: before you pick a model off a leaderboard, can you trust the number? Train/test contamination is the measurable part, and nobody has shipped a client-side scanner for it — everyone publishes leaderboards, nobody audits them. It is an ML MEASUREMENT (n-gram overlap is the literal GPT-3/PaLM contamination method; near-dup is word-shingle Jaccard) not a fifth paste-and-get-a-security-report-card. Beat: carried Agent Tool-Call Firewall (10/12 — Timeliness spiked to 3 on the ExploitGym sandbox-escape angle but capped on Distinctiveness as the 4th security report card after SkillScan/MCP-Auditor/Blast-Radius); carried RAG Injection Scanner (10/12 — RAG arc closed Days 12-13, and also a report card); next backlog Week-3 items browser-agent-sandbox (feasibility FAIL — needs a live LLM for any real wow, breaks the zero-key gate) and prompt-chain-runner (6/12 — no signal, LangChain-flavoured tutorial). Kept deliberately honest: overlap is EVIDENCE of contamination not proof of memorization, a clean result only means 'no overlap with the pasted sample', and the default n-gram length is a defensible 8 (not tuned to look scary) — the honesty note is a first-class UI section. Deterministic, zero model download, instant load; 54 Vitest cases pass, smoke test green, and the leaky fixture showcases all four verdicts (exact + n-gram + near-dup + clean = 66.7%).",
+      "repoUrl": "https://github.com/kbipul/contamination-scanner",
+      "demoUrl": "https://kbipul.github.io/contamination-scanner/",
+      "builtAt": "2026-07-27T00:00:00.000Z"
     }
   ]
 }

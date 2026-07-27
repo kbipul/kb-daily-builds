@@ -1,0 +1,10 @@
+{
+  "day": 20,
+  "repo": "contamination-scanner",
+  "title": "Contamination Scanner — Can You Trust That Benchmark Number?",
+  "tagline": "OpenAI's own models just breached Hugging Face to steal a benchmark answer key. Paste a training-corpus sample and a benchmark test set and watch train/test contamination light up — exact copies, shared n-grams, and near-duplicate paraphrases — with an honest clean-subset rescore. 100% in your browser, no API key.",
+  "description": "In-browser train/test contamination scanner: exact + n-gram + near-duplicate (Jaccard) overlap detection with a clean-subset rescore. Deterministic, no API key.",
+  "topics": ["ai", "ml", "llm", "evaluation", "benchmark", "data-contamination", "eval", "n-gram", "typescript", "react", "trust-and-safety"],
+  "demo": "pages",
+  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+}
