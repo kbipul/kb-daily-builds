@@ -51,16 +51,31 @@ jobs:
           git config user.name  "$GIT_AUTHOR_NAME"
           git config user.email "$GIT_AUTHOR_EMAIL"
 
+          # Malformed entries (status "built" with no usable "folder") are reported
+          # loudly and skipped -- one bad entry must never kill the whole fan-out.
+          # (Day 021 regression, 2026-07-28: a missing "folder" resolved to
+          # projects/undefined and exited the job before any project published.)
           PENDING=$(node -e '
             const s = require("./state/state.json");
-            console.log(s.projects.filter(p => p.status === "built").map(p => p.folder).join(" "));
+            const built = s.projects.filter(p => p.status === "built");
+            const bad = built.filter(p => typeof p.folder !== "string" || !p.folder.trim());
+            for (const p of bad) {
+              console.error(`::error::state.json day ${p.day} (${p.repo}) has status "built" but no "folder" field - SKIPPED. Add "folder": "NNN-<slug>" and re-push.`);
+            }
+            console.log(built.filter(p => !bad.includes(p)).map(p => p.folder.trim()).join(" "));
           ')
           if [ -z "$PENDING" ]; then echo "Nothing pending."; exit 0; fi
+
+          SKIPPED=""
 
           for FOLDER in $PENDING; do
             echo "── Publishing $FOLDER ─────────────────────────"
             DIR="projects/$FOLDER"
-            [ -f "$DIR/project.json" ] || { echo "::error::$DIR missing project.json"; exit 1; }
+            if [ ! -f "$DIR/project.json" ]; then
+              echo "::error::$DIR missing project.json - SKIPPED (other projects still publish)"
+              SKIPPED="$SKIPPED $FOLDER"
+              continue
+            fi
 
             REPO=$(node -p "require('./$DIR/project.json').repo")
             TITLE=$(node -p "require('./$DIR/project.json').title")
@@ -131,6 +146,14 @@ jobs:
           git add state/state.json
           git commit -q -m "chore: mark published [skip ci]" || true
           git push -q
+
+          # Everything publishable has now published. Only after that do we fail
+          # the job, so a single malformed entry is visible without blocking the
+          # healthy ones.
+          if [ -n "${SKIPPED// /}" ]; then
+            echo "::error::Skipped malformed project folder(s):$SKIPPED"
+            exit 1
+          fi
 
       - name: Update profile README (kbipul/kbipul)
         run: |
