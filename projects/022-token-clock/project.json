@@ -2,7 +2,7 @@
   "day": 22,
   "repo": "token-clock",
   "title": "Token Clock — Your AI Bill Now Depends on What Time You Run It",
-  "tagline": "DeepSeek's peak/off-peak API pricing goes live at 16:00 UTC on 16 Aug 2026 — output tokens up to 1,100% more expensive, and half price outside two UTC windows. Map your daily traffic onto those bands in your own timezone, see your peak exposure, and watch deferrable work shift into off-peak. 100% in your browser, no API key.",
+  "tagline": "DeepSeek's peak/off-peak API pricing went live at 16:00 UTC on 16 Aug 2026 — output tokens up to 1,100% more expensive, and half price outside two UTC windows. Map your daily traffic onto those bands in your own timezone, see your peak exposure, and watch deferrable work shift into off-peak. 100% in your browser, no API key.",
   "description": "Time-of-day LLM pricing planner: map daily token traffic onto peak/off-peak bands in your timezone, measure peak exposure, shift deferrable load. No API key.",
   "topics": ["ai", "ml", "llm", "finops", "ai-cost", "deepseek", "pricing", "scheduling", "typescript", "react", "azure"],
   "demo": "pages",

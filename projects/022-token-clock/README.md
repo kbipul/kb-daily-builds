@@ -2,7 +2,7 @@
 
 # Token Clock — Your AI Bill Now Depends on What Time You Run It
 
-**DeepSeek's peak/off-peak API pricing goes live at 16:00 UTC on 16 August 2026 — output tokens up to 1,100% more expensive than the old flat rate at peak, and exactly half the peak rate outside two UTC windows. Map your daily traffic onto those bands in your own timezone, see your peak exposure, and watch deferrable work shift into off-peak. 100% in your browser, no API key.**
+**DeepSeek's peak/off-peak API pricing went live at 16:00 UTC on 16 August 2026 — output tokens up to 1,100% more expensive than the old flat rate at peak, and exactly half the peak rate outside two UTC windows. Map your daily traffic onto those bands in your own timezone, see your peak exposure, and watch deferrable work shift into off-peak. 100% in your browser, no API key.**
 
 [![CI](https://github.com/kbipul/token-clock/actions/workflows/ci.yml/badge.svg)](https://github.com/kbipul/token-clock/actions/workflows/ci.yml)
 [![Live demo](https://img.shields.io/badge/demo-live-62d0ff)](https://kbipul.github.io/token-clock/)
