@@ -1,5 +1,15 @@
+import { costForHourlyOnDay, costForWeek, cheapestWeekendDay } from "./cost";
 import { blendedRate } from "./cost";
-import type { ModelPricing, ShiftMove, ShiftResult, Workload, Zone } from "./types";
+import { isWeekendDay } from "./clock";
+import type {
+  ModelPricing,
+  ShiftMove,
+  ShiftResult,
+  WeekendMove,
+  WeekendPlan,
+  Workload,
+  Zone,
+} from "./types";
 
 const PER_M = 1_000_000;
 
@@ -92,4 +102,80 @@ export function shiftDeferrable(
   }
 
   return { shifted, moves, strandedTokens };
+}
+
+/**
+ * The weekend play.
+ *
+ * Since 23 Aug 2026 DeepSeek bills Saturday and Sunday entirely at the off-peak
+ * rate, which makes the cheapest lever no longer "run this batch at 3 a.m." but
+ * "run it on Saturday". For every deferrable workload this compares the cost of
+ * its weekday run against the same run on the cheapest weekend day.
+ *
+ * Deliberately NOT netted against a capacity model: moving all five weekday runs
+ * onto two days is a scheduling decision only the owner can make, so each
+ * weekday is reported as its own move and the total is clearly the ceiling.
+ */
+export function weekendPlan(
+  workloads: Workload[],
+  zone: Zone,
+  model: ModelPricing,
+): WeekendPlan {
+  const deferrable = workloads.filter((w) => w.deferrable);
+  const moves: WeekendMove[] = [];
+  let baselineDeferrableUsd = 0;
+
+  for (const w of deferrable) {
+    const week = costForWeek(w.hourlyOutputTokens, zone, model);
+    baselineDeferrableUsd += week.weeklyCostUsd;
+
+    const target = cheapestWeekendDay(week);
+    const weekendCostUsd = target.report.totalCostUsd;
+
+    for (const { day, report } of week.days) {
+      if (isWeekendDay(day)) continue;
+      const savedUsd = report.totalCostUsd - weekendCostUsd;
+      if (savedUsd <= 1e-12) continue;
+      moves.push({
+        workloadId: w.id,
+        workloadName: w.name,
+        fromDay: day,
+        toDay: target.day,
+        tokens: report.totalTokens,
+        weekdayCostUsd: report.totalCostUsd,
+        weekendCostUsd,
+        savedUsd,
+      });
+    }
+  }
+
+  const totalSavedUsd = moves.reduce((s, m) => s + m.savedUsd, 0);
+  return {
+    moves,
+    totalSavedUsd,
+    baselineDeferrableUsd,
+    noWeekendEdge: moves.length === 0,
+  };
+}
+
+/**
+ * Weekly cost after BOTH levers: intra-day shifting on the five weekdays, and
+ * the untouched (already all-off-peak) weekend days.
+ */
+export function weeklyCostAfterIntradayShift(
+  workloads: Workload[],
+  shiftedSeries: Record<string, number[]>,
+  zone: Zone,
+  model: ModelPricing,
+): number {
+  const combined = new Array(24).fill(0);
+  for (const w of workloads) {
+    const series = shiftedSeries[w.id] ?? w.hourlyOutputTokens;
+    for (let h = 0; h < 24; h++) combined[h] += series[h] ?? 0;
+  }
+  let total = 0;
+  for (let day = 0; day < 7; day++) {
+    total += costForHourlyOnDay(combined, day, zone, model).totalCostUsd;
+  }
+  return total;
 }

@@ -18,6 +18,12 @@ export interface ModelPricing {
   outputPerMTok: BandPrice;
   /** Empty array => flat pricing, no time-of-day bands. */
   peakWindowsUtc: UtcWindow[];
+  /**
+   * UTC weekdays (0 = Sunday … 6 = Saturday) on which the peak windows apply.
+   * DeepSeek dropped weekend peak pricing on 23 Aug 2026, so this is Mon–Fri.
+   * A full [0..6] array means the bands run every day.
+   */
+  peakDaysUtc: number[];
   /** The flat rate in force before this repricing, if the source states one. */
   previousFlatOutputPerMTok: number | null;
   effectiveFrom: string;
@@ -85,4 +91,43 @@ export interface ShiftResult {
   moves: ShiftMove[];
   /** Deferrable tokens that had no strictly cheaper reachable hour with capacity. */
   strandedTokens: number;
+}
+
+/** One local day of the week, priced. */
+export interface DayCost {
+  /** 0 = Sunday … 6 = Saturday, in the user's LOCAL zone. */
+  day: number;
+  report: CostReport;
+}
+
+export interface WeekCostReport {
+  /** Seven local days, Sunday first. */
+  days: DayCost[];
+  weeklyTokens: number;
+  weeklyCostUsd: number;
+  /** Share of the week's spend billed at the peak rate, 0..1. */
+  peakExposure: number;
+  previousFlatWeeklyCostUsd: number | null;
+}
+
+/** Moving one weekday's deferrable batch run onto a weekend day. */
+export interface WeekendMove {
+  workloadId: string;
+  workloadName: string;
+  fromDay: number;
+  toDay: number;
+  tokens: number;
+  weekdayCostUsd: number;
+  weekendCostUsd: number;
+  savedUsd: number;
+}
+
+export interface WeekendPlan {
+  moves: WeekendMove[];
+  /** Saving from moving every deferrable weekday run to the cheapest weekend day. */
+  totalSavedUsd: number;
+  /** Weekly deferrable spend before any weekend move. */
+  baselineDeferrableUsd: number;
+  /** True when the model has no weekend discount to exploit. */
+  noWeekendEdge: boolean;
 }

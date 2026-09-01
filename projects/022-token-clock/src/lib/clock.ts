@@ -1,6 +1,7 @@
 import type { UtcWindow, Zone } from "./types";
 
 export const MINUTES_PER_DAY = 1440;
+export const MINUTES_PER_WEEK = MINUTES_PER_DAY * 7;
 
 /** Normalize any minute value onto [0, 1440). */
 export function wrapMin(min: number): number {
@@ -76,4 +77,62 @@ export function windowInZone(window: UtcWindow, zone: Zone): string {
     return `${String(h).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
   };
   return `${fmt(window.startMin + zone.offsetMin)}–${fmt(window.endMin + zone.offsetMin)}`;
+}
+
+/** Normalize any minute value onto [0, 10080) — minutes from Sunday 00:00. */
+export function wrapWeekMin(min: number): number {
+  return ((min % MINUTES_PER_WEEK) + MINUTES_PER_WEEK) % MINUTES_PER_WEEK;
+}
+
+/** Is this UTC weekday (0 = Sunday … 6 = Saturday) one the peak bands apply on? */
+export function isPeakDayUtc(utcDay: number, peakDaysUtc: number[]): boolean {
+  return peakDaysUtc.includes(((utcDay % 7) + 7) % 7);
+}
+
+/**
+ * The fraction (0..1) of one LOCAL hour on one LOCAL day that is peak-priced.
+ *
+ * Day-of-week is resolved on the **UTC** day the minute actually lands on, not
+ * the user's local day, and that distinction is the whole point of this
+ * function. DeepSeek bills in UTC windows and (since 23 Aug 2026) exempts the
+ * weekend — so for a user in US Pacific (UTC−7), local Friday 18:00 is Saturday
+ * 01:00 UTC, which sits squarely inside a peak window but on an exempt day.
+ * A local-day model would bill that hour at peak. This one does not.
+ *
+ * The weekend is evaluated on UTC days, which is safe here because every
+ * DeepSeek peak window lies inside 01:00–10:00 UTC. Adding the +8h Beijing
+ * offset keeps those minutes on the same calendar date, so the UTC weekend and
+ * the Beijing weekend (the one the announcement is written in) select exactly
+ * the same peak minutes.
+ */
+export function peakFractionForLocalHourOnDay(
+  localHour: number,
+  localDay: number,
+  zone: Zone,
+  bands: { peakWindowsUtc: UtcWindow[]; peakDaysUtc: number[] },
+): number {
+  if (bands.peakWindowsUtc.length === 0 || bands.peakDaysUtc.length === 0) return 0;
+
+  let covered = 0;
+  for (let m = 0; m < 60; m++) {
+    const utcWeekMin = wrapWeekMin(
+      localDay * MINUTES_PER_DAY + localHour * 60 + m - zone.offsetMin,
+    );
+    const utcDay = Math.floor(utcWeekMin / MINUTES_PER_DAY);
+    if (!isPeakDayUtc(utcDay, bands.peakDaysUtc)) continue;
+
+    const utcMinOfDay = utcWeekMin % MINUTES_PER_DAY;
+    if (bands.peakWindowsUtc.some((w) => overlapMinutes(utcMinOfDay, 1, w) > 0)) {
+      covered++;
+    }
+  }
+  return covered / 60;
+}
+
+export const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/** Weekend in the user's local week, for labelling only. */
+export function isWeekendDay(day: number): boolean {
+  const d = ((day % 7) + 7) % 7;
+  return d === 0 || d === 6;
 }

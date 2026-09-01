@@ -12,8 +12,23 @@ const DEEPSEEK_PEAK = [
   { startMin: H(6), endMin: H(10) },
 ];
 
+/**
+ * Monday–Friday only. The launch scheme (16 Aug 2026) ran the peak bands seven
+ * days a week; DeepSeek amended it from 00:00 Beijing time on 23 Aug 2026 so
+ * that Saturday and Sunday bill entirely at the off-peak rate.
+ *
+ * Encoded as UTC weekdays. Safe, because every peak window above sits inside
+ * 01:00–10:00 UTC — adding the +8h Beijing offset keeps those minutes on the
+ * same calendar day, so the Beijing weekend and the UTC weekend exempt exactly
+ * the same minutes. See peakFractionForLocalHourOnDay for the local-day trap.
+ */
+const DEEPSEEK_PEAK_DAYS = [1, 2, 3, 4, 5];
+
+/** The scheme exactly as it launched on 16 Aug: peak bands every day of the week. */
+const LAUNCH_WEEK_PEAK_DAYS = [0, 1, 2, 3, 4, 5, 6];
+
 const DEEPSEEK_SOURCE =
-  "TechNode / Quartz, 13–14 Aug 2026 — DeepSeek V4 peak & off-peak API pricing, effective 16:00 UTC 16 Aug 2026";
+  "TechNode / Quartz, 13–14 Aug 2026 (bands, effective 16:00 UTC 16 Aug 2026); Bloomberg / PANews / 36Kr, 23 Aug 2026 (weekends moved to off-peak from 00:00 Beijing time, 23 Aug 2026)";
 
 /**
  * Every figure below is USD per 1,000,000 OUTPUT tokens.
@@ -30,10 +45,11 @@ export const MODELS: ModelPricing[] = [
     name: "V4-Flash",
     outputPerMTok: { peak: 1.32, offpeak: 0.66 },
     peakWindowsUtc: DEEPSEEK_PEAK,
+    peakDaysUtc: DEEPSEEK_PEAK_DAYS,
     previousFlatOutputPerMTok: 0.28,
-    effectiveFrom: "2026-08-16T16:00:00Z",
+    effectiveFrom: "2026-08-16T16:00:00Z, weekend exemption from 2026-08-23",
     source: DEEPSEEK_SOURCE,
-    note: "Off-peak is exactly half of peak. Peak is ~4.7x the previous flat rate.",
+    note: "Off-peak is exactly half of peak. Peak is ~4.7x the previous flat rate. Peak bands run Mon-Fri only; the whole weekend is off-peak.",
   },
   {
     id: "deepseek-v4-pro",
@@ -41,10 +57,23 @@ export const MODELS: ModelPricing[] = [
     name: "V4-Pro",
     outputPerMTok: { peak: 3.96, offpeak: 1.98 },
     peakWindowsUtc: DEEPSEEK_PEAK,
+    peakDaysUtc: DEEPSEEK_PEAK_DAYS,
     previousFlatOutputPerMTok: 0.87,
-    effectiveFrom: "2026-08-16T16:00:00Z",
+    effectiveFrom: "2026-08-16T16:00:00Z, weekend exemption from 2026-08-23",
     source: DEEPSEEK_SOURCE,
-    note: "Off-peak is exactly half of peak. Peak is ~4.6x the previous flat rate.",
+    note: "Off-peak is exactly half of peak. Peak is ~4.6x the previous flat rate. Peak bands run Mon-Fri only; the whole weekend is off-peak.",
+  },
+  {
+    id: "deepseek-v4-flash-launch",
+    provider: "DeepSeek",
+    name: "V4-Flash (launch week: peak 7 days)",
+    outputPerMTok: { peak: 1.32, offpeak: 0.66 },
+    peakWindowsUtc: DEEPSEEK_PEAK,
+    peakDaysUtc: LAUNCH_WEEK_PEAK_DAYS,
+    previousFlatOutputPerMTok: 0.28,
+    effectiveFrom: "2026-08-16T16:00:00Z to 2026-08-23",
+    source: DEEPSEEK_SOURCE,
+    note: "The scheme as launched, with peak bands every day. Kept so you can measure what the 23 Aug weekend exemption is actually worth on your traffic.",
   },
   {
     id: "deepseek-v4-flash-old",
@@ -52,6 +81,7 @@ export const MODELS: ModelPricing[] = [
     name: "V4-Flash (pre-16 Aug flat rate)",
     outputPerMTok: { peak: 0.28, offpeak: 0.28 },
     peakWindowsUtc: [],
+    peakDaysUtc: [],
     previousFlatOutputPerMTok: null,
     effectiveFrom: "before 2026-08-16T16:00:00Z",
     source: DEEPSEEK_SOURCE,

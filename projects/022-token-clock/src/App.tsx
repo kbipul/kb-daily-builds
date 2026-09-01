@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { MODELS, ZONES, modelById, zoneById } from "./data/pricing";
 import { PROFILES, profileById } from "./data/profiles";
-import { windowInZone } from "./lib/clock";
-import { combineHourly, costForHourly } from "./lib/cost";
-import { shiftDeferrable } from "./lib/shift";
+import { DAY_NAMES, windowInZone } from "./lib/clock";
+import { combineHourly, costForWeek } from "./lib/cost";
+import { shiftDeferrable, weekendPlan, weeklyCostAfterIntradayShift } from "./lib/shift";
 import { hourLabel, multiple, pct, tokens, usd } from "./lib/format";
 import type { Workload } from "./lib/types";
 
@@ -23,8 +23,8 @@ export default function App() {
     [profile, overrides, profileId],
   );
 
-  const before = useMemo(
-    () => costForHourly(combineHourly(workloads), zone, model),
+  const week = useMemo(
+    () => costForWeek(combineHourly(workloads), zone, model),
     [workloads, zone, model],
   );
 
@@ -33,17 +33,28 @@ export default function App() {
     [workloads, zone, model, capacity],
   );
 
-  const after = useMemo(
-    () => costForHourly(combineHourly(workloads, shift.shifted), zone, model),
+  const afterWeeklyUsd = useMemo(
+    () => weeklyCostAfterIntradayShift(workloads, shift.shifted, zone, model),
     [workloads, shift, zone, model],
   );
 
-  const saved = before.totalCostUsd - after.totalCostUsd;
+  const weekend = useMemo(
+    () => weekendPlan(workloads, zone, model),
+    [workloads, zone, model],
+  );
+
+  const saved = week.weeklyCostUsd - afterWeeklyUsd;
   const banded = model.peakWindowsUtc.length > 0;
+  const weekdayOnly = banded && model.peakDaysUtc.length > 0 && model.peakDaysUtc.length < 7;
+
+  // Wednesday and Saturday stand in for the two shapes of day. Every day is
+  // priced separately in `week`; these two are simply what gets drawn.
+  const weekdayView = week.days[3];
+  const weekendView = week.days[6];
   const maxTokens = Math.max(
     1,
-    ...before.hours.map((h) => h.tokens),
-    ...after.hours.map((h) => h.tokens),
+    ...weekdayView.report.hours.map((h) => h.tokens),
+    ...weekendView.report.hours.map((h) => h.tokens),
   );
 
   const setWorkload = (id: string, patch: Partial<Workload>) =>
@@ -61,11 +72,14 @@ export default function App() {
           Your AI bill now depends on what time you run it.
         </p>
         <div className="signal">
-          <strong>Live at 16:00 UTC, 16 August 2026.</strong> DeepSeek is
-          splitting its API pricing into peak and off-peak bands — output tokens
-          up to <em>1,100% more expensive</em> than the old flat rate at peak,
-          and exactly half the peak rate outside two UTC windows. Time-of-day
-          pricing has arrived, and nothing in your stack knows about it yet.
+          <strong>Amended 23 August 2026 — the weekend is now free of peak
+          pricing.</strong>{" "}
+          DeepSeek split its API pricing into peak and off-peak bands on 16
+          August (output tokens up to <em>1,100% more expensive</em> than the old
+          flat rate at peak). One week later it dropped peak billing on Saturday
+          and Sunday entirely. So the cheapest lever is no longer{" "}
+          <em>run this batch at 3 a.m.</em> — it is <em>run it on Saturday</em>,
+          and nothing in your scheduler knows that yet.
         </div>
       </header>
 
@@ -118,30 +132,43 @@ export default function App() {
       <section className="ledger">
         <div className="card">
           <span className="card-label">As scheduled</span>
-          <span className="card-value">{usd(before.totalCostUsd)}</span>
-          <span className="card-sub">per day · output tokens</span>
+          <span className="card-value">{usd(week.weeklyCostUsd)}</span>
+          <span className="card-sub">per week · output tokens</span>
         </div>
         <div className="card">
           <span className="card-label">Peak exposure</span>
-          <span className={`card-value ${before.peakExposure > 0.4 ? "bad" : ""}`}>
-            {pct(before.peakExposure)}
+          <span className={`card-value ${week.peakExposure > 0.4 ? "bad" : ""}`}>
+            {pct(week.peakExposure)}
           </span>
-          <span className="card-sub">of spend at the peak rate</span>
+          <span className="card-sub">of weekly spend at the peak rate</span>
         </div>
         <div className="card good">
-          <span className="card-label">After shifting deferrable work</span>
-          <span className="card-value">{usd(after.totalCostUsd)}</span>
+          <span className="card-label">Move deferrable work to the weekend</span>
+          <span className="card-value">{usd(weekend.totalSavedUsd)}</span>
           <span className="card-sub">
-            saves {usd(saved)} / day ·{" "}
-            {pct(before.totalCostUsd ? saved / before.totalCostUsd : 0)}
+            {weekend.noWeekendEdge
+              ? "no weekend discount on this model"
+              : `per week · ${pct(
+                  weekend.baselineDeferrableUsd
+                    ? weekend.totalSavedUsd / weekend.baselineDeferrableUsd
+                    : 0,
+                )} off deferrable spend`}
+          </span>
+        </div>
+        <div className="card">
+          <span className="card-label">Or shift within the day</span>
+          <span className="card-value">{usd(saved)}</span>
+          <span className="card-sub">
+            per week · {pct(week.weeklyCostUsd ? saved / week.weeklyCostUsd : 0)} ·
+            the smaller lever
           </span>
         </div>
         <div className="card">
           <span className="card-label">Versus the old flat rate</span>
           <span className="card-value">
-            {before.previousFlatCostUsd === null
+            {week.previousFlatWeeklyCostUsd === null
               ? "—"
-              : usd(before.totalCostUsd - before.previousFlatCostUsd)}
+              : usd(week.weeklyCostUsd - week.previousFlatWeeklyCostUsd)}
           </span>
           <span className="card-sub">
             {model.previousFlatOutputPerMTok === null
@@ -155,7 +182,7 @@ export default function App() {
       </section>
 
       <section className="panel">
-        <h2>Your day, priced hour by hour</h2>
+        <h2>Your week, priced hour by hour</h2>
         <p className="hint">
           {banded ? (
             <>
@@ -165,11 +192,18 @@ export default function App() {
                   {windowInZone(w, zone)}
                 </span>
               ))}
+              {weekdayOnly && (
+                <strong className="weekend-note">
+                  {" "}
+                  — Monday to Friday only. Saturday and Sunday are off-peak all
+                  day.
+                </strong>
+              )}
               {zone.offsetMin % 60 !== 0 && (
                 <em className="straddle">
                   {" "}
-                  — your offset is not a whole number of hours, so the shaded
-                  hours are only partly peak-priced.
+                  Your offset is not a whole number of hours, so the shaded hours
+                  are only partly peak-priced.
                 </em>
               )}
             </>
@@ -179,14 +213,14 @@ export default function App() {
         </p>
 
         <Chart
-          title="As scheduled"
-          hours={before.hours}
+          title="A weekday (Wednesday)"
+          hours={weekdayView.report.hours}
           maxTokens={maxTokens}
           zoneLabel={zone.label}
         />
         <Chart
-          title="After shifting deferrable work"
-          hours={after.hours}
+          title="A weekend day (Saturday)"
+          hours={weekendView.report.hours}
           maxTokens={maxTokens}
           zoneLabel={zone.label}
         />
@@ -196,6 +230,79 @@ export default function App() {
           <span><i className="sw off" /> off-peak minutes</span>
           <span>bar height = output tokens in that local hour</span>
         </div>
+
+        <table className="wl">
+          <thead>
+            <tr>
+              <th>Local day</th>
+              <th>Cost</th>
+              <th>Peak exposure</th>
+            </tr>
+          </thead>
+          <tbody>
+            {week.days.map(({ day, report }) => (
+              <tr key={day}>
+                <td>{DAY_NAMES[day]}</td>
+                <td className="num">{usd(report.totalCostUsd)}</td>
+                <td className="num">{pct(report.peakExposure, 0)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="hint">
+          Each of the seven days is priced on its own rather than multiplying one
+          representative weekday by five. Far from UTC the days really do differ:
+          in US Pacific, local Friday evening lands on UTC Saturday and is exempt,
+          while local Sunday evening lands on UTC Monday and is not.
+        </p>
+      </section>
+
+      <section className="panel">
+        <h2>The weekend play</h2>
+        {weekend.noWeekendEdge ? (
+          <p className="muted">
+            Nothing to gain here — either no workload is marked deferrable, or
+            this model prices every day the same.
+          </p>
+        ) : (
+          <>
+            <p className="hint">
+              Each row moves one weekday's deferrable run onto the cheapest
+              weekend day. They are listed separately on purpose: whether your
+              pipeline can absorb all five on two days is a capacity decision
+              only you can make, so the total above is a ceiling, not a promise.
+            </p>
+            <table className="wl">
+              <thead>
+                <tr>
+                  <th>Workload</th>
+                  <th>Move</th>
+                  <th>Tokens</th>
+                  <th>Weekday</th>
+                  <th>Weekend</th>
+                  <th>Saves</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weekend.moves.map((m, i) => (
+                  <tr key={i}>
+                    <td>{m.workloadName}</td>
+                    <td>
+                      <code>{DAY_NAMES[m.fromDay]}</code> →{" "}
+                      <code>{DAY_NAMES[m.toDay]}</code>
+                    </td>
+                    <td className="num">{tokens(m.tokens)}</td>
+                    <td className="num">{usd(m.weekdayCostUsd)}</td>
+                    <td className="num">{usd(m.weekendCostUsd)}</td>
+                    <td className="num">
+                      <strong>{usd(m.savedUsd)}</strong>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
       </section>
 
       <section className="panel">
@@ -313,7 +420,23 @@ export default function App() {
             is where you tell the planner what your pipeline can absorb.
           </li>
           <li>
-            <strong>Prices move.</strong> {model.source}. {model.note}
+            <strong>The weekend total is a ceiling, not a plan.</strong> It adds
+            up all five weekday runs as if the weekend could absorb every one of
+            them. Two days of capacity is the constraint the table leaves to you.
+          </li>
+          <li>
+            <strong>Weekends are resolved on the UTC day.</strong> DeepSeek
+            announced the exemption in Beijing time, but every peak window sits
+            inside 01:00–10:00 UTC, so the +8h offset never crosses midnight and
+            the two definitions select identical minutes. If the bands ever move
+            outside that range, this assumption needs revisiting.
+          </li>
+          <li>
+            <strong>Prices move — this one moved mid-build.</strong>{" "}
+            {model.source}. {model.note} Simple "is it peak right now" clocks
+            already exist (seekpeak.dev and others); what this adds is your own
+            hourly traffic mapped onto the bands, in your timezone, priced across
+            a full week.
           </li>
         </ul>
       </section>

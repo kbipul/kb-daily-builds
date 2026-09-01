@@ -161,3 +161,7 @@ input[type="range"] { padding: 0; accent-color: var(--accent); height: 34px; }
 
 footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 34px; }
 a { color: var(--accent); }
+
+.weekend-note {
+  color: var(--good, #16a34a);
+}

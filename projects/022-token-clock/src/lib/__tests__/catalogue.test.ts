@@ -46,6 +46,36 @@ describe("pricing catalogue", () => {
     }
   });
 
+  it("exempts the weekend on the live DeepSeek entries, per the 23 Aug amendment", () => {
+    for (const id of ["deepseek-v4-flash", "deepseek-v4-pro"]) {
+      const m = modelById(id);
+      expect(m.peakDaysUtc).toEqual([1, 2, 3, 4, 5]);
+      expect(m.peakDaysUtc).not.toContain(0);
+      expect(m.peakDaysUtc).not.toContain(6);
+    }
+  });
+
+  it("keeps the launch-week entry on a seven-day schedule for comparison", () => {
+    expect(modelById("deepseek-v4-flash-launch").peakDaysUtc).toHaveLength(7);
+  });
+
+  it("gives flat models no peak days at all", () => {
+    for (const m of MODELS) {
+      if (m.peakWindowsUtc.length === 0) expect(m.peakDaysUtc).toEqual([]);
+      else expect(m.peakDaysUtc.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("uses only valid weekday indices", () => {
+    for (const m of MODELS) {
+      for (const d of m.peakDaysUtc) {
+        expect(Number.isInteger(d)).toBe(true);
+        expect(d).toBeGreaterThanOrEqual(0);
+        expect(d).toBeLessThanOrEqual(6);
+      }
+    }
+  });
+
   it("throws on an unknown model or zone", () => {
     expect(() => modelById("nope")).toThrow();
     expect(() => zoneById("nope")).toThrow();

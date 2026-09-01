@@ -1,10 +1,27 @@
 {
   "day": 22,
   "repo": "token-clock",
-  "title": "Token Clock — Your AI Bill Now Depends on What Time You Run It",
-  "tagline": "DeepSeek's peak/off-peak API pricing went live at 16:00 UTC on 16 Aug 2026 — output tokens up to 1,100% more expensive, and half price outside two UTC windows. Map your daily traffic onto those bands in your own timezone, see your peak exposure, and watch deferrable work shift into off-peak. 100% in your browser, no API key.",
-  "description": "Time-of-day LLM pricing planner: map daily token traffic onto peak/off-peak bands in your timezone, measure peak exposure, shift deferrable load. No API key.",
-  "topics": ["ai", "ml", "llm", "finops", "ai-cost", "deepseek", "pricing", "scheduling", "typescript", "react", "azure"],
+  "title": "Token Clock — Your AI Bill Now Depends on What Day You Run It",
+  "tagline": "DeepSeek made API tokens peak-priced on 16 Aug 2026, then exempted the whole weekend on 23 Aug. Output tokens run up to 1,100% above the old flat rate inside two weekday UTC windows, and Saturday and Sunday are now off-peak all day. Map your traffic onto the bands in your timezone, price a full week, and see what moving batch work to the weekend is worth. 100% in your browser, no API key.",
+  "description": "Price a full week of LLM traffic against DeepSeek's weekday peak bands and weekend exemption, in your timezone.",
+  "topics": [
+    "ai",
+    "ml",
+    "llm",
+    "finops",
+    "ai-cost",
+    "deepseek",
+    "pricing",
+    "scheduling",
+    "typescript",
+    "react",
+    "azure"
+  ],
   "demo": "pages",
-  "stack": ["React", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ]
 }
