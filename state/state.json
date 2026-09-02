@@ -55,7 +55,7 @@
       "repo": "token-cost-lab",
       "title": "Token Cost Lab — See What a Prompt Actually Costs",
       "tagline": "Paste a prompt, pick your models, and watch the per-request cost light up across GPT-5.6, Claude Sonnet 5, Grok 4.5 and more — tokenized 100% in your browser, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-11",
       "demo": "pages",
       "valueScore": 11,
@@ -65,7 +65,7 @@
       "demoUrl": "https://kbipul.github.io/token-cost-lab/",
       "publishedAt": "2026-07-11T01:48:37.545Z",
       "refreshNote": "2026-09-02 price-drift refresh. The first re-queue attempt hit a publish.yml bug that created a duplicate repo token-cost-lab-kb; publish.yml is fixed and that stray repo needs manual deletion.",
-      "refreshedAt": "2026-09-02T13:08:13.341Z"
+      "refreshedAt": "2026-09-02T13:12:53.134Z"
     },
     {
       "day": 5,
