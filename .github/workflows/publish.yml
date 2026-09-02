@@ -83,15 +83,34 @@ jobs:
             DAY=$(node -p "require('./$DIR/project.json').day")
             DEMO=$(node -p "require('./$DIR/project.json').demo || 'none'")
 
-            # 1. Create repo if it doesn't exist (append -kb on name collision)
+            # 1. Create repo if it doesn't exist (append -kb on a genuine name
+            #    collision -- i.e. some OTHER project already owns the name).
+            #
+            #    Re-sync case (fixed 2026-09-02): re-publishing an already-published
+            #    project means flipping its state entry back to "built", which used
+            #    to make the old check ("is any entry with this repo name currently
+            #    published?") answer false -- so a refresh of Day 004 created a
+            #    duplicate repo `token-cost-lab-kb` instead of updating
+            #    `token-cost-lab`. Ownership is now decided by the FOLDER, not by
+            #    a status that the re-queue itself has just changed.
             if gh api "repos/$OWNER/$REPO" --silent 2>/dev/null; then
-              if [ "$(node -p "require('./state/state.json').projects.some(p=>p.repo==='$REPO'&&p.status==='published')")" = "false" ]; then
+              OWNS=$(node -p "
+                const s = require('./state/state.json');
+                const mine = s.projects.find(p => p.folder === '$FOLDER');
+                const claimedByMe = !!mine &&
+                  (mine.repo === '$REPO' || String(mine.repoUrl || '').endsWith('/$REPO'));
+                const claimedByPublished = s.projects.some(
+                  p => p.repo === '$REPO' && p.status === 'published' && p.folder !== '$FOLDER');
+                String(claimedByMe || claimedByPublished);
+              ")
+              if [ "$OWNS" = "true" ]; then
+                echo "$REPO already belongs to $FOLDER - re-syncing in place, not creating a duplicate."
+              else
+                echo "::warning::$REPO exists but no state entry claims it - publishing as ${REPO}-kb instead."
                 REPO="${REPO}-kb"
                 gh api user/repos -f name="$REPO" -f description="$DESC" \
                   -f homepage="https://www.kumarbipul.com" \
                   -F has_wiki=false -F has_projects=false --silent
-              else
-                echo "$REPO already published; skipping create."
               fi
             else
               gh api user/repos -f name="$REPO" -f description="$DESC" \
@@ -137,7 +156,12 @@ jobs:
               p.repo = '$REPO';
               p.repoUrl = 'https://github.com/$OWNER/$REPO';
               if ('$DEMO_URL') p.demoUrl = '$DEMO_URL';
-              p.publishedAt = new Date().toISOString();
+              // A re-publish must never rewrite when this project FIRST shipped.
+              // (Fixed 2026-09-02: the Day 004 refresh would have restamped a
+              // July publish date with September.) First publish sets
+              // publishedAt once; every later sync only moves refreshedAt.
+              const now = new Date().toISOString();
+              if (p.publishedAt) { p.refreshedAt = now; } else { p.publishedAt = now; }
               fs.writeFileSync('state/state.json', JSON.stringify(s, null, 2) + '\n');
             "
             echo "✅ Published https://github.com/$OWNER/$REPO"
