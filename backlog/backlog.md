@@ -105,3 +105,9 @@ When ≤14 days remain, the weekly audit generates the next 30 ideas following t
 | 17 | DeepSeek V4 Price-Floor Board | `price-floor-board` | Pick your current model + monthly token volume and see how far DeepSeek V4's ~$0.44/M output floor (stable 2026-07-24) undercuts it, across the week's open-weight wave (Kimi K3, Gemini 3.6 Flash). Client-side calculator. | pages | 8/12 (lost to Agent Scratchpad — overlaps Day 4 Token Cost Lab, Distinctiveness 1) |
 | 21 | Loop Guard | `loop-guard` | Paste an agent-loop config (max steps, stop conditions, tool set) and simulate runaway behavior: where it terminates, where it burns its step budget in a tool-call cycle, and a safer rewrite. Client-side simulator, no model. Rides Microsoft's new AB-100/AB-620 agent certifications making loop-safety a named competency. | pages | 9/12 (lost to kb-agent-framework — the framework demo already visualizes the step guard) |
 | 22 | Repricing Exposure Board | `repricing-board` | Paste your monthly token mix and see what the last month of provider repricing did to it: DeepSeek V4 up to +1,100% at peak (16 Aug), GPT-5.6 Luna down 80% (30 Jul), Claude Sonnet 5 $2→$3/M on 1 Sep. A diff view over a moving price list, with switch-cost break-evens. | pages | 9/12 (lost to Token Clock — right signal, but Distinctiveness 1: it is Day 4 Token Cost Lab with a delta column) |
+
+### Signal-derived (added Day 23)
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| eval-treadmill | Eval Treadmill — visualize how AI safety benchmarks are saturated faster than new ones ship | React + TS + Vite | 10/12 |
+| ai-attack-surface | AI Attack Surface Mapper — paste your infra config, see every AI-specific attack vector mapped | React + TS + Vite | 10/12 |
