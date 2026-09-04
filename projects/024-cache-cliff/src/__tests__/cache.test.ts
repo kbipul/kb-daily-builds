@@ -3,6 +3,8 @@ import {
   diagnose,
   hitDepth,
   optimize,
+  q,
+  relocate,
   requestCost,
   rollup,
   stableThrough,
@@ -337,5 +339,76 @@ describe('validateStack', () => {
   it('rejects a fifth breakpoint', () => {
     const blocks = Array.from({ length: 6 }, (_, i) => b(`x${i}`, 10, 'static', 'context'));
     expect(validateStack(stack(blocks, [0, 1, 2, 3, 4])).length).toBe(1);
+  });
+});
+
+describe('q — label quoting', () => {
+  it('quotes a bare label', () => {
+    expect(q('System prompt')).toBe('"System prompt"');
+  });
+
+  it('leaves an already-quoted label alone rather than doubling up', () => {
+    expect(q('"Current date and time: …"')).toBe('"Current date and time: …"');
+    expect(q('“Current date”')).toBe('“Current date”');
+  });
+
+  it('never appears doubled in a finding title', () => {
+    const s = stack(
+      [b('sys', 1000, 'static', 'system'), { ...b('now', 12, 'per-turn', 'system'), label: '"Current date: …"' }, b('repo', 30_000, 'static', 'context')],
+      [0],
+    );
+    for (const d of diagnose(s, fable, '5m')) expect(d.title).not.toContain('""');
+  });
+});
+
+describe('relocate — the tier the optimiser is not allowed to reach', () => {
+  it('moves a per-turn block out of an early zone into the current turn', () => {
+    const s = stack(
+      [b('sys', 1000, 'static', 'system'), b('now', 12, 'per-turn', 'system'), b('repo', 24_000, 'static', 'context')],
+      [0],
+    );
+    const { stack: fixed, moved } = relocate(s);
+    expect(moved.map((m) => m.blockId)).toEqual(['now']);
+    expect(fixed.blocks[fixed.blocks.length - 1].id).toBe('now');
+    expect(hitDepth(fixed, 'warm')).toBe(1);
+  });
+
+  it('leaves history and turn blocks where they are', () => {
+    const s = stack(
+      [b('sys', 1000, 'static', 'system'), b('hist', 8000, 'per-turn', 'history'), b('u', 300, 'per-turn', 'turn')],
+      [0],
+    );
+    expect(relocate(s).moved).toEqual([]);
+  });
+
+  it('beats plain reordering on the coding-agent preset', () => {
+    const coding = PRESETS.find((p) => p.name.startsWith('Coding agent'))!;
+    const reordered = rollup(optimize(coding), fable, '5m').perMonth;
+    const relocated = rollup(relocate(coding).stack, fable, '5m').perMonth;
+    expect(relocated).toBeLessThan(reordered);
+  });
+
+  it('never costs more than reordering alone, on any preset', () => {
+    for (const preset of PRESETS) {
+      const reordered = rollup(optimize(preset), fable, '5m').perMonth;
+      const relocated = rollup(relocate(preset).stack, fable, '5m').perMonth;
+      expect(relocated).toBeLessThanOrEqual(reordered + 1e-9);
+    }
+  });
+
+  it('preserves every block and every token', () => {
+    for (const preset of PRESETS) {
+      const { stack: r } = relocate(preset);
+      expect(totalTokens(r)).toBe(totalTokens(preset));
+      expect(new Set(r.blocks.map((x) => x.id))).toEqual(new Set(preset.blocks.map((x) => x.id)));
+    }
+  });
+
+  it('clears the unfixable-early-volatility finding it exists to answer', () => {
+    const coding = PRESETS.find((p) => p.name.startsWith('Coding agent'))!;
+    expect(diagnose(coding, fable, '5m').some((d) => d.kind === 'unfixable-early-volatility')).toBe(true);
+    expect(
+      diagnose(relocate(coding).stack, fable, '5m').some((d) => d.kind === 'unfixable-early-volatility'),
+    ).toBe(false);
   });
 });

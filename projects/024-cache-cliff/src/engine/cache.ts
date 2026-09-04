@@ -36,6 +36,10 @@ export interface RequestCost {
   total: number;
 }
 
+/** Quote a label without doubling up when the label already carries quotes. */
+export const q = (label: string): string =>
+  /^["\u201c].*["\u201d]$/.test(label.trim()) ? label.trim() : `"${label}"`;
+
 const rangeTokens = (blocks: Block[], from: number, to: number) =>
   from > to ? 0 : sum(blocks.slice(from, to + 1).map((b) => b.tokens));
 
@@ -158,7 +162,7 @@ export function diagnose(stack: PromptStack, model: ModelPricing, ttl: Ttl): Dia
     out.push({
       kind: 'trapped-breakpoint',
       severity: 'critical',
-      title: `Breakpoint on "${blocks[b].label}" can never be read back`,
+      title: `Breakpoint on ${q(blocks[b].label)} can never be read back`,
       detail: `Its prefix contains a per-turn block, so the ${tokens.toLocaleString()}-token prefix is rewritten at $${writeRate(model, ttl)}/M every single request and never read. That is ${surcharge >= 0 ? 'a surcharge of' : 'a saving of'} $${Math.abs(surcharge).toFixed(4)} per request over not caching at all.`,
       blockId: blocks[b].id,
     });
@@ -173,7 +177,7 @@ export function diagnose(stack: PromptStack, model: ModelPricing, ttl: Ttl): Dia
       out.push({
         kind: 'cliff',
         severity: 'warning',
-        title: `"${culprit.label}" (${culprit.tokens.toLocaleString()} tokens) strands ${stranded.toLocaleString()} tokens behind it`,
+        title: `${q(culprit.label)} (${culprit.tokens.toLocaleString()} tokens) strands ${stranded.toLocaleString()} tokens behind it`,
         detail: `It changes ${culprit.volatility === 'per-turn' ? 'every turn' : 'every session'}, and it sits at position ${warmEnd + 2} of ${blocks.length}. Prefix matching stops here, so nothing after it can be cached no matter how stable it is.`,
         blockId: culprit.id,
         strandedTokens: stranded,
@@ -197,8 +201,8 @@ export function diagnose(stack: PromptStack, model: ModelPricing, ttl: Ttl): Dia
       out.push({
         kind: 'redundant-breakpoint',
         severity: 'info',
-        title: `Breakpoint on "${blocks[valid[i - 1]].label}" is redundant`,
-        detail: `The deeper breakpoint on "${blocks[valid[i]].label}" has the same stability, so it always wins the longest-prefix match. You have ${MAX_BREAKPOINTS} markers to spend; this one buys nothing.`,
+        title: `Breakpoint on ${q(blocks[valid[i - 1]].label)} is redundant`,
+        detail: `The deeper breakpoint on ${q(blocks[valid[i]].label)} has the same stability, so it always wins the longest-prefix match. You have ${MAX_BREAKPOINTS} markers to spend; this one buys nothing.`,
         blockId: blocks[valid[i - 1]].id,
       });
     }
@@ -275,3 +279,70 @@ export function optimize(stack: PromptStack): PromptStack {
 }
 
 export const totalTokens = (stack: PromptStack) => sum(stack.blocks.map((b) => b.tokens));
+
+/** Zones whose contents are assembled before the conversation starts. */
+const EARLY_ZONES: Zone[] = ['tools', 'system', 'context'];
+
+export interface Relocation {
+  blockId: string;
+  label: string;
+  tokens: number;
+  from: Zone;
+  volatility: Volatility;
+}
+
+/**
+ * Tokens that read back over one whole session, weighted the way the bill is:
+ * the cold prefix is paid for once, the warm one on every remaining turn. Used
+ * as the objective for `relocate` so the decision is model-independent — a
+ * move either gets more tokens reading back or it does not, whatever the
+ * price list says.
+ */
+export function readBackScore(stack: PromptStack): number {
+  const at = (h: Horizon) => rangeTokens(stack.blocks, 0, hitDepth(stack, h));
+  return at('cold') + Math.max(0, stack.turnsPerSession - 1) * at('warm');
+}
+
+/**
+ * The second tier. `optimize` only reorders inside a zone, because that is all
+ * you can do without touching code. This one also moves volatile blocks OUT of
+ * the zones that are assembled up front and into the current turn — usually
+ * correct (a timestamp, a retrieved chunk or a user's name reads the same at
+ * the bottom of the prompt) but a change to how the request is built, not a
+ * reshuffle. It is priced separately for that reason and never folded into the
+ * headline.
+ *
+ * Greedy, one candidate at a time, keeping a move only when it increases
+ * readBackScore. Greedy is enough here because the blocks compete for one
+ * resource — position in a single prefix — and a move that strands fewer
+ * tokens never makes a later move worse.
+ */
+export function relocate(stack: PromptStack): { stack: PromptStack; moved: Relocation[] } {
+  const moved: Relocation[] = [];
+  let current = optimize(stack);
+  let score = readBackScore(current);
+
+  for (const candidate of stack.blocks) {
+    if (candidate.volatility === 'static') continue;
+    if (!EARLY_ZONES.includes(candidate.zone)) continue;
+
+    const trial = optimize({
+      ...current,
+      blocks: current.blocks.map((b) => (b.id === candidate.id ? { ...b, zone: 'turn' as Zone } : b)),
+    });
+    const trialScore = readBackScore(trial);
+    if (trialScore > score) {
+      moved.push({
+        blockId: candidate.id,
+        label: candidate.label,
+        tokens: candidate.tokens,
+        from: candidate.zone,
+        volatility: candidate.volatility,
+      });
+      current = trial;
+      score = trialScore;
+    }
+  }
+
+  return { stack: current, moved };
+}

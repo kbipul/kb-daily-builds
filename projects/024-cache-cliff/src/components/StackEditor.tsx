@@ -48,6 +48,14 @@ export function StackEditor({ stack, onChange }: Props) {
       </h2>
 
       <table className="stack-table">
+        <colgroup>
+          <col className="c-bp" />
+          <col className="c-label" />
+          <col className="c-zone" />
+          <col className="c-vol" />
+          <col className="c-tok" />
+          <col />
+        </colgroup>
         <thead>
           <tr>
             <th className="c-bp" title={`cache_control marker — the API allows ${MAX_BREAKPOINTS}`}>

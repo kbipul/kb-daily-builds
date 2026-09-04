@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { MODELS, type ModelPricing, type Ttl } from './engine/pricing';
 import { PRESETS } from './engine/presets';
-import { diagnose, optimize, validateStack } from './engine/cache';
+import { diagnose, optimize, relocate, validateStack } from './engine/cache';
 import type { PromptStack } from './engine/types';
 import { StackEditor } from './components/StackEditor';
 import { CliffChart } from './components/CliffChart';
@@ -24,10 +24,10 @@ export default function App() {
       <header>
         <h1>Cache Cliff</h1>
         <p className="lede">
-          Claude Fable 5.1 went GA on 1 September 2026 with cache reads cut 75%, to $0.25 per million — 2.5% of its
-          input price, where every other Claude model charges 10%. That single change made a cache <em>miss</em> cost{' '}
-          <strong>50× a hit</strong> instead of 12.5×. Prefix hygiene just became four times more valuable than it was
-          last week. Lay out your prompt below and find the token that is breaking yours.
+          Claude Fable 5.1 reads a cached token for $0.25 per million and writes one for $12.50. A hit and a miss on the
+          same tokens are <strong>50× apart</strong>. Prefix caching matches the longest identical token prefix of your
+          request, so the first block that changes ends caching for everything behind it, however stable that tail is.
+          Lay out your prompt and find the block breaking yours.
         </p>
       </header>
 
@@ -100,16 +100,21 @@ export default function App() {
       )}
 
       <CliffChart stack={stack} />
-      <CostPanel stack={stack} model={model} ttl={ttl} onApplyFix={() => setStack(optimize(stack))} />
+      <CostPanel
+        stack={stack}
+        model={model}
+        ttl={ttl}
+        onApplyFix={() => setStack(optimize(stack))}
+        onApplyRelocation={() => setStack(relocate(stack).stack)}
+      />
       <Findings diagnostics={diagnostics} />
       <StackEditor stack={stack} onChange={setStack} />
 
       <footer>
         <p className="muted small">
-          Prefix caching matches the longest identical token prefix of your request, so the first block that changes
-          ends caching for everything behind it — however stable that tail is. Nothing here calls an API; the arithmetic
-          runs in your browser. Prices are the published list rates cited above and exclude batch or enterprise
-          discounts.
+          Nothing here calls an API. The arithmetic runs in your browser and no text you paste leaves the tab. Prices
+          are the published list rates shown above, so batch and enterprise discounts are out of scope. Cache reads at
+          $0.25/M went live on 1 September 2026.
         </p>
         <p className="muted small">
           Day 024 of <a href="https://github.com/kbipul/kb-daily-builds">kb-daily-builds</a> ·{' '}
