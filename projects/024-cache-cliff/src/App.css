@@ -73,7 +73,7 @@ textarea {
   font-size: 13px;
 }
 
-.num-input { width: 100%; max-width: 96px; text-align: right; }
+.num-input { width: 100%; min-width: 74px; max-width: 116px; text-align: right; }
 .label-input { width: 100%; min-width: 0; border-color: transparent; background: transparent; }
 .label-input:focus { border-color: var(--line); background: #0d1119; }
 
@@ -123,6 +123,7 @@ textarea {
 .cost.bad { border-color: var(--bad); }
 .cost.bad .cost-v { color: var(--bad); }
 .cost-note { font-size: 11px; color: var(--bad); margin-top: 2px; }
+.cost-note.muted { color: var(--dim); }
 
 .verdict { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
 .verdict:first-of-type { border-top: none; }
@@ -170,10 +171,10 @@ button.ghost:hover { color: var(--ink); border-color: var(--dim); }
 .stack-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .stack-table th { text-align: left; color: var(--dim); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 0 6px 8px; }
 .stack-table td { padding: 5px 6px; border-top: 1px solid var(--line); vertical-align: middle; }
-.stack-table col.c-label { width: 42%; }
-.stack-table col.c-zone { width: 21%; }
-.stack-table col.c-vol { width: 15%; }
-.stack-table col.c-tok { width: 14%; }
+.stack-table col.c-label { width: 33%; }
+.stack-table col.c-zone { width: 24%; }
+.stack-table col.c-vol { width: 19%; }
+.stack-table col.c-tok { width: 17%; }
 .stack-table select { width: 100%; }
 .stack-table .num, .stack-table th.num { text-align: right; }
 .c-bp { width: 30px; text-align: center; }
@@ -181,7 +182,8 @@ button.ghost:hover { color: var(--ink); border-color: var(--dim); }
 .vol-per-turn td:nth-child(2) { color: #f0a08f; }
 .vol-per-session td:nth-child(2) { color: #a9c4ea; }
 
-.row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; margin-top: 16px; }
+.row .num-input { max-width: 88px; }
 
 .paster { margin-top: 16px; }
 .paster summary { cursor: pointer; color: var(--dim); font-size: 13px; }
