@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 23,
+  "dayCounter": 24,
   "projects": [
     {
       "day": 1,
@@ -392,6 +392,28 @@
       "repoUrl": "https://github.com/kbipul/escape-sim",
       "demoUrl": "https://kbipul.github.io/escape-sim/",
       "publishedAt": "2026-09-03T00:48:33.250Z"
+    },
+    {
+      "day": 24,
+      "folder": "024-cache-cliff",
+      "repo": "cache-cliff",
+      "title": "Cache Cliff — On Fable 5.1 a Cache Miss Costs 50× a Hit",
+      "tagline": "Claude Fable 5.1 cut cache reads 75% on 1 Sep 2026. Lay out your prompt stack and find the twelve tokens stranding twenty-four thousand.",
+      "description": "Find the block breaking your Claude prompt-cache prefix, what it strands, and what reordering it is worth per month.",
+      "status": "built",
+      "demo": "pages",
+      "stack": [
+        "React 18",
+        "TypeScript",
+        "Vite",
+        "Vitest"
+      ],
+      "valueScore": 12,
+      "signal": "Claude Fable 5.1 + Mythos 5.1 GA on 2026-09-01 with cache READS cut 75% to $0.25/M — 2.5% of the $10/M input price, where every other Claude model charges 10%. Cache writes unchanged ($12.50/M 5-minute, $20/M 1-hour), so the hit-vs-miss gap moved from 12.5x to 50x in one release; Anthropic's own framing is ~25% off typical workloads and up to ~45% off highly agentic ones (VentureBeat, MarkTechPost, 1-3 Sep). Wider week: OpenAI GPT-6 Astra (first model past the Preparedness 'Critical' cyber threshold — already ridden on Day 023) and GPT-Live voice; Mythos 5.1 gated to vetted US orgs via Cyber/Life-Sciences Verification Programs; Gemini 3.8 Flash and Meta Muse Spark 1.3 shipped 2 Sep. GitHub trending is agent-infrastructure heavy: volcengine/OpenViking (self-evolving context DB unifying agent memory + RAG + skills), akitaonrails/ai-memory (cross-vendor agent handoff), mukul975/Anthropic-Cybersecurity-Skills (817 skills on the agentskills.io standard), obra/superpowers, mattpocock/skills. HF trending leans long-context open weights (Kimi K3, DeepSeek-V4-Flash) plus JIT-Agent. Reddit and Hugging Face direct fetches are allowlist-blocked from the sandbox; both were covered via search results.",
+      "rationale": "Only 12/12 of the slate (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). Timeliness: the price change is three days old and is the pricing story of the week. Distinctiveness is what makes this a 3 rather than the 1 that has capped every price-tool idea since Day 4 — the loop has already priced a prompt (Day 004 token-cost-lab), routed one to a model tier (Day 008 prompt-router), packed one into a budget (Day 012 context-packer) and timed one against peak bands (Day 022 token-clock), and not one of them models prefix STABILITY. The 75% cut makes that the only question left worth tooling: on Fable 5.1 a cached prefix repays its own write after 1.26 requests, so 'should I cache?' is answered for everyone, and 'does my prefix actually hit?' is structural, not arithmetic. The build earns it. The load-bearing finding is that turning caching ON can cost more than leaving it off: the bundled coding-agent preset — 18 tools, system prompt, repo map, history — carries a twelve-token 'Current date and time' line at position 3 that strands 32,300 tokens behind it, and because the cache_control marker sits behind that line the prefix is written at $12.50/M every request and never read, taking the workload from $15,124/month uncached to $18,473/month cached, against $13,299 for the same prompt reordered. That is a 22% penalty for switching a cost feature on, and it is invisible to any dashboard reporting cache-hit RATE rather than cache-hit COST. Two honest constraints shaped the engine: costs are computed over two horizons (cold session start vs warm turn) because a per-session block caches perfectly inside a conversation and is rewritten on every new one — the enterprise RAG preset's 40-token personalisation line in front of a 42,000-token corpus is free on turn 6 and ruinous at 900 sessions/day; and reordering is legal only WITHIN a zone (tools -> system -> context -> history -> turn), so where the genuinely right fix crosses a zone boundary the optimiser does what it legally can (still 64% off that preset) and names the move a human has to authorise rather than emitting advice you cannot take. Two failures worth recording: a test written to prove the README's claim that the cut 'quadruples what a broken prefix costs you' returned 1.07x and disproved it — the absolute waste barely moves because a miss is billed at the unchanged write rate; what quadrupled is the ratio to the repaired stack, because the repaired stack got 4x cheaper. Same fact, different sentence, and the wrong one would have shipped. And the ceil(chars/4) token rule of thumb came back 45% high on plain English (38 vs 27), so the estimator now merges words up to seven characters, splits longer ones every four, and chunks digit runs by three — within 4% — while stating +/-20% and pointing at usage.input_tokens as the only exact number, because Anthropic does not publish the Claude tokenizer. The README's dollar table is asserted in presets.test.ts, so the write-up fails the build if it stops being true. Beat the next two backlog items sk-plugins-pack (5/12 — Positioning 3 but Timeliness 0, Demo-ability 1 on byok, Distinctiveness 1: SK plugin samples are the most-written .NET AI content on the internet) and token-meter-dotnet (4/12 — cli, and it is Day 004 plus Day 022 ground with a middleware wrapper), a fresh Trusted-Access Advisor riding the Mythos 5.1 verification gating (9/12 — Day 009 open-model-passport already owns 'can I ship this model' governance; appended to the backlog), and a fresh Skill Library Collision Detector riding the 817-skill Anthropic-Cybersecurity-Skills repo trending (8/12 — would be the third skill report card after Day 006 skill-scan, and skill-lint plus skill-portability are already queued; appended). 58 Vitest cases pass, tsc clean, smoke test green, secret scan clean.",
+      "builtAt": "2026-09-04T00:00:00.000Z",
+      "repoUrl": "https://github.com/kbipul/cache-cliff",
+      "demoUrl": "https://kbipul.github.io/cache-cliff/"
     }
   ]
 }

@@ -1,0 +1,10 @@
+{
+  "day": 24,
+  "repo": "cache-cliff",
+  "title": "Cache Cliff — On Fable 5.1 a Cache Miss Costs 50× a Hit",
+  "tagline": "Claude Fable 5.1 cut cache reads 75% on 1 Sep 2026. Lay out your prompt stack and find the twelve tokens stranding twenty-four thousand.",
+  "description": "Find the block breaking your Claude prompt-cache prefix, what it strands, and what reordering it is worth per month.",
+  "topics": ["ai", "llm", "prompt-caching", "finops", "claude", "typescript", "react"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}
