@@ -400,7 +400,7 @@
       "title": "Cache Cliff — On Fable 5.1 a Cache Miss Costs 50× a Hit",
       "tagline": "Claude Fable 5.1 cut cache reads 75% on 1 Sep 2026. Lay out your prompt stack and find the twelve tokens stranding twenty-four thousand.",
       "description": "Find the block breaking your Claude prompt-cache prefix, what it strands, and what reordering it is worth per month.",
-      "status": "built",
+      "status": "published",
       "demo": "pages",
       "stack": [
         "React 18",
@@ -416,7 +416,7 @@
       "demoUrl": "https://kbipul.github.io/cache-cliff/",
       "publishedAt": "2026-09-04T05:40:15.119Z",
       "revisedAt": "2026-09-04T00:00:00.000Z",
-      "refreshedAt": "2026-09-04T05:55:53.342Z"
+      "refreshedAt": "2026-09-04T06:07:13.400Z"
     }
   ]
 }
