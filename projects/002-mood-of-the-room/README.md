@@ -13,9 +13,11 @@
 
 ## What it does
 
-Most sentiment tools give you one number for a whole document, which hides the interesting part. The paragraph that swings from panic to relief comes back as "neutral" and you learn nothing. Mood of the Room scores each sentence on its own and draws the result as a red-to-green heatmap, so you can see where a conversation actually turned. Paste a support thread, a batch of reviews, or a stand-up recap and you get the emotional shape at a glance, plus a summary of how many sentences landed positive, neutral, or negative.
+Most sentiment tools give you one number for a whole document, which hides the interesting part. The paragraph that swings from panic to relief comes back as "neutral" and you learn nothing.
 
-Under the hood it uses a DistilBERT model fine-tuned on SST-2, loaded once from the Hugging Face CDN through transformers.js and then run entirely on your device. The text never leaves the tab. No server, no key.
+Mood of the Room scores each sentence on its own and draws the result as a red-to-green heatmap, so you can see where a conversation actually turned. Paste a support thread or a batch of reviews and you get the emotional shape at a glance, plus a count of how many sentences landed positive, neutral, or negative.
+
+The model is DistilBERT fine-tuned on SST-2, loaded once from the Hugging Face CDN through transformers.js and then run entirely on your device. The text never leaves the tab. No server, no key.
 
 ![Screenshot](docs/demo.png)
 
@@ -50,19 +52,25 @@ npm run build    # production build into dist/
  per-sentence chips                  overall mood bar
 ```
 
-Three things worth pointing out:
+Everything worth testing lives in `src/lib/text.ts` and has no ML dependency: `splitSentences`, `toSigned`, `moodLabel`, `scoreToColor`, `summarize`, `formatScore`. `sentiment.ts` is the only file that imports `@huggingface/transformers`, and it does that through a dynamic import behind a lazy singleton. `App.tsx` wires the two together and holds the state. `text.test.ts` covers those six functions in fifteen cases and never touches the network, which is what makes it safe to run in CI, where downloading a model is neither wanted nor reliable.
 
-1. **Logic and model are kept apart on purpose.** Everything I'd want to test (sentence splitting, the label-to-signed-score mapping, the HSL color ramp, the roll-up math) lives in `src/lib/text.ts` as pure functions with no ML dependency. The model wrapper in `sentiment.ts` is a thin lazy singleton. That keeps the test suite fast and deterministic in CI, where downloading a model is neither wanted nor reliable.
-2. **The model loads once, lazily.** The pipeline is built on the first "Analyze" and cached, with a progress callback driving the button label so the ~65 MB first load isn't a mystery hang.
-3. **Signed sentiment instead of two labels.** SST-2 gives POSITIVE/NEGATIVE plus a confidence; collapsing that into a single number in `[-1, 1]` makes both the color ramp and the averaging trivial.
+The pipeline is built on the first "Analyze" and cached in `pipePromise`. A progress callback drives the button label, first `Loading model… n%` and then `Reading… n/total`, so the ~65 MB first load isn't a mystery hang.
+
+SST-2 returns POSITIVE or NEGATIVE plus a confidence. `toSigned` keeps the confidence for POSITIVE, negates it for NEGATIVE, and maps anything else to 0, which gives one number in `[-1, 1]`. That single number feeds both halves of the UI: `scoreToColor` turns it into a hue from 0 to 140 with saturation rising as the score gets more extreme, and `summarize` averages it and counts the buckets.
 
 ## Build notes
 
-The real design question here was where to put the intelligence. It would have been easy to call the pipeline straight from the React components and scatter the scoring math through the UI, but I've been burned by that before. Once the ML call is tangled up with rendering you can't test either half cleanly. So I drew a hard line: `text.ts` is pure and holds all the testable logic, `sentiment.ts` is the only file that imports the model, and `App.tsx` just wires them together. The payoff is a test file that runs in milliseconds and actually pins down the behavior (color ramp, bucket thresholds, the empty-input case) without ever loading a neural net.
+The real design question was where to put the intelligence. Calling the pipeline straight from the React components and scattering the scoring math through the UI would have been faster to write, and I've been burned by that before. Once the ML call is tangled up with rendering you can't test either half cleanly. So the line is drawn at the file boundary: `text.ts` pure, `sentiment.ts` the only importer of the model. The payoff is a test file that runs in milliseconds and pins down real behavior, including the exact HSL strings at both ends of the ramp, the ±0.2 bucket edges, and what `summarize([])` returns.
 
-The per-sentence framing mattered more than I expected. A whole-document score is almost always "mildly positive" and tells you nothing. Scoring each sentence shows the shape of a conversation instead. The demo sample deliberately runs from "I was terrified" to "genuinely proud," and seeing those two ends colored red and green in the same block is the whole reason the tool exists. The model was never the hard part; getting the output to actually say something was.
+The per-sentence framing mattered more than I expected. The demo sample in `seed.ts` is nine lines that run from "I was terrified" through a database outage and back to "genuinely proud." A whole-document score flattens all of that into one mildly positive number.
 
-The honest rough edge is the neutral band. SST-2 is a binary classifier trained to be confident, so it rarely returns a genuinely middling score. A flat, factual sentence still comes back as 85% one way or the other. I fake a neutral bucket with a threshold near the mean, which is a heuristic, not truth. The right fix is a three-class model (positive/neutral/negative), but I kept the smaller binary one to keep first load fast and noted the trade rather than hiding it.
+## What it gets wrong
+
+The neutral band is the weakest part. SST-2 is a binary classifier trained to be confident, so it rarely returns a genuinely middling score; a flat, factual sentence still comes back as 85% one way or the other. `moodLabel` calls anything between -0.2 and +0.2 neutral, which is a threshold I picked, not a class the model has. The right fix is a three-class model (positive/neutral/negative), and I kept the smaller binary one to keep first load fast.
+
+Sentences are scored alone. `scoreSentence` hands the model one sentence with nothing around it, so sarcasm and negation that depend on the previous line are invisible to it. `splitSentences` breaks on `.`, `!`, `?` and newlines, so an abbreviation splits one sentence into two fragments and each fragment gets scored as if it were whole. A sentence carrying praise and complaint at once collapses to a single signed number and a single chip.
+
+There is no accuracy measurement in this repo. `text.test.ts` tests the plumbing: splitting, the label mapping, the color ramp, the roll-up math. Nothing in it checks what the model says about any particular sentence, and I have no numbers on how it holds up on text that looks nothing like the sample. If you paste something and the chip is obviously wrong, that sentence and its score are the bug report I want.
 
 ## Stack
 

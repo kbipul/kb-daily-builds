@@ -93,23 +93,23 @@ Greedy is the part I am least sure about. It is defensible here because the bloc
 
 ## Build notes
 
-**A test I wrote to prove a claim disproved it.** The first draft of this README said the 75% cut "quadruples what a broken prefix costs you." I wrote `cache.test.ts > the Fable 5.1 asymmetry` to lock that in. It came back **1.07×**.
+The first draft of this README said the 75% cut "quadruples what a broken prefix costs you." I wrote `cache.test.ts > the Fable 5.1 asymmetry` to lock that in. It came back **1.07×**.
 
 The absolute waste barely moves between the two price lists, because a miss is billed at the write rate and the write rate did not change. What quadrupled is the *ratio* between the broken stack and the repaired one, because the repaired one got four times cheaper. Same underlying fact, a materially different sentence, and the wrong one was already written. The test now asserts `ratio(fable5_1) / ratio(fable5) ≈ 4` and the sentence upstairs matches it.
 
 Everything the README quotes in dollars now lives in `presets.test.ts` under `describe('README claims')`. If the pricing table or the engine moves, the write-up fails the build rather than quietly going stale.
 
-**The token rule of thumb is 45% wrong.** `ceil(chars / 4)` is what everyone repeats. On this sentence —
+`ceil(chars / 4)` is the token rule of thumb everyone repeats, and it is 45% wrong. On this sentence:
 
 > The quick brown fox jumps over the lazy dog while the engineer wonders whether the prompt cache will hold together for another billing cycle.
 
-— it returns 38 tokens where cl100k-class tokenizers give 26 to 28. Fine in a blog post. Not fine when the output has a dollar sign on it.
+it returns 38 tokens where cl100k-class tokenizers give 26 to 28. Fine in a blog post. Not fine when the output has a dollar sign on it.
 
 Three rules get it inside 4%: merge letter runs up to seven characters into one token, split longer ones every four characters after that, and chunk digit runs by three. All three are in `tokens.ts` with the reasoning inline.
 
-I am not confident it generalises. It was tuned on English prose and I have not checked it against JSON, code, or Devanagari, all three of which show up in real system prompts and all three of which tokenize differently. And the deeper problem does not go away with better rules: **Anthropic does not publish the Claude tokenizer at all.** Every count here is an estimate, stated at ±20%, next to a pointer to the one exact number you already have — `usage.input_tokens`, in the API response you are already parsing. Every block takes a raw number for that reason.
+I am not confident it generalises. It was tuned on English prose and I have not checked it against JSON, code, or Devanagari, all three of which show up in real system prompts and all three of which tokenize differently. And the deeper problem does not go away with better rules: **Anthropic does not publish the Claude tokenizer at all.** Every count here is an estimate, stated at ±20%, next to a pointer to the one exact number you already have: `usage.input_tokens`, in the API response you are already parsing. Every block takes a raw number for that reason.
 
-**What is not in here.** Conversation history grows turn over turn; every block is a fixed average size for the session, which understates long sessions. There is no paste-a-request-body import, so you retype the shape. Only Fable 5.1 and its own pre-5.1 read rate ship as presets, because those are the two numbers I can cite; everything else is the Custom model with the conventional ratios pre-filled rather than a price table I would be guessing at.
+Three things are not in here. Conversation history grows turn over turn; every block is a fixed average size for the session, which understates long sessions. There is no paste-a-request-body import, so you retype the shape. Only Fable 5.1 and its own pre-5.1 read rate ship as presets, because those are the two numbers I can cite; everything else is the Custom model with the conventional ratios pre-filled rather than a price table I would be guessing at.
 
 ## Stack
 

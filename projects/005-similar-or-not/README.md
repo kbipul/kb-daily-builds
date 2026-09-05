@@ -2,7 +2,7 @@
 
 # Similar or Not — Watch Meaning Become Geometry
 
-**Type a handful of sentences and see them embed, cluster on a 2D map, and light up a cosine-similarity heatmap — an embeddings playground running 100% in your browser.**
+**Type a handful of sentences and see them embed, cluster on a 2D map, and light up a cosine-similarity heatmap. An embeddings playground running 100% in your browser.**
 
 [![CI](https://github.com/kbipul/similar-or-not/actions/workflows/ci.yml/badge.svg)](https://github.com/kbipul/similar-or-not/actions/workflows/ci.yml)
 [![Live demo](https://img.shields.io/badge/demo-live-34d399)](https://kbipul.github.io/similar-or-not/)
@@ -13,9 +13,9 @@
 
 ## What it does
 
-Embeddings are the quiet workhorse behind semantic search, RAG, clustering and dedup — but they're usually invisible. Similar or Not makes them tangible: paste a few sentences, and a small language model turns each into a 384‑dimensional vector, then the app shows you two views of what the model "thinks." A cosine‑similarity heatmap scores every pair, and a 2D PCA map places the sentences so that closer dots mean closer meaning. Near‑duplicate lines visibly snap together; unrelated ones drift apart.
+Embeddings sit behind semantic search, RAG, clustering and dedup, and you almost never get to look at one. Similar or Not makes them visible. Paste a few sentences, and a small language model turns each into a 384-dimensional vector. The app then draws two views of what the model "thinks". The cosine-similarity heatmap scores every pair. The 2D PCA map places the sentences so that closer dots mean closer meaning. Near-duplicate lines snap together; unrelated ones drift apart.
 
-It's a teaching tool and a sanity‑check: drop in your own labels or documents and see whether the model actually separates the categories you care about — before you wire embeddings into a pipeline.
+It is a teaching tool and a sanity check. Drop in your own labels or documents and see whether the model actually separates the categories you care about, before you wire embeddings into a pipeline. Three preset sets ship in `src/lib/samples.ts` so the map shows structure on first load.
 
 ![Screenshot](docs/demo.png)
 
@@ -23,7 +23,7 @@ It's a teaching tool and a sanity‑check: drop in your own labels or documents 
 
 ## Try it
 
-**[Live demo →](https://kbipul.github.io/similar-or-not/)** — runs fully in your browser; the model (~23MB) downloads once and is cached.
+**[Live demo →](https://kbipul.github.io/similar-or-not/)** runs fully in your browser. The model (~23MB) downloads once and is cached.
 
 ```bash
 git clone https://github.com/kbipul/similar-or-not
@@ -45,18 +45,25 @@ sentences ──► transformers.js (all-MiniLM-L6-v2, mean-pooled + L2-normaliz
          (heatmap)              (2D scatter)
 ```
 
-Two decisions worth calling out:
+Two decisions worth calling out.
 
-1. **All the linear algebra is hand‑rolled and pure.** Cosine similarity, the similarity matrix, and a small power‑iteration PCA live in `src/lib/vec.ts` with no React and no model imports, so they're covered by fast, deterministic unit tests. The PCA seed is fixed, so the map doesn't jump around between renders.
-2. **The model is isolated behind one wrapper.** `embed.ts` is the only file that touches transformers.js and the network; it mean‑pools and L2‑normalizes so cosine similarity is well‑behaved. Swapping in a different embedding model is a one‑line change.
+All the linear algebra is hand-rolled and pure. `cosine`, `similarityMatrix` and a small power-iteration `pca2d` live in `src/lib/vec.ts` with no React and no model imports, which is what makes the unit tests fast and deterministic. `topEigenvector` seeds itself with the fixed vector 1, 1/2, 1/3, … and runs 80 iterations, so the map does not jump around between renders.
 
-## Build notes — what I learned
+The model is isolated behind one wrapper. `embed.ts` is the only file that imports `@huggingface/transformers` or touches the network. It mean-pools and L2-normalizes so cosine similarity is well-behaved, and the model name is a single `MODEL_ID` constant, so swapping in a different embedding model is a one-line change.
 
-The fun part was refusing to `npm install` a PCA. A 2D projection of embeddings sounds like it needs a heavyweight numerics library, but the top two principal components fall out of a dozen lines of power iteration: project every centered vector onto the current estimate, sum, normalize, repeat; then deflate and do it again for the second component. Writing it myself meant I could seed it deterministically — which matters, because a map that reshuffles every keystroke feels broken even when the geometry is identical.
+## Build notes
 
-Keeping the math pure made the tests genuinely useful rather than ceremonial. I could assert real properties — cosine of a vector with itself clamps to exactly 1, orthogonal vectors read 0, clustered inputs stay closer in the projection than outliers — without ever downloading a model or touching a DOM. The bugs those caught were the boring, important kind: a sign flip in the Y‑axis, a divide‑by‑zero when every point shares a coordinate.
+The fun part was refusing to `npm install` a PCA. A 2D projection of embeddings sounds like it needs a heavyweight numerics library, but the top two principal components fall out of about a dozen lines of power iteration: project every centered vector onto the current estimate, sum, normalize, repeat. Then deflate, stripping the first component out of every row, and run the same loop again for the second. Writing it myself meant I could seed it deterministically. A map that reshuffles on every keystroke feels broken even when the geometry underneath is identical.
 
-The honest caveat is that PCA is a *linear* shadow of a very non‑linear space. Two sentences can look near on the 2D map yet score lower on the heatmap, because the map is throwing away 382 dimensions to fit on your screen. I leaned into that by always showing both views side by side — the heatmap is the ground truth, the map is the intuition. If I extend this, UMAP or t‑SNE would give a prettier layout, but I like that a from‑scratch PCA keeps the whole thing explainable and dependency‑light.
+Because the math is pure, `src/lib/__tests__/vec.test.ts` can assert real properties without downloading a model or touching a DOM: cosine of a vector with itself never drifts past 1, orthogonal vectors read 0, clustered inputs stay closer in the projection than an outlier. Both bugs it caught were in `fitToBox`. The Y axis was flipped the wrong way, and the scaling divided by zero when every point shared a coordinate. The spans now fall back to 1.
+
+## What the 2D map is hiding
+
+PCA is a *linear* shadow of a very non-linear space. The map keeps 2 of the 384 dimensions and throws away 382 to fit on your screen, so two sentences can look near each other on the map and still score lower on the heatmap. Both views are on screen side by side for that reason. When they disagree, the heatmap is the one to trust; the map is intuition.
+
+What I have not done is put a number on the distortion. There is nothing in the repo that measures how much the projection loses, and I would want that measurement before trusting the map for anything beyond a demo. Cosine similarity has the same problem from the other direction: it collapses a pair of 384-dimensional vectors into one scalar, and I have not checked what that scalar ignores. The "Sentiment mix" preset in `samples.ts` is the obvious test. It mixes "the best meal I have had all year" with "I want a refund", which are opposite in sentiment and near-identical in topic, and I do not know yet whether the heatmap splits them or the restaurant-review vocabulary dominates. My guess is the topic wins, but I have not run it and counted.
+
+UMAP or t-SNE would give a prettier layout than power iteration. I have not tried either here, so I cannot say whether the extra dependency buys anything past looking better. The from-scratch PCA does stay explainable and dependency-light, which is why it is still in.
 
 ## Stack
 
