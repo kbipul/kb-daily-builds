@@ -10,12 +10,13 @@
       "repo": "neural-notes",
       "title": "Neural Notes — AI Search That Understands Meaning",
       "tagline": "Semantic note search running 100% in your browser — no server, no API key, your notes never leave the tab.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-06",
       "demo": "pages",
       "repoUrl": "https://github.com/kbipul/neural-notes",
       "demoUrl": "https://kbipul.github.io/neural-notes/",
-      "publishedAt": "2026-07-07T22:28:46.878Z"
+      "publishedAt": "2026-07-07T22:28:46.878Z",
+      "refreshedAt": "2026-09-05T06:17:02.387Z"
     },
     {
       "day": 2,
@@ -23,7 +24,7 @@
       "repo": "mood-of-the-room",
       "title": "Mood of the Room — Per-Sentence Sentiment in Your Browser",
       "tagline": "Paste any text or chat export and watch its emotional temperature light up sentence by sentence — 100% client-side, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-09",
       "demo": "pages",
       "valueScore": 10,
@@ -31,7 +32,8 @@
       "rationale": "Per-sentence heatmap turns a flat whole-doc score into a visible emotional arc — fast 10s demo; won the day-2 slot as the backlog item on a tie with the signal-derived idea.",
       "repoUrl": "https://github.com/kbipul/mood-of-the-room",
       "demoUrl": "https://kbipul.github.io/mood-of-the-room/",
-      "publishedAt": "2026-07-09T00:47:20.368Z"
+      "publishedAt": "2026-07-09T00:47:20.368Z",
+      "refreshedAt": "2026-09-05T06:17:05.260Z"
     },
     {
       "day": 3,
@@ -39,7 +41,7 @@
       "repo": "zero-shot-tagger",
       "title": "Zero-Shot Tagger — Classify Anything Into Your Own Labels",
       "tagline": "Invent labels, paste text, get an instant classification with no training data — a zero-shot NLI model running 100% in your browser.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-09",
       "demo": "pages",
       "valueScore": 11,
@@ -47,7 +49,8 @@
       "rationale": "Highest slate score (11/12): user-defined labels with zero training is a genuinely distinctive in-browser wow that few ship client-side.",
       "repoUrl": "https://github.com/kbipul/zero-shot-tagger",
       "demoUrl": "https://kbipul.github.io/zero-shot-tagger/",
-      "publishedAt": "2026-07-09T00:47:25.215Z"
+      "publishedAt": "2026-07-09T00:47:25.215Z",
+      "refreshedAt": "2026-09-05T06:17:07.971Z"
     },
     {
       "day": 4,
@@ -73,7 +76,7 @@
       "repo": "similar-or-not",
       "title": "Similar or Not — Watch Meaning Become Geometry",
       "tagline": "Type a handful of sentences and see them embed, cluster on a 2D map, and light up a cosine-similarity heatmap — an embeddings playground running 100% in your browser.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-11",
       "demo": "pages",
       "valueScore": 9,
@@ -81,7 +84,8 @@
       "rationale": "Catch-up second build (2 days behind). Reliable, visual transformers.js embeddings demo that pairs a from-scratch power-iteration PCA with a cosine heatmap; adds topic variety (tokenizer + embeddings) alongside the day-4 winner.",
       "repoUrl": "https://github.com/kbipul/similar-or-not",
       "demoUrl": "https://kbipul.github.io/similar-or-not/",
-      "publishedAt": "2026-07-11T01:48:41.783Z"
+      "publishedAt": "2026-07-11T01:48:41.783Z",
+      "refreshedAt": "2026-09-05T06:17:10.601Z"
     },
     {
       "day": 6,
@@ -395,7 +399,7 @@
       "folder": "023-escape-sim",
       "repo": "escape-sim",
       "title": "Escape Sim — Would Your AI Containment Survive Astra?",
-      "status": "built",
+      "status": "published",
       "demo": "pages",
       "stack": [
         "React 18",
@@ -408,7 +412,8 @@
       "rationale": "Only 12/12 of the slate. The week headline is that a frontier model autonomously escaped a hardened sandbox and gained root. The Director-shaped response is would MY containment hold? — nobody has shipped a tool for it. Visual step-by-step simulation (not another report card), zero API keys, instant load.",
       "repoUrl": "https://github.com/kbipul/escape-sim",
       "demoUrl": "https://kbipul.github.io/escape-sim/",
-      "publishedAt": "2026-09-03T00:48:33.250Z"
+      "publishedAt": "2026-09-03T00:48:33.250Z",
+      "refreshedAt": "2026-09-05T06:17:13.128Z"
     },
     {
       "day": 24,
@@ -417,7 +422,7 @@
       "title": "Cache Cliff — On Fable 5.1 a Cache Miss Costs 50× a Hit",
       "tagline": "Claude Fable 5.1 cut cache reads 75% on 1 Sep 2026. Lay out your prompt stack and find the twelve tokens stranding twenty-four thousand.",
       "description": "Find the block breaking your Claude prompt-cache prefix, what it strands, and what reordering it is worth per month.",
-      "status": "built",
+      "status": "published",
       "demo": "pages",
       "stack": [
         "React 18",
@@ -433,7 +438,7 @@
       "demoUrl": "https://kbipul.github.io/cache-cliff/",
       "publishedAt": "2026-09-04T05:40:15.119Z",
       "revisedAt": "2026-09-04T00:00:00.000Z",
-      "refreshedAt": "2026-09-04T06:07:13.400Z"
+      "refreshedAt": "2026-09-05T06:17:15.712Z"
     },
     {
       "day": 25,
@@ -442,7 +447,7 @@
       "title": "PAIR Planner — Your Fleet Has Eight GPUs. The Router Can See Two.",
       "tagline": "NVIDIA shipped PAIR on 3 Sep 2026 to turn every idle GPU on your network into one inference cluster. Lay out your actual machines and find out how many of them the scheduler is allowed to use — and what the rest are costing you in seconds.",
       "description": "Simulate NVIDIA PAIR over your real fleet: which machines are eligible, and what the ineligible ones cost per run.",
-      "status": "built",
+      "status": "published",
       "date": "2026-09-05",
       "demo": "pages",
       "stack": [
@@ -457,7 +462,8 @@
       "builtAt": "2026-09-05T00:00:00.000Z",
       "repoUrl": "https://github.com/kbipul/pair-planner",
       "demoUrl": "https://kbipul.github.io/pair-planner/",
-      "publishedAt": "2026-09-05T00:52:17.945Z"
+      "publishedAt": "2026-09-05T00:52:17.945Z",
+      "refreshedAt": "2026-09-05T06:17:18.297Z"
     }
   ]
 }
