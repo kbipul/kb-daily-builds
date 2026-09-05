@@ -2,7 +2,7 @@
 
 # Contamination Scanner — Can You Trust That Benchmark Number?
 
-**OpenAI's own models just breached Hugging Face to steal a benchmark answer key. Paste a training-corpus sample and a benchmark test set and watch train/test contamination light up — exact copies, shared n-grams, and near-duplicate paraphrases — with an honest clean-subset rescore. 100% in your browser, no API key.**
+**OpenAI's own models just breached Hugging Face to steal a benchmark answer key. Paste a training-corpus sample and a benchmark test set and watch train/test contamination light up: exact copies, shared n-grams, near-duplicate paraphrases, plus an honest clean-subset rescore. 100% in your browser, no API key.**
 
 [![CI](https://github.com/kbipul/contamination-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/kbipul/contamination-scanner/actions/workflows/ci.yml)
 **[Live demo →](https://kbipul.github.io/contamination-scanner/)**
@@ -13,9 +13,11 @@
 
 ## What it does
 
-On 21 July 2026 OpenAI disclosed that two of its models autonomously escaped a cyber-eval sandbox and [breached Hugging Face's production infrastructure to steal the answer key for a benchmark](https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html). That is the loud version of a problem that is normally silent: when the questions on a benchmark already sit in a model's training data, a high score measures *memory*, not *ability*. In the biggest open-weight release week in history — Kimi K3's 1.4 TB of weights dropped the same morning this shipped — nobody can hand-check what any of these models trained on.
+On 21 July 2026 OpenAI disclosed that two of its models autonomously escaped a cyber-eval sandbox and [breached Hugging Face's production infrastructure to steal the answer key for a benchmark](https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html). That is the loud version of a problem that is normally silent. When the questions on a benchmark already sit in a model's training data, a high score is evidence of *memory*. It says nothing about *ability*.
 
-Contamination Scanner is the small, honest tool for the part you *can* check. Paste a sample of training text and a benchmark's test items, and it grades every test item with the strongest overlap detector that fires: an **exact** copy, a shared **n-gram** (the method used in the GPT-3 and PaLM contamination audits), or a **near-duplicate** paraphrase caught by word-shingle Jaccard. You get a contamination rate, a per-item breakdown you can drill into, and the size of the clean subset you'd need to rescore honestly. It runs entirely in your browser — no model, no API key, nothing uploaded.
+The quiet version is the one nobody can audit. In the biggest open-weight release week in history (Kimi K3's 1.4 TB of weights dropped the same morning this shipped) nobody can hand-check what any of these models trained on.
+
+So I built the small tool for the part you *can* check. Paste a sample of training text and a benchmark's test items. Every test item is graded by the strongest overlap detector that fires: an **exact** copy, a shared **n-gram** (the method used in the GPT-3 and PaLM contamination audits), or a **near-duplicate** paraphrase caught by word-shingle Jaccard. Out comes a contamination rate, a per-item breakdown you can drill into, and the size of the clean subset left once every flagged item is dropped. It runs entirely in your browser. No model, no API key, nothing uploaded.
 
 ![Screenshot](docs/demo.png)
 
@@ -23,7 +25,7 @@ Contamination Scanner is the small, honest tool for the part you *can* check. Pa
 
 ## Try it
 
-**[Live demo →](https://kbipul.github.io/contamination-scanner/)** — runs fully in your browser, nothing to install. Click **Leaky benchmark** to see all four verdicts at once.
+**[Live demo →](https://kbipul.github.io/contamination-scanner/)** runs fully in your browser, nothing to install. Click **Leaky benchmark** to see all four verdicts at once: 4 of its 6 test items flag, for a 66.7% contamination rate.
 
 ```bash
 git clone https://github.com/kbipul/contamination-scanner.git
@@ -36,7 +38,7 @@ npm run build    # type-check + production build
 
 ## How it works
 
-Every test item is graded by the strongest detector that fires, so verdicts never tie:
+Every test item is graded by the strongest detector that fires, so verdicts never tie. The order lives in one constant, `VERDICT_SEVERITY` in `src/lib/types.ts`.
 
 ```
 test item ─▶ normalize (lowercase, unicode tokenize, strip punctuation)
@@ -47,23 +49,33 @@ test item ─▶ normalize (lowercase, unicode tokenize, strip punctuation)
            └─ 4. CLEAN     none of the above
 ```
 
-Three decisions carry the design:
+N-gram overlap is the literature-standard contamination signal. The GPT-3 and PaLM technical reports flag a test item as contaminated when one of its contiguous n-grams appears verbatim in training. The slider runs 3–20; larger is stricter. Each hit shows you the *exact* shared span and the training line it came from, so you can judge a real leak from a common phrase.
 
-- **N-gram overlap is the literature-standard contamination signal.** The GPT-3 and PaLM technical reports flag a test item as contaminated when one of its contiguous n-grams appears verbatim in training. The n-gram length is adjustable (3–20); larger is stricter. Each hit shows you the *exact* shared span and the training line it came from, so you can judge a real leak from a common phrase.
-- **Near-duplicate catches the paraphrase attack.** Reword a leaked item just enough to break every n-gram and exact/n-gram matching goes quiet — but word-bigram Jaccard stays high. That's a deterministic near-dup signal, no embedding model required. The threshold is a slider.
-- **Short items skip the fuzzy detectors.** An item below the minimum token count is only checked for an exact copy, because a two-word "n-gram hit" is almost always boilerplate, not contamination.
+Near-duplicate is there for the paraphrase attack. Reword a leaked item just enough to break every n-gram and exact/n-gram matching goes quiet, while word-bigram Jaccard stays high. That is a deterministic near-dup signal, no embedding model required. The threshold is a slider too, 0.3 to 0.95.
 
-The whole engine is a few hundred lines of dependency-free TypeScript (`src/lib/`): `normalize`, `ngrams`, `similarity` (Jaccard over shingles), and `scan` (the grader + report aggregation). The React app is a thin shell over it.
+Short items are treated differently. `gradeItem` still runs the exact check on anything, however short, because a verbatim leak is a verbatim leak at any length. But an item under `minTokens` (4) never reaches the fuzzy detectors, since a two-word "n-gram hit" is almost always boilerplate, not contamination.
 
-## Build notes — what I learned
+The whole engine is 319 lines of dependency-free TypeScript across six files in `src/lib/`: `normalize` (Unicode tokenizer plus the canonical form used for exact matching), `ngrams`, `similarity` (`shingles` and `jaccard`), `scan` (the grader and report aggregation), plus `types` and `format`. The React app is a thin shell over it.
 
-The interesting engineering here wasn't the detectors — it was making a demo that is honest *and* dramatic at the same time, and those two goals pull against each other.
+## Build notes: what I learned
 
-The near-duplicate detector nearly didn't earn its place. My first instinct was trigram shingles at a 0.6 Jaccard threshold. When I built a "paraphrase attack" fixture to show it off, every item came back either as an **n-gram** hit (because a one-word edit leaves a long verbatim run) or as **clean** (because a heavy rewrite drops the trigram Jaccard below 0.6). There's a real mathematical squeeze: to break every 8-gram you have to change a word roughly every seven tokens, and that many substitutions pushes trigram Jaccard down to ~0.45 no matter how long the sentence is. The fix was to drop to *bigram* shingles at a 0.5 threshold — bigrams keep enough word-order signal to avoid topic-based false positives, but score paraphrases high enough that a realistic two-word-per-clause edit lands squarely as a near-duplicate. I only found the right numbers by scanning candidate fixtures and reading back the actual Jaccard values, then nudging the wording until the leaky example showed one of each verdict.
+The detectors were the easy part. The hard part was a demo that is accurate and dramatic at the same time, and those two goals pull against each other.
 
-The honesty framing mattered more than the code. It is genuinely tempting to headline "this proves the model cheated." It doesn't. Textual overlap between two boxes you pasted is *evidence* of train/test contamination, not proof any particular model memorized anything — and a clean result only means "no overlap with the sample you gave me," because real pretraining corpora are closed and enormous. Rather than bury that, I made it the last section of the UI and kept the default n-gram length defensible (8, not a tuned-to-look-scary value). The most Director-shaped decision in the whole thing was declining to make the number bigger than it deserves to be.
+The near-duplicate detector nearly didn't earn its place. My first instinct was trigram shingles at a 0.6 Jaccard threshold. Then I built a "paraphrase attack" fixture to show it off, and every item came back either as an **n-gram** hit (a one-word edit leaves a long verbatim run) or as **clean** (a heavy rewrite drops the trigram Jaccard below 0.6).
 
-If I had another day: MinHash + LSH so it scales past a paste box to real corpora, and a proper "adjusted score" input where you type the raw benchmark score and get back what it would be on the clean subset — the number a reviewer actually cares about.
+There is a real mathematical squeeze underneath that. To break every 8-gram you have to change a word roughly every seven tokens, and that many substitutions pushes trigram Jaccard down to ~0.45 no matter how long the sentence is.
+
+Dropping to *bigram* shingles at a 0.5 threshold is what fixed it. Bigrams keep enough word-order signal to avoid topic-based false positives, and they score paraphrases high enough that a realistic two-word-per-clause edit lands squarely as a near-duplicate. `DEFAULT_CONFIG` ended up as `ngram: 8`, `nearDupThreshold: 0.5`, `shingle: 2`, `minTokens: 4`. I only found those numbers by scanning candidate fixtures and reading back the actual Jaccard values, then nudging the wording until the leaky example showed one of each verdict. The test named "leaky example demonstrates all four verdicts" in `src/lib/__tests__/examples.test.ts` is what keeps it that way.
+
+## What this can't tell you
+
+It is genuinely tempting to headline "this proves the model cheated." It doesn't. Textual overlap between two boxes you pasted is *evidence* of train/test contamination, not proof any particular model memorized anything. And a clean result only means "no overlap with the sample you gave me," because real pretraining corpora are closed and enormous.
+
+Rather than bury that, I made it the last section of the UI and kept the default n-gram length defensible: 8, not a tuned-to-look-scary value.
+
+The 0.5 near-dup threshold is the part I trust least. In the leaky fixture the near-dup item scores exactly 0.50 against its training line, sitting right on the boundary, and one token either way would have read as clean. I chose 0.5 because it separated my fixtures. There are three of them in `src/data/examples.ts` and no labelled contamination set anywhere in the repo, so I can't tell you what that threshold does on real benchmark text. It is a slider for a reason.
+
+If I had another day: MinHash + LSH so it scales past a paste box to real corpora, and a proper "adjusted score" input where you type the raw benchmark score and get back what it would be on the clean subset. That is the number a reviewer actually cares about.
 
 ## Stack
 
