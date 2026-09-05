@@ -13,11 +13,11 @@
 
 ## What it does
 
-This week CNBC reported that somewhere between 30% and 46% of enterprise AI token spend at US companies is already flowing to cheap Chinese models, and Z.ai's open-weights GLM-5.2 landed at $1.40/$4.40 per million tokens while matching frontier models on long-horizon coding. The interesting question stopped being *"which model is best?"* and became **"which model is enough — for this specific prompt?"**
+This week CNBC reported that somewhere between 30% and 46% of enterprise AI token spend at US companies is already flowing to cheap Chinese models. Z.ai's open-weights GLM-5.2 landed at $1.40/$4.40 per million tokens while matching frontier models on long-horizon coding. That moves the question. *"Which model is best?"* matters less now than *"which model is enough, for this specific prompt?"*
 
-Prompt Router answers that question, per prompt, in your browser. Paste a workload (one prompt per line) and every line gets classified into a **Value / Mid / Frontier** tier, assigned the cheapest model in that tier, and priced. The header shows what the workload costs routed versus what it costs the way most teams actually run — everything to one frontier model. On the built-in sample workloads that gap runs **57–76%**.
+Prompt Router answers that question, per prompt, in your browser. Paste a workload, one prompt per line. Every line gets classified into a Value, Mid or Frontier tier, assigned the cheapest model in that tier, and priced. The header shows what the workload costs routed versus what it costs the way most teams actually run: everything to one frontier model. On the built-in sample workloads in `src/lib/workloads.ts` that gap runs 57–76%.
 
-The classifier is deliberately two-headed: a keyword/feature scorer that is precise but blind, and a k-NN vote over 26 hand-labelled exemplar prompts using [all-MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2) embeddings that is fuzzy but understands meaning. They are blended — and then four guards can only ever push a prompt **up** a tier, never down.
+Two classifiers do the work, deliberately. A keyword and feature scorer is precise but blind. A k-NN vote over 26 hand-labelled exemplar prompts, using [all-MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2) embeddings, is fuzzy but understands meaning. `route()` blends the two, and then four guards get a look. A guard can only push a prompt *up* a tier. None of them can push one down.
 
 ![Screenshot](docs/demo.png)
 
@@ -25,7 +25,7 @@ The classifier is deliberately two-headed: a keyword/feature scorer that is prec
 
 ## Try it
 
-**[Live demo →](https://kbipul.github.io/prompt-router/)** — runs fully in your browser. No API key, no server, no telemetry. The 23MB embedding model downloads once and is cached; until it lands the router works on features alone.
+The [live demo](https://kbipul.github.io/prompt-router/) runs fully in your browser. It needs no API key and no server, and it sends no telemetry. The 23MB embedding model downloads once from the Hugging Face CDN and is cached; until it lands, the router works on features alone.
 
 ```bash
 git clone https://github.com/kbipul/prompt-router.git
@@ -51,30 +51,34 @@ npm run dev   # http://localhost:5173
                                             Value / Mid / Frontier + cost
 ```
 
-**1. Two routers, deliberately.** The feature scorer fires on code, math, multi-step structure, agentic loops, long context, non-Latin script and high-stakes vocabulary. It is fast and explainable but cannot tell *"add JSDoc comments"* (trivial) from *"refactor this module"* (not). The embedding router can — it has no rules at all, just 26 labelled exemplars and cosine similarity. Blending them 50/50 beat every lopsided split I tried against the sample workloads.
+`extractFeatures` in `src/lib/features.ts` fires on code, math, multi-step structure, agentic loops, long context, non-Latin script and high-stakes vocabulary. It is fast and explainable. It also cannot tell *"add JSDoc comments"* (trivial) from *"refactor this module"* (not). The embedding router can, because it has no rules at all: 26 labelled exemplars and cosine similarity, k = 5. `route()` weights the two halves 50/50, which beat every lopsided split I tried against the sample workloads.
 
-**2. The guards only ever escalate.** The two failure modes are not symmetric. Routing an easy prompt to an expensive model wastes a fraction of a cent. Routing a contract review to a bulk model can cost a company a lawsuit. So every guard moves a prompt *up*:
+The two failure modes are not symmetric. Routing an easy prompt to an expensive model wastes a fraction of a cent. Routing a contract review to a bulk model can cost a company a lawsuit. So every guard moves a prompt *up*:
 
 | Guard | Rule |
 |---|---|
 | 1 | High-stakes vocabulary (legal, medical, GDPR, compliance, production) never lands on the value tier |
-| 2 | Agentic tool loops always go frontier — errors compound across iterations |
+| 2 | Agentic tool loops always go frontier, because errors compound across iterations |
 | 3 | A split k-NN vote (< 55% agreement) buys insurance instead of guessing cheap |
 | 4 | A *confident* semantic verdict (≥ 80%) overrules the blend upward |
 
-**3. It degrades, it does not break.** If the embedding model fails to load — offline, blocked CDN, locked-down corporate browser — the router keeps running on features alone and says so in the UI. A router that hard-fails without its model is a router nobody puts in front of production traffic.
+It degrades rather than breaking. If the embedding model fails to load, because you are offline or behind a blocked CDN or in a locked-down corporate browser, the router keeps running on features alone and says so in the UI. In `route()` both `promptVec` and `exemplarVecs` are optional; when they are missing the semantic half of the blend is skipped and the decision carries the reason `feature-only mode (no embeddings)`.
 
-## Build notes — what I learned
+## Build notes
 
-**The bug the tests found was my own reasoning, not my code.** I wrote a test asserting that an ambiguous prompt — one equidistant from cheap and expensive exemplars — would produce a low-confidence k-NN vote and trigger the escalation guard. It failed: confidence came back at exactly 1.0. With one-hot fake embeddings and ten value exemplars sitting at identical similarity, the top-5 neighbours were *all* value. The vote was unanimous, and unanimously wrong. That is a real property of k-NN, not a test artifact: **a confident-looking vote and a well-supported vote are not the same thing**, and a router that reads the first as the second will cheerfully send your contract review to a bulk model at 100% confidence. I had to construct a genuinely split neighbourhood to test the guard at all.
+One test caught a bug in my reasoning rather than in my code. I had asserted that an ambiguous prompt, one equidistant from cheap and expensive exemplars, would produce a low-confidence k-NN vote and trigger the escalation guard. It failed. Confidence came back at exactly 1.0. With one-hot fake embeddings and ten value exemplars sitting at identical similarity, the top-5 neighbours were *all* value. The vote was unanimous, and unanimously wrong. That is a real property of k-NN, not a test artifact: a confident-looking vote and a well-supported vote are not the same thing, and a router that reads the first as the second will cheerfully send your contract review to a bulk model at 100% confidence. I had to construct a genuinely split neighbourhood before the guard could be tested at all. It is the case named *escalates rather than guessing when the k-NN vote is split* in `src/lib/__tests__/route.test.ts`.
 
-**Calibrating the feature scorer was an exercise in admitting what it can't see.** My first weights let a single strong signal — "prove this algorithm terminates, then derive its worst-case complexity" — score 24 out of 100 and route to the *cheap* tier. Meanwhile "debug why our webhook retries fire twice in production" scored zero, because none of my regexes knew that "in production" is a high-stakes phrase. I fixed both by raising every "real work" signal above the value band on its own. The honest consequence: in feature-only mode the router now sends *every* code prompt to at least Mid, including "add JSDoc comments," which is obviously overkill. That is the correct behaviour for a blind router — and it is exactly what the 23MB of embeddings earns back.
+Two prompts broke my first set of weights in opposite directions. *"Prove this algorithm terminates, then derive its worst-case complexity"* scored 24 out of 100 and routed to the *cheap* tier. *"Debug why our webhook retries fire twice in production"* scored zero, because none of my regexes knew that "in production" is a high-stakes phrase. I fixed both by raising every "real work" signal above the value band on its own. The honest consequence: in feature-only mode the router now sends *every* code prompt to at least Mid, including "add JSDoc comments," which is obviously overkill. That is the correct behaviour for a blind router, and it is exactly what the 23MB of embeddings earns back. `difficultyScore` is pinned from the other side too, by the case *never lets length alone reach the frontier band*.
 
-**The escalation guards are the whole product.** It would be trivial to write a router that saves 90% by being aggressive. It would also be worthless, because nobody deploys a cost optimiser they cannot trust with a liability clause. Every design decision here bends toward *asymmetric* caution: the blend can move a prompt down, but no guard ever can. The result is that the sample workloads save 57–76% rather than the 85%+ I could have advertised — and the 8 percentage points I gave up are the reason a platform team would actually turn this on.
+It would be trivial to write a router that saves 90% by being aggressive. It would also be worthless, because nobody deploys a cost optimiser they cannot trust with a liability clause. Every design decision here bends toward asymmetric caution: the blend can move a prompt down, but no guard ever can. The sample workloads therefore save 57–76% rather than the 85%+ I could have advertised, and the 8 percentage points I gave up are the reason a platform team would actually turn this on.
 
-**Output tokens, not input tokens, are the bill.** Early versions priced on input length and the savings barely moved, because a 40-message email thread costs pennies to *read*. Output is billed at 3–6x input, so what actually matters is how much the model writes back — which is a function of the prompt's *shape*, not its size. Estimating expected output per prompt type (code: 700 tokens, extraction: 200) changed the ledger more than any routing improvement did.
+The bill lands on output tokens. Early versions priced on input length and the savings barely moved, because a 40-message email thread costs pennies to *read*. Output is billed at 3–6x input, so what actually matters is how much the model writes back, which is a function of the prompt's *shape* rather than its size. `expectedOutputTokens` estimates it per prompt type: 700 tokens for code or agentic work, 200 for structured extraction. Switching the ledger onto that estimate changed the numbers more than any routing improvement did.
 
-**What I'd do differently.** The exemplar set is 26 prompts written by one person on one afternoon — it is the single weakest link in the system, and it is also the easiest thing to improve. The right version of this learns its labels from *your* traffic: log which prompts your team escalated by hand, and the router's exemplar set becomes an asset that compounds. That is the version I would ship internally.
+## The exemplar set is the weak link
+
+`src/lib/exemplars.ts` holds 26 prompts written by one person on one afternoon. It is the single weakest link in the system, and it is also the easiest thing to improve. Every verdict the semantic half produces is measured against those 26 lines, and the 57–76% figure comes from the built-in sample workloads rather than from anyone's production traffic.
+
+The right version of this learns its labels from *your* traffic: log which prompts your team escalated by hand, and the exemplar set becomes an asset that compounds instead of a one-afternoon artifact. That is the version I would ship internally.
 
 ## Stack
 
@@ -84,9 +88,9 @@ npm run dev   # http://localhost:5173
 | ML | transformers.js (`Xenova/all-MiniLM-L6-v2`), running on WASM in-browser |
 | Routing | Hand-written feature scorer + weighted k-NN over labelled exemplars |
 | Build | Vite 6 |
-| Tests | Vitest — 41 tests, all pure functions, zero network |
+| Tests | Vitest, 41 tests, all pure functions, zero network |
 
-Prices are publicly cited list prices as of **2026-07-14**, editable in `src/lib/models.ts`. They move weekly, tokenizers differ, and your negotiated rate is not the list rate — treat the *percentage*, not the dollar figure, as the finding.
+Prices are publicly cited list prices as of **2026-07-14**, editable in `src/lib/models.ts`. They move weekly, tokenizers differ, and your negotiated rate is not the list rate. Treat the *percentage*, not the dollar figure, as the finding.
 
 ---
 
