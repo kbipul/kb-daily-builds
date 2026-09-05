@@ -55,7 +55,7 @@
       "repo": "token-cost-lab",
       "title": "Token Cost Lab — See What a Prompt Actually Costs",
       "tagline": "Paste a prompt, pick your models, and watch the per-request cost light up across GPT-5.6, Claude Sonnet 5, Grok 4.5 and more — tokenized 100% in your browser, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-11",
       "demo": "pages",
       "valueScore": 11,
@@ -65,7 +65,7 @@
       "demoUrl": "https://kbipul.github.io/token-cost-lab/",
       "publishedAt": "2026-07-11T01:48:37.545Z",
       "refreshNote": "2026-09-02 price-drift refresh. The first re-queue attempt hit a publish.yml bug that created a duplicate repo token-cost-lab-kb; publish.yml is fixed and that stray repo needs manual deletion.",
-      "refreshedAt": "2026-09-02T13:12:53.134Z"
+      "refreshedAt": "2026-09-05T05:30:56.192Z"
     },
     {
       "day": 5,
@@ -89,7 +89,7 @@
       "repo": "skill-scan",
       "title": "SkillScan — X-ray an AI Agent Skill Before You Install It",
       "tagline": "Paste any agent skill file and get an instant security report: prompt injection, data exfiltration, dangerous commands, permission creep and context cost — 100% in your browser.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-12",
       "demo": "pages",
       "valueScore": 12,
@@ -97,7 +97,8 @@
       "rationale": "Only perfect 12/12 of the run. Rides the hottest live trend with the angle nobody has shipped — everyone is publishing skills, nobody is auditing them. Demo-ability is exceptional (opens on a hostile fixture, grade F in one second, zero setup), and it positions Bipul as the security-minded adult in the agent-skills room — the single most Director-shaped stance available this week.",
       "repoUrl": "https://github.com/kbipul/skill-scan",
       "demoUrl": "https://kbipul.github.io/skill-scan/",
-      "publishedAt": "2026-07-13T00:35:12.325Z"
+      "publishedAt": "2026-07-13T00:35:12.325Z",
+      "refreshedAt": "2026-09-05T05:30:58.659Z"
     },
     {
       "day": 7,
@@ -105,7 +106,7 @@
       "repo": "mcp-auditor",
       "title": "MCP Auditor — Audit Your MCP Server Config Before Your Agent Does",
       "tagline": "Paste your Claude Desktop / Cursor / VS Code mcpServers config and get an instant security report: hardcoded secrets, unpinned remote execution, root filesystem access, and dangerous capability combos like filesystem+network exfiltration paths — 100% in your browser.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-13",
       "demo": "pages",
       "valueScore": 10,
@@ -113,7 +114,8 @@
       "rationale": "Highest score in today's slate (10/12: Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 2) — beat the two next backlog items (Lingua Detect, Ask My Docs) and two other fresh signal ideas (a skill-spec conformance linter riding today's agentskills/agentskills trend, and a Foundry model comparison board riding Claude-on-Azure-Foundry news), both of which scored 8/12 and risked overlapping with prior builds (SkillScan and Token Cost Lab respectively). MCP Auditor is the direct sibling to Day 006's SkillScan — same rule-engine architecture, same scoring model — completing a two-day 'AI agent supply-chain security' arc: Day 6 audited the skills an agent loads, Day 7 audits the servers it talks to. Coherent, Director-shaped, and rides a signal that is still fresh two days later.",
       "repoUrl": "https://github.com/kbipul/mcp-auditor",
       "demoUrl": "https://kbipul.github.io/mcp-auditor/",
-      "publishedAt": "2026-07-13T00:54:44.990Z"
+      "publishedAt": "2026-07-13T00:54:44.990Z",
+      "refreshedAt": "2026-09-05T05:31:00.974Z"
     },
     {
       "day": 8,
@@ -121,7 +123,7 @@
       "repo": "prompt-router",
       "title": "Prompt Router — Stop Sending Every Prompt to Your Most Expensive Model",
       "tagline": "Paste a day's worth of prompts and watch each one get routed to the cheapest model tier that can actually handle it — an embedding + feature classifier running 100% in your browser, with a live savings ledger.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-14",
       "demo": "pages",
       "valueScore": 11,
@@ -129,7 +131,8 @@
       "rationale": "Top of a 5-candidate slate (11/12: Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 2). The week's real story is not 'a new model shipped' but 'cheap models became good enough' — which turns model *selection* into an engineering problem, and that is exactly the AI/ML-Director conversation. Beat the two next backlog items (Lingua Detect 6/12, Ask My Docs 9/12) and tied with a signal-derived 'Open Model Passport' idea (11/12) — broke the tie toward Prompt Router because it does real in-browser ML inference rather than being a third static rule-engine in a row after SkillScan and MCP Auditor, and because a live savings ledger is a harder demo to look away from. Distinctiveness marked down to 2 (not 3) honestly: the cost framing is adjacent to Day 4's Token Cost Lab, though the product is genuinely different — Day 4 prices a prompt, Day 8 decides where to send it.",
       "repoUrl": "https://github.com/kbipul/prompt-router",
       "demoUrl": "https://kbipul.github.io/prompt-router/",
-      "publishedAt": "2026-07-14T00:51:51.903Z"
+      "publishedAt": "2026-07-14T00:51:51.903Z",
+      "refreshedAt": "2026-09-05T05:31:03.631Z"
     },
     {
       "day": 9,
@@ -137,7 +140,7 @@
       "repo": "open-model-passport",
       "title": "Open Model Passport — Can You Actually Ship This Model?",
       "tagline": "Pick an AI model, declare what you intend to do with it, and get an instant shipping-clearance report — licence, weights, residency and EU AI Act exposure, with a source link on every claim.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-15",
       "demo": "pages",
       "valueScore": 12,
@@ -145,7 +148,8 @@
       "rationale": "Only 12/12 of the slate (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). The week's story is that the model everyone is actually running is one nobody can actually download — the gap between what a model is CALLED and what you can legally ship is exactly the question an IT Director signs off on, and almost nobody has shipped a tool for it (everyone benchmarks quality and price instead). Beat the two next backlog items (Lingua Detect 4/12 — tutorial-shaped, no signal; Ask My Docs 8/12 — WebLLM's multi-GB first load undercuts the 10-second wow) and two fresh signal ideas: a 'blast radius' agent-command simulator riding Dicklesworthstone/destructive_command_guard trending at 473 stars today (11/12, lost on Distinctiveness — it would have been the third agent-security rule engine after SkillScan and MCP Auditor), and Prompt Compressor (8/12, stale meme). Carried over from the day-8 slate where it tied at 11/12 and lost the tie-break; today's governance signals push Timeliness to a clean 3. Design keeps it honest: every fact carries source + asOf + verified/reported confidence, and undisclosed training compute returns an explicit 'cannot determine' finding rather than a silent pass — 8 of 9 catalogued models publish no FLOP figure at all.",
       "repoUrl": "https://github.com/kbipul/open-model-passport",
       "demoUrl": "https://kbipul.github.io/open-model-passport/",
-      "publishedAt": "2026-07-15T00:45:32.049Z"
+      "publishedAt": "2026-07-15T00:45:32.049Z",
+      "refreshedAt": "2026-09-05T05:31:06.071Z"
     },
     {
       "day": 10,
