@@ -13,9 +13,9 @@
 
 ## What it does
 
-This week frontier models started shipping **million-token context windows** (Moonshot's Kimi K3 and Thinking Machines' Inkling both landed with 1M-token context) — and the reflex is to just retrieve everything and paste it in. But a bigger window is not a retrieval strategy: stuff junk in and the answer is still buried, and you still pay for every token. **What** you put in the window is what matters, and that is a retrieval problem.
+Two frontier models shipped million-token context windows this week: Moonshot's Kimi K3 and Thinking Machines' Inkling, both with 1M-token context. Azure's HorizonDB landed the same week with vector indexing built in. When the window gets that big the reflex is to retrieve everything and paste it in. But a bigger window is not a retrieval strategy: stuff junk in and the answer is still buried, and you still pay for every token. What you put in the window is what matters, and that is a retrieval problem. Day 12 packed the window. Day 13 decides what deserves to go in it.
 
-Hybrid Search makes the retrieval problem visible. Type a query and three rankers race on the same 15-passage corpus: **BM25** (classic keyword scoring), a **dense vector** ranker (MiniLM embeddings, cosine similarity), and a **Hybrid** column that fuses the two with **Reciprocal Rank Fusion**. The curated example queries are picked so the first two *genuinely disagree* — BM25 nails a rare exact token like `HTTP 429`, the vector arm rescues a pure paraphrase with no shared words — and the hybrid column is the one that stays near the top on both. Everything runs on-device: BM25 is pure TypeScript, the embedding model downloads once from the Hugging Face CDN and then never leaves your tab.
+Type a query and three rankers race on the same 15-passage corpus. BM25 does classic keyword scoring. A dense vector ranker embeds with MiniLM and ranks by cosine similarity. A third column fuses the two with Reciprocal Rank Fusion. The five example queries in `corpus.ts` are curated so the first two *genuinely disagree*: BM25 nails a rare exact token like `HTTP 429`, and the vector arm rescues a pure paraphrase with no shared words. The hybrid column is the one that stays near the top on both. Everything runs on-device. BM25 is pure TypeScript, and the embedding model downloads once from the Hugging Face CDN and then never leaves your tab.
 
 ![Screenshot](docs/demo.png)
 
@@ -42,21 +42,31 @@ query ─┬─▶ BM25 (inverted index, pure TS) ───────▶ ranke
        └─▶ MiniLM embedding ─▶ cosine vs corpus ─▶ ranked list  ┘
 ```
 
-Three deliberate decisions:
+Three decisions shaped the build.
 
-1. **BM25 from scratch, not a library.** Tokenize → inverted index → Okapi BM25 with `k1=1.5`, `b=0.75` and Lucene-style `+1` idf smoothing (so a term appearing in every document stays weakly positive, never negative). It's ~80 lines and fully unit-tested.
-2. **Fuse on rank, not on score.** BM25 scores and cosine similarities live on incomparable scales, so RRF throws the numbers away: each list contributes `1 / (k + rank)` (k = 60, from Cormack et al. 2009) to every document. A passage near the top of *both* lists beats one that merely tops a single list — no score normalization, no tuning per corpus.
-3. **The network stays out of the tested core.** All ranking and fusion math (`bm25.ts`, `vec.ts`, `fuse.ts`, `search.ts`) is pure and deterministic; the only I/O is `embed.ts`, a thin `transformers.js` wrapper. Tests inject plain vectors, so the suite is fast and never touches the model.
+I wrote Okapi BM25 by hand instead of pulling in a library. `tokenize.ts` lowercases, splits on non-alphanumeric runs, and drops a small stopword set plus 1-char tokens. `bm25.ts` builds the inverted index and scores with `k1=1.5`, `b=0.75` and Lucene-style `+1` idf smoothing, so a term appearing in every document stays weakly positive, never negative. It's ~80 lines and fully unit-tested.
 
-## Build notes — what I learned
+Fusion happens on rank, never on score. BM25 scores and cosine similarities live on incomparable scales, so RRF throws the numbers away: each list contributes `1 / (k + rank)` to every document, with k = 60 from Cormack et al. 2009. A passage near the top of *both* lists beats one that merely tops a single list. No score normalization, no tuning per corpus. `fuse.ts` does export a `normalizeScores` helper, but it is min–max only, it feeds the score bars in the UI, and the fusion path never calls it.
 
-The point of this build isn't "BM25 vs embeddings, which wins" — it's that the honest answer is *neither, reliably*. Getting the demo to actually **show** that took more curation than code. My first corpus had passages that were too on-topic for every query, so all three columns agreed and the whole thing looked pointless. The fix was to write the corpus and queries as adversarial pairs: a query with a rare exact token (`HTTP 429`) that embeddings smear into "throttling in general," and a pure paraphrase (`notebook loses charge` vs a doc titled `laptop battery drains`) that shares zero keywords with its answer. Only once BM25 and the vectors *disagree* does fusion have a job to do.
+The network stays out of the tested core. All ranking and fusion math (`bm25.ts`, `vec.ts`, `fuse.ts`, `search.ts`) is pure and deterministic; the only I/O is `embed.ts`, a thin `transformers.js` wrapper. Tests inject plain vectors, so the suite is fast and never touches the model.
 
-The most interesting bug was in my own test, not the code. I'd asserted that a term appearing in every document gets an idf of exactly 0 — the classic BM25 idf goes negative there and you clamp it. But I'd written the **Lucene** variant with `+1` inside the log, which never goes negative in the first place; the clamp is purely defensive and the value lands at a small positive number. The test was encoding a folk memory of a different formula than the one I shipped. I kept the Lucene form (it's the modern default and monotonic) and rewrote the test to assert the property that actually matters: idf is non-negative and a rare term always outweighs a common one.
+## Build notes
 
-RRF keeps surprising me with how little it needs to work. There's no learned weight, no per-corpus tuning, no score calibration — just `1 / (k + rank)` summed across lists — and it reliably beats either ranker alone on the hard queries. The single knob `k` only controls how much the very top positions dominate; at k = 60 it's gentle enough that a document has to do well on *both* lists to win. For a technique that fits on one line, that's a lot of robustness.
+Which ranker wins is the wrong question, because neither wins reliably. Getting the demo to actually **show** that took more curation than code. My first corpus had passages that were too on-topic for every query, so all three columns agreed and the whole thing looked pointless. I rewrote the corpus and queries as adversarial pairs. `HTTP 429` is a rare exact token that embeddings smear into "throttling in general." The query `my notebook loses charge too quickly` shares zero keywords with the passage it should find, which is titled `laptop battery drains`. Each of the five entries in `EXAMPLE_QUERIES` carries a `note` naming which arm should win and why.
 
-**Honest limits.** The corpus is 15 hand-written passages, not a real index — enough to demonstrate the behavior, not to benchmark it. The vector arm uses a small general-purpose model (`all-MiniLM-L6-v2`); a domain-tuned embedder would shift some of these calls. And the first load pulls ~23 MB of model weights plus the ONNX WASM runtime, so the semantic column lags a beat behind the instant BM25 column on a cold cache — I lean into that by rendering BM25 immediately and streaming the semantic and hybrid columns in when the embeddings are ready.
+The most interesting bug was in my own test, not the code. I'd asserted that a term appearing in every document gets an idf of exactly 0, which is what the classic BM25 idf does: it goes negative there and you clamp it. But `bm25.ts` computes `Math.log((N - df + 0.5) / (df + 0.5) + 1)`, the Lucene variant, with the `+1` inside the log. That never goes negative in the first place, so the `Math.max(0, raw)` clamp is purely defensive and the value lands at a small positive number. The test was encoding a folk memory of a different formula than the one I shipped. I kept the Lucene form (it's the modern default and monotonic) and rewrote the assertion. It now reads `keeps idf non-negative (Lucene-style +1 smoothing) even for a term in every doc`, and it checks the property that actually matters: idf is non-negative, and a rare term always outweighs a common one.
+
+RRF keeps surprising me with how little it needs to work. There's no learned weight and no score calibration, just `1 / (k + rank)` summed across lists, and it beats either ranker alone on the hard queries here. The single knob `k` only controls how much the very top positions dominate; at k = 60 it's gentle enough that a document has to do well on *both* lists to win. One test, `smaller k sharpens the advantage of top ranks`, is the only place I've actually probed that knob.
+
+## What I don't know
+
+The corpus is 15 hand-written passages, not a real index. I wrote the queries too. That makes every disagreement in the demo a curated one rather than a measured one, and it is why there is no accuracy number anywhere in this README. The repo has no relevance-judgment set and no precision or MRR test; the 19 tests in `core.test.ts` check ranking and fusion math, not retrieval quality. So the claim I'll make is narrow: on these five queries, the hybrid column is the one that stays near the top on both kinds. Whether that survives a real index, I have not measured, and this corpus is too small to tell me.
+
+k = 60 is inherited from the 2009 paper, not tuned here. I don't know what value this corpus would prefer. At 15 passages I doubt the question is even answerable.
+
+The vector arm uses a small general-purpose model, `all-MiniLM-L6-v2`. A domain-tuned embedder would shift some of these calls. I haven't tried one.
+
+The first load pulls ~23 MB of model weights plus the ONNX WASM runtime, so on a cold cache the semantic column lags a beat behind the instant BM25 column. I lean into that by rendering BM25 immediately and streaming the semantic and hybrid columns in when the embeddings are ready. That hides the wait; it doesn't shorten it.
 
 ## Stack
 

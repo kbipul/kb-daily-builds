@@ -13,7 +13,9 @@
 
 ## What it does
 
-This week Thinking Machines' **Inkling** landed with a **1,000,000-token context window**, so "just put more in the prompt" has never been cheaper — or more tempting. But a bigger window doesn't retrieve for you: fill it with low-relevance text and you pay for tokens, add latency, and bury the passages that actually answer the question. Context Window Packer makes the *packing decision* visible. Paste a set of source blocks and a query; it counts real tokens for each block (`o200k_base`), scores each block's relevance with **BM25**, and then packs a chosen token budget three ways side-by-side: naive truncation, greedy-by-density, and a genuinely **optimal 0/1 knapsack**. You see, live, how much more relevance the optimal packing captures for the same tokens.
+This week Thinking Machines' **Inkling** landed with a **1,000,000-token context window**, so "just put more in the prompt" has never been cheaper, or more tempting. But a bigger window doesn't retrieve for you. Fill it with low-relevance text and you pay for the tokens. You add latency. And the passages that actually answer the question get buried.
+
+Context Window Packer makes the *packing decision* visible. Paste a set of source blocks and a query; it counts real tokens for each block (`o200k_base`), scores each block's relevance with **BM25**, and then packs a chosen token budget three ways side-by-side: naive truncation, greedy-by-density, and a genuinely **optimal 0/1 knapsack**. You see, live, how much more relevance the optimal packing captures for the same tokens.
 
 ![Screenshot](docs/demo.png)
 
@@ -21,7 +23,7 @@ This week Thinking Machines' **Inkling** landed with a **1,000,000-token context
 
 ## Try it
 
-**[Live demo →](https://kbipul.github.io/context-packer/)** — runs fully in your browser, nothing to install, no API key.
+**[Live demo →](https://kbipul.github.io/context-packer/)** runs fully in your browser. Nothing to install, no API key.
 
 ```bash
 git clone https://github.com/kbipul/context-packer.git
@@ -34,11 +36,15 @@ npm run build    # production build to dist/
 
 ## How it works
 
-Three modules, each pure and independently tested:
+Three modules do the work, and each has its own test file under `src/lib/__tests__`.
 
-- **`tokenizer.ts`** — wraps `gpt-tokenizer` (`o200k_base`) for real token counts. Budgeting by character length silently lies about what fits.
-- **`bm25.ts`** — a dependency-free BM25 ranker (IDF + length-normalized term frequency) scores each block against the query. No embedding model, fully offline.
-- **`pack.ts`** — the three strategies:
+`tokenizer.ts` wraps `gpt-tokenizer` (`o200k_base`) behind one function, `countTokens()`. Budgeting by character length silently lies about what fits. If the encoder ever throws, the fallback is `Math.ceil(text.length / 4)`, which is wrong but never breaks the UI.
+
+`bm25.ts` is a dependency-free BM25 ranker with no embedding model, fully offline. `tokenizeWords()` lowercases, splits on non-alphanumerics and drops a 33-word stopword list; `buildCorpus()` computes IDF and average document length; `bm25Score()` runs the standard formula at `k1 = 1.5`, `b = 0.75`.
+
+`score.ts` is the one module that touches both of those. `parseSources()` splits the textarea on lines that are only `---`, and `scoreChunks()` attaches tokens, relevance and density to each block. With an empty query every block scores relevance 1, so the packer simply maximizes how many blocks fit.
+
+`pack.ts` holds the three strategies:
 
 ```
 firstFit  keep original order, stop at first overflow      (what most pipelines ship)
@@ -46,15 +52,23 @@ greedy    take highest relevance-per-token that still fits (fast, not optimal)
 knapsack  0/1 dynamic programming → the optimal subset     (this is the point)
 ```
 
-The knapsack scales token costs so the DP table stays bounded (`n × 2000` cells) no matter how large the budget — a 1M-token window packs instantly. Costs are rounded **up** against a rounded-**down** capacity, which guarantees the reconstructed set's real token total never exceeds the budget.
+The knapsack scales token costs so the DP table stays bounded (`n × 2000` cells) no matter how large the budget, which is why a 1M-token window packs instantly. Costs are rounded **up** against a rounded-**down** capacity, which guarantees the reconstructed set's real token total never exceeds the budget.
 
-## Build notes — what I learned
+## Build notes
 
-The interesting part wasn't the knapsack — it was making the knapsack *safe* at 1M-token scale. A textbook 0/1 knapsack DP is `O(n × capacity)`, and a capacity of a million cells per item turns the demo into a space heater. Scaling the token costs fixes the performance, but naive scaling breaks the one property the tool exists to promise: that the selection actually fits. If you round item costs *down*, rounding error accumulates and the "optimal" set can quietly overflow the budget you told the model was hard. The fix is asymmetric rounding — costs rounded up, capacity rounded down — which makes the scaled solution provably feasible in real tokens (`Σtokens ≤ Σ⌈tokens/s⌉·s ≤ ⌊budget/s⌋·s ≤ budget`). It's slightly conservative, and I decided that's the right trade: a packer that occasionally leaves a few tokens on the table is honest; one that overflows the window is broken.
+The knapsack was not the interesting part. Making the knapsack *safe* at 1M-token scale was. A textbook 0/1 knapsack DP is `O(n × capacity)`, and a capacity of a million cells per item turns the demo into a space heater. Scaling the token costs fixes the performance, but naive scaling breaks the one property the tool exists to promise: that the selection actually fits. If you round item costs *down*, rounding error accumulates and the "optimal" set can quietly overflow the budget you told the model was hard.
 
-The second lesson was how badly the naive baseline loses, and how ordinary that baseline is. "First-fit" here is just truncation — keep prepending context until the next block won't fit — and it's what an enormous number of RAG systems actually do. On the seeded example, optimal packing routinely captures 30–50% more relevance for the *same* token budget, purely by being allowed to skip a big low-value block in favor of two smaller high-value ones. Greedy-by-density closes most of that gap and is what I'd reach for in production, but watching it occasionally get fooled by a single dense-but-large block is a nice, concrete argument for why the exact method earns its keep on small candidate sets.
+The fix is asymmetric rounding, costs up against capacity down, which makes the scaled solution provably feasible in real tokens (`Σtokens ≤ Σ⌈tokens/s⌉·s ≤ ⌊budget/s⌋·s ≤ budget`). It's slightly conservative, and I decided that's the right trade against a packer that can overflow the window.
 
-I deliberately used BM25 rather than embeddings for relevance. It keeps the demo fully offline and instant, it's the sparse half of every serious hybrid-RAG stack anyway, and it makes the scoring legible — you can read a block and see why it ranked where it did. Swapping in a cross-encoder or embedding score would change the numbers but not the packing logic, which is the reusable idea here.
+What I can't tell you is how much that costs. Nothing in the repo measures the relevance the scaled DP gives up once the scale factor rises above 1. The large-budget case in `pack.test.ts` builds 30 blocks of 40,000 to 69,000 tokens against a 500,000-token budget and asserts two things only: `tokensUsed <= budget`, and that the selection isn't empty. That's feasibility. It says nothing about how close to optimal the scaled answer lands, and I left the question there.
+
+The second lesson was how badly the naive baseline loses, and how ordinary that baseline is. "First-fit" here is just truncation, keep prepending context until the next block won't fit, and it's what an enormous number of RAG systems actually do. On the seeded example, optimal packing routinely captures 30–50% more relevance for the *same* token budget, purely by being allowed to skip a big low-value block in favor of two smaller high-value ones. The test named "finds the optimal subset where greedy is fooled" is the same shape in miniature: one 3-token block worth 5, two 2-token blocks worth 3 each, budget 4. Greedy takes the dense block and stops at 5. The knapsack takes the pair and gets 6.
+
+Greedy-by-density closes most of that gap and is what I'd reach for in production. Watching it occasionally get fooled by a single dense-but-large block is a nice, concrete argument for why the exact method earns its keep on small candidate sets.
+
+I deliberately used BM25 rather than embeddings for relevance. It keeps the demo fully offline and instant, and it's the sparse half of every serious hybrid-RAG stack anyway. It also makes the scoring legible: you can read a block and see why it ranked where it did. Swapping in a cross-encoder or embedding score would change the numbers but not the packing logic, which is the reusable idea here.
+
+The default payload in `samples.ts` is 8 blocks against the query "open weight models with long context windows", with the budget slider starting at 120 tokens. The blocks are deliberately mixed: some directly answer the query, some are adjacent, some are noise. One is a notice that the third-floor coffee machine has been repaired. That same coffee-machine sentence is the document `bm25.test.ts` asserts must score exactly 0.
 
 If I extended it: a fourth "ordered knapsack" strategy that also respects position (to fight lost-in-the-middle), and a token-cost overlay in dollars per model, reusing the multipliers from [Token Cost Lab](https://github.com/kbipul/token-cost-lab) (Day 4).
 
