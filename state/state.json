@@ -242,7 +242,7 @@
       "repo": "will-it-fit",
       "title": "Will It Fit? — Can You Actually Run That Open-Weight Model?",
       "tagline": "Pick an open-weight LLM (Kimi K3, LongCat-2.0, GPT-OSS…), a quantization, and your GPU or Azure VM — instantly see if it fits in VRAM and how fast it decodes. 100% in your browser, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-22",
       "demo": "pages",
       "valueScore": 12,
@@ -250,7 +250,8 @@
       "rationale": "Perfect 12/12. Opens a brand-new axis for the series — the infra/deployment reality of the Microsoft-stack AI leader — that none of the prior 14 browser-NLP toys touched. Rides two concurrent <7-day signals (Kimi K3 weights drop + AMD/Azure hardware week), demos in <1s with zero model download, and teaches the genuinely misread MoE 'total-vs-active VRAM' gap (weights sized by 2.8T total, decode by 32B active).",
       "repoUrl": "https://github.com/kbipul/will-it-fit",
       "demoUrl": "https://kbipul.github.io/will-it-fit/",
-      "publishedAt": "2026-07-22T00:45:00.910Z"
+      "publishedAt": "2026-07-22T00:45:00.910Z",
+      "refreshedAt": "2026-09-05T05:44:50.525Z"
     },
     {
       "day": 16,
@@ -258,7 +259,7 @@
       "repo": "tool-caller-ts",
       "title": "Tool Caller — Validate & Repair an LLM's Function Calls Before They Run",
       "tagline": "Paste the tool call a model just produced and watch it get checked against the tool's JSON Schema — hallucinated tool names, wrong types, bad enums, malformed JSON — then auto-repaired into a call that would actually run. 100% in your browser, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-23",
       "demo": "pages",
       "valueScore": 11,
@@ -266,7 +267,8 @@
       "rationale": "Top of a 5-candidate slate (11/12: Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 3). Opens the untouched Week-3 'agents & tool use' axis (backlog tool-caller-ts) that none of the prior 15 builds touched. Timeliness is an honest 2 — it rides the live agent-tooling trend and the sandbox-escape week rather than a single <48h release. Beat a fresh 'Agent Tool-Call Firewall' idea riding the OpenAI sandbox-escape story (10/12 — capped on Distinctiveness: it would have been the 4th paste-and-get-a-report-card security engine after SkillScan/MCP-Auditor/Blast-Radius) and a 'Foundry Residency Advisor' riding the MS x Mistral Azure-Europe deal + Mistral-on-Foundry (9/12 — overlaps Day 9 Open Model Passport governance ground). Also beat next backlog item prompt-chain-runner (6/12, no signal, LangChain-flavoured) and the parked RAG Injection Scanner (RAG arc just closed days 12-13). Distinctiveness earns a clean 3: a client-side JSON-Schema tool-call validator+repairer is not another security scanner, RAG demo or infra calculator, and it draws a hard honesty line — it coerces '2'->2 and 'buisness'->business but reports out-of-range / missing-required as INVALID rather than fabricating intent, with a re-validation invariant guaranteeing every 'repairable' verdict re-checks clean. Losing ideas >=8 (Agent Tool-Call Firewall 10, Foundry Residency Advisor 9) appended to the backlog.",
       "repoUrl": "https://github.com/kbipul/tool-caller-ts",
       "demoUrl": "https://kbipul.github.io/tool-caller-ts/",
-      "publishedAt": "2026-07-23T00:53:02.208Z"
+      "publishedAt": "2026-07-23T00:53:02.208Z",
+      "refreshedAt": "2026-09-05T05:44:53.164Z"
     },
     {
       "day": 17,
@@ -274,7 +276,7 @@
       "repo": "agent-scratchpad",
       "title": "Agent Scratchpad — Watch a ReAct Agent Think, and Catch Where It Breaks",
       "tagline": "Replay an LLM agent's Thought → Action → Observation loop step by step and get an instant loop-health report — stuck loops, oscillation, out-of-toolset calls, ungrounded answers, error thrash — 100% in your browser, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-24",
       "demo": "pages",
       "valueScore": 11,
@@ -282,7 +284,8 @@
       "rationale": "Top of a 5-candidate slate (11/12: Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 3). Opens the Week-3 'agents & tool use' arc one level up from Day 16's Tool Caller: Day 16 validated a SINGLE function call against its schema; Day 17 analyzes the WHOLE think-act-observe loop for eight failure classes (stuck-loop, unknown-tool, oscillation, error-thrash, no-progress, budget-overrun, no-final-answer, ungrounded-answer). Timeliness is an honest 2 — it rides the ongoing agent-reliability trend and last week's sandbox-escape story rather than a single <48h release; the biggest single signal (DeepSeek V4 today) only supports cost/infra ideas that overlap Day 4 Token Cost Lab and Day 15 Will It Fit. Beat: a fresh 'DeepSeek V4 Price-Floor Board' (8/12 — rides today's release but overlaps Token Cost Lab so Distinctiveness 1, appended to backlog); the carried Agent Tool-Call Firewall (10/12 — strong but would be the 4th paste-and-get-a-report-card security engine after SkillScan/MCP-Auditor/Blast-Radius); and the two next backlog items prompt-chain-runner (6/12, no signal, LangChain-flavoured) and agent-scratchpad's plain form. Distinctiveness earns a clean 3: it is a step-through visual PLAYER (Blast-Radius-style simulator, not a static report card) and draws a hard honesty line on the ungrounded-answer check — it only flags concrete numbers/quoted spans absent from every observation, never claims to verify meaning. Deterministic, zero model download, 43 Vitest cases pass.",
       "repoUrl": "https://github.com/kbipul/agent-scratchpad",
       "demoUrl": "https://kbipul.github.io/agent-scratchpad/",
-      "publishedAt": "2026-07-24T00:45:16.250Z"
+      "publishedAt": "2026-07-24T00:45:16.250Z",
+      "refreshedAt": "2026-09-05T05:44:55.535Z"
     },
     {
       "day": 18,
@@ -290,7 +293,7 @@
       "repo": "handoff-inspector",
       "title": "Handoff — Inspect a Multi-Agent Run for Coordination Failures",
       "tagline": "Paste a multi-agent orchestration trace (supervisor + sub-agents) and watch it on a swimlane timeline while it flags the coordination failures single-agent tools miss — dropped handoffs, delegation loops, context lost between agents, duplicated work. 100% in your browser, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-25",
       "demo": "pages",
       "valueScore": 11,
@@ -299,7 +302,8 @@
       "repoUrl": "https://github.com/kbipul/handoff-inspector",
       "demoUrl": "https://kbipul.github.io/handoff-inspector/",
       "builtAt": "2026-07-25T00:00:00.000Z",
-      "publishedAt": "2026-07-25T00:48:22.817Z"
+      "publishedAt": "2026-07-25T00:48:22.817Z",
+      "refreshedAt": "2026-09-05T05:44:58.012Z"
     },
     {
       "day": 19,
@@ -308,7 +312,7 @@
       "title": "Agent Memory Inspector — Audit What Your Agent Remembers",
       "tagline": "Microsoft Foundry just shipped editable agent memory to production. Paste an agent's memory store (procedural / user / session scopes) and get an instant hygiene report — expired TTLs, contradictions, scope leaks, candidate PII, duplicates — plus a retrieval simulation showing which memories a query would actually recall. 100% in your browser, no API key.",
       "description": "In-browser agent-memory hygiene inspector: deterministic detectors (expired TTL, contradictions, scope leaks, candidate PII, duplicates) + BM25 retrieval sim that shows poisoned recall. No API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-26",
       "demo": "pages",
       "valueScore": 12,
@@ -317,7 +321,8 @@
       "repoUrl": "https://github.com/kbipul/agent-memory-inspector",
       "demoUrl": "https://kbipul.github.io/agent-memory-inspector/",
       "builtAt": "2026-07-26T00:00:00.000Z",
-      "publishedAt": "2026-07-26T00:51:41.298Z"
+      "publishedAt": "2026-07-26T00:51:41.298Z",
+      "refreshedAt": "2026-09-05T05:45:00.855Z"
     },
     {
       "day": 20,
