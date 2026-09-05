@@ -331,7 +331,7 @@
       "title": "Contamination Scanner — Can You Trust That Benchmark Number?",
       "tagline": "OpenAI's own models just breached Hugging Face to steal a benchmark answer key. Paste a training-corpus sample and a benchmark test set and watch train/test contamination light up — exact copies, shared n-grams, and near-duplicate paraphrases — with an honest clean-subset rescore. 100% in your browser, no API key.",
       "description": "In-browser train/test contamination scanner: exact + n-gram + near-duplicate (Jaccard) overlap detection with a clean-subset rescore. Deterministic, no API key.",
-      "status": "built",
+      "status": "published",
       "date": "2026-07-27",
       "demo": "pages",
       "valueScore": 12,
@@ -340,13 +340,14 @@
       "repoUrl": "https://github.com/kbipul/contamination-scanner",
       "demoUrl": "https://kbipul.github.io/contamination-scanner/",
       "builtAt": "2026-07-27T00:00:00.000Z",
-      "publishedAt": "2026-07-27T02:03:50.613Z"
+      "publishedAt": "2026-07-27T02:03:50.613Z",
+      "refreshedAt": "2026-09-05T05:51:36.665Z"
     },
     {
       "day": 21,
       "repo": "kb-agent-framework",
       "title": "kb-agent-framework — A Minimal Typed Agent Runtime You Can Read in One Sitting",
-      "status": "built",
+      "status": "published",
       "demo": "pages",
       "stack": [
         "React",
@@ -360,7 +361,8 @@
       "folder": "021-kb-agent-framework",
       "repoUrl": "https://github.com/kbipul/kb-agent-framework",
       "demoUrl": "https://kbipul.github.io/kb-agent-framework/",
-      "publishedAt": "2026-09-02T12:56:22.727Z"
+      "publishedAt": "2026-09-02T12:56:22.727Z",
+      "refreshedAt": "2026-09-05T05:51:38.595Z"
     },
     {
       "day": 22,
@@ -369,7 +371,7 @@
       "title": "Token Clock — Your AI Bill Now Depends on What Day You Run It",
       "tagline": "DeepSeek made API tokens peak-priced on 16 Aug 2026, then exempted the whole weekend on 23 Aug. Price a full week of your traffic against the weekday bands and the weekend exemption, in your timezone, and see what moving batch work to Saturday is worth. 100% in your browser, no API key.",
       "description": "Price a full week of LLM traffic against DeepSeek's weekday peak bands and weekend exemption, in your timezone.",
-      "status": "built",
+      "status": "published",
       "date": "2026-08-16",
       "demo": "pages",
       "stack": [
@@ -385,7 +387,8 @@
       "revisedAt": "2026-09-01T00:00:00.000Z",
       "repoUrl": "https://github.com/kbipul/token-clock",
       "demoUrl": "https://kbipul.github.io/token-clock/",
-      "publishedAt": "2026-09-02T12:56:28.178Z"
+      "publishedAt": "2026-09-02T12:56:28.178Z",
+      "refreshedAt": "2026-09-05T05:51:40.703Z"
     },
     {
       "day": 23,
