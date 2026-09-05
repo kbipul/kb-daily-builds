@@ -1,0 +1,10 @@
+{
+  "day": 25,
+  "repo": "pair-planner",
+  "title": "PAIR Planner — Your Fleet Has Eight GPUs. The Router Can See Two.",
+  "tagline": "NVIDIA shipped PAIR on 3 Sep 2026 to turn every idle GPU on your network into one inference cluster. Lay out your actual machines and find out how many of them the scheduler is allowed to use — and what the rest are costing you in seconds.",
+  "description": "Simulate NVIDIA PAIR over your real fleet: which machines are eligible, and what the ineligible ones cost per run.",
+  "topics": ["ai", "local-llm", "nvidia-pair", "agents", "capacity-planning", "typescript", "react"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}

@@ -117,3 +117,9 @@ When ≤14 days remain, the weekly audit generates the next 30 ideas following t
 |------|------|-------|-------|
 | trusted-access | Trusted-Access Advisor — describe an AI use case and see whether it needs a vetted-org programme (Anthropic Cyber / Life Sciences Verification, US-only today) and what the application actually asks for. Rides Mythos 5.1's gated launch, 1 Sep 2026. | React + TS + Vite | 9/12 |
 | skill-collision | Skill Library Collision Detector — load a directory of SKILL.md frontmatter and see which descriptions overlap badly enough that the agent picks the wrong one, plus the context-budget cost of the whole library. Rides mukul975/Anthropic-Cybersecurity-Skills (817 skills) trending 4 Sep 2026. | React + TS + Vite | 8/12 |
+
+### Signal-derived (added Day 25)
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| skill-collision | *(carried from Day 24, re-scored 9/12 — Timeliness up to 3 as mattpocock/skills hit #1 on GitHub trending with +2,758 stars on 5 Sep 2026.)* Still capped on Distinctiveness: it would be the third skill report card after Day 006 skill-scan, with skill-lint and skill-portability queued. | React + TS + Vite | 9/12 |
+| local-model-fit | Local Model Fit Advisor — describe a machine, see which local models will actually run on it and at what speed. Rides magnitudedev/magnitude trending 5 Sep 2026. Scored 7/12 and NOT appended as a build candidate: Day 025 pair-planner already owns the memory-fit gate and says more with it. Recorded so the loop does not rediscover it. | React + TS + Vite | 7/12 |

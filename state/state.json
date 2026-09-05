@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 24,
+  "dayCounter": 25,
   "projects": [
     {
       "day": 1,
@@ -417,6 +417,27 @@
       "publishedAt": "2026-09-04T05:40:15.119Z",
       "revisedAt": "2026-09-04T00:00:00.000Z",
       "refreshedAt": "2026-09-04T06:07:13.400Z"
+    },
+    {
+      "day": 25,
+      "folder": "025-pair-planner",
+      "repo": "pair-planner",
+      "title": "PAIR Planner — Your Fleet Has Eight GPUs. The Router Can See Two.",
+      "tagline": "NVIDIA shipped PAIR on 3 Sep 2026 to turn every idle GPU on your network into one inference cluster. Lay out your actual machines and find out how many of them the scheduler is allowed to use — and what the rest are costing you in seconds.",
+      "description": "Simulate NVIDIA PAIR over your real fleet: which machines are eligible, and what the ineligible ones cost per run.",
+      "status": "built",
+      "date": "2026-09-05",
+      "demo": "pages",
+      "stack": [
+        "React 18",
+        "TypeScript",
+        "Vite",
+        "Vitest"
+      ],
+      "valueScore": 12,
+      "signal": "NVIDIA released the Personal AI Router (PAIR) beta on 2026-09-03 — free software joining compatible Windows/macOS/Linux machines (RTX 20-series and newer, RTX PRO, DGX Spark, Apple M4+) into one local inference pool that spreads a lead agent's subagent calls across whichever node is free, proxying Ollama and LM Studio rather than replacing them; covered at IFA 2026 with a demo of 5 subagents finishing in 8m48s on three devices against 18m00s on one. NVIDIA's own write-up states the scheduler filters nodes on readiness, supported engine state, requested-model presence and job load, and names a gaming PC mid-session, a closed laptop, and a machine running Ollama without the requested model pulled as ineligible. Wider week: GPT-6 Astra began rolling out through the Microsoft Foundry Limited Access Program (09-03, Astra's Critical cyber threshold already ridden on Day 023); Fable 5.1 GA 09-01 with the 75% cache-read cut (ridden Day 024); Gemini 3.8 Flash, Meta Muse Spark 1.3 and Qwen3.8 27B all landed 09-02; Cursor reports Fable 5.1 at 73.4% on its coding benchmark. GitHub trending is dominated by Agent Skills — mattpocock/skills #1 (+2,758 today), anthropics/skills, affaan-m/ECC, blader/humanizer, JuliusBrussee/caveman — plus magnitudedev/magnitude, a local inference server that picks the best model for your hardware and plugs into existing agents. HF trending leans agent-environment and context-compression papers (Terminal-Universe, LatentPress, LLaDA-Image) with GLM-5.2 the discussed open-weight model. Direct Hugging Face and Reddit fetches are allowlist-blocked from the sandbox and were covered via search; github.com/trending needed a curl fallback because web_fetch's provenance check blocked it.",
+      "rationale": "Only 12/12 of the slate (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). Timeliness: the beta is two days old and nobody has shipped a planner for it. Distinctiveness is the clean 3 because the loop has priced a prompt (Day 004), routed one to a model tier (Day 008), packed one into a budget (Day 012), timed one against peak bands (Day 022) and cached one (Day 024) — every single build so far reasons about ONE machine's bill. This is the first that reasons about a fleet: capacity and scheduling, which is the IT-Director-native problem and the axis the series had not touched. Positioning: an office floor of idle Windows RTX workstations as an after-hours inference tier is the enterprise reading of a consumer launch, and it is where a director adds something a hobbyist cannot. The build earns the score on two findings. First, eligibility rather than silicon is the binding constraint, and by a margin I did not expect: the home-office preset's four capable machines are worth literally nothing as configured (38m30s with four, 38m30s with one) because the gaming PC is in use, the study desktop only ever pulled Phi-4 mini and the mini PC has no engine — the same hardware made eligible finishes in 8m17s, and the top fix is 28m03s for closing a game. That is a sleep-policy and `ollama pull` problem that will never appear on a hardware budget. Second, a genuine design error the office preset exposed: it reported a speedup of 0.80, a cluster somehow slower than one machine, because the 16 GB host had left the 70B policy check unplaced and I was dividing a full run by a shorter run that skipped the expensive job. The fix was conceptual rather than arithmetic — when the host cannot serve every job the two schedules are not doing the same work, so plan() now carries soloFeasible, refuses to print a speedup when it is false, and exposes headroom (cluster vs ceiling) which compares two schedules over an identical job set. Kept honest deliberately: the NVIDIA IFA demo is used as a calibration preset with job sizes fitted to the PUBLISHED solo figure (18m15s against 18m00s, asserted within 5%) and the cluster time left free to be wrong — it predicts 7m28s against their measured 8m48s, 18% optimistic, and that gap is asserted in the tests and quoted in the README rather than tuned away. Intra-node request batching was built and then removed because I could not source a gain curve, which makes every cluster figure conservative; the greedy longest-job-first scheduler carries no optimality guarantee on unequal machines and is defended only by the fact that the headline compares two schedules built by the same rule; and the tokens/sec table is public-benchmark-order estimates at +/-40% that I benchmarked myself not at all, stated on screen rather than in a footnote. Beat the next two backlog items prompt-templates-cs (5/12 — Positioning 3 but Timeliness 0, Demo-ability 1 on cli, Distinctiveness 1) and azure-content-safety-demo (4/12 — byok plus a required Azure resource, so a stranger cannot run it at all), a refreshed Skill Library Collision Detector riding mattpocock/skills at #1 (9/12, up from 8 on Timeliness — but it would be the third skill report card after Day 006 skill-scan, with skill-lint and skill-portability already queued), a fresh Local Model Fit Advisor riding magnitudedev/magnitude (7/12 — overlaps this build's memory gate with less to say), and the carried Eval Treadmill (8/12 — its signal is now three weeks old). 47 Vitest cases pass, tsc clean, smoke test green, secret scan clean.",
+      "builtAt": "2026-09-05T00:00:00.000Z"
     }
   ]
 }
