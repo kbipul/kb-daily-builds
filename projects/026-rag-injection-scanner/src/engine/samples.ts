@@ -18,7 +18,8 @@ export const SAMPLES: Sample[] = [
   {
     key: 'poisoned-wiki',
     label: 'Poisoned internal wiki',
-    blurb: 'Four chunks from a support-bot index. Three are ordinary. One is not.',
+    blurb:
+      'Four chunks from a support-bot index. One is hostile. One is an innocent sentence that trips the same rule.',
     text: `source: wiki/expenses/travel-policy.md
 Employees may book economy fares directly through the travel portal. Bookings
 above INR 60,000 require line-manager approval recorded in the portal before
