@@ -4,7 +4,7 @@ import { PROFILES, profileById } from "./data/profiles";
 import { DAY_NAMES, windowInZone } from "./lib/clock";
 import { combineHourly, costForWeek } from "./lib/cost";
 import { shiftDeferrable, weekendPlan, weeklyCostAfterIntradayShift } from "./lib/shift";
-import { hourLabel, multiple, pct, tokens, usd } from "./lib/format";
+import { hourLabel, leverNote, multiple, pct, tokens, usd } from "./lib/format";
 import type { Workload } from "./lib/types";
 
 export default function App() {
@@ -69,7 +69,7 @@ export default function App() {
         <p className="kicker">Day 22 · kb-daily-builds</p>
         <h1>Token Clock</h1>
         <p className="tagline">
-          Your AI bill now depends on what time you run it.
+          Your AI bill now depends on what day you run it.
         </p>
         <div className="signal">
           <strong>Amended 23 August 2026 — the weekend is now free of peak
@@ -159,8 +159,8 @@ export default function App() {
           <span className="card-label">Or shift within the day</span>
           <span className="card-value">{usd(saved)}</span>
           <span className="card-sub">
-            per week · {pct(week.weeklyCostUsd ? saved / week.weeklyCostUsd : 0)} ·
-            the smaller lever
+            per week · {pct(week.weeklyCostUsd ? saved / week.weeklyCostUsd : 0)} ·{" "}
+            {leverNote(saved, weekend.totalSavedUsd, weekend.noWeekendEdge)}
           </span>
         </div>
         <div className="card">

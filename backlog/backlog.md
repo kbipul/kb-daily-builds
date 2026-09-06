@@ -13,7 +13,7 @@ Rules for the loop (see PLAYBOOK.md Step 1.5 — the selection protocol governs)
 ## India Flagship Pool (every 14th day — the "AI voice of India" series)
 | Idea | Repo | Scope | Demo |
 |---|---|---|---|
-| [F] Bhasha Detect | `bhasha-detect` | Identify all 22 scheduled Indian languages + Hinglish in-browser; confusion-matrix explorer | pages |
+| ~~[F] Bhasha Detect~~ **(BUILT Day 014, 2026-07-21)** | `bhasha-detect` | Identify all 22 scheduled Indian languages + Hinglish in-browser; confusion-matrix explorer | pages |
 | [F] Hinglish Bridge | `hinglish-bridge` | Real-time Hinglish ⇄ Devanagari transliteration + normalization as you type | pages |
 | [F] Kisan Sahayak | `kisan-sahayak` | Bilingual (Hindi/English) RAG over public agri-scheme documents with citations | pages |
 | [F] UPI Guard | `upi-guard` | ML.NET anomaly detection on synthetic UPI-scale transaction streams; pattern dashboard | cli |
@@ -98,11 +98,11 @@ When ≤14 days remain, the weekly audit generates the next 30 ideas following t
 | 8 | ~~Open Model Passport~~ (BUILT day 9, 2026-07-15) | `open-model-passport` | Pick an open/hosted model, get an instant "can I actually ship this?" report: licence terms, commercial use, weight availability, data residency, EU AI Act GPAI obligations. | pages | Won day 9 at 12/12 |
 | 8 | AI Risk Tier Classifier | `ai-risk-tier` | Describe an AI use case, get its EU AI Act risk tier + the obligations that attach, fully client-side. Rides the UN Global Dialogue on AI Governance (Geneva, 6-7 Jul 2026) and China's CAC companion-AI rules (effective 15 Jul 2026). | pages | 9/12 |
 | 9 | Blast Radius | `blast-radius` | Paste a shell/git command an agent wants to run and see a simulated blast-radius preview against a virtual filesystem: what gets destroyed, whether it is reversible, and a safer rewrite. Visual simulator rather than another rule-engine report card. | pages | 11/12 |
-| 11 | Skill Portability Checker | `skill-portability` | Paste a SKILL.md and see which agents will actually run it — Claude Code, Codex, Cursor, Gemini CLI, OpenCode — checked against the `agentskills/agentskills` spec: required frontmatter, naming, and the vendor-specific extensions that silently break portability. | pages | 8/12 |
+| 11 | ~~Skill Portability Checker~~ **(STRUCK W36 — duplicate mechanic of Day 006 skill-scan; `skill-lint` already covers the conformance angle)** | `skill-portability` | Paste a SKILL.md and see which agents will actually run it — Claude Code, Codex, Cursor, Gemini CLI, OpenCode — checked against the `agentskills/agentskills` spec: required frontmatter, naming, and the vendor-specific extensions that silently break portability. | pages | 8/12 |
 | 13 | RAG Injection Scanner | `rag-injection-scanner` | Paste the chunks a RAG pipeline retrieved and get an instant report of prompt-injection / instruction-override payloads hiding in the retrieved context ("ignore previous instructions", tool-call bait, exfiltration lures, zero-width smuggling) before they reach the model. Client-side rule engine, no model needed. | pages | 10/12 |
 | 16 | Agent Tool-Call Firewall | `tool-call-firewall` | Paste an agent's proposed tool calls + a least-privilege policy and see which calls a policy would ALLOW vs BLOCK and why (shell/http/file scopes, dangerous combos). Rides OpenAI's 2026-07-20 sandbox-escape disclosure. | pages | 10/12 (lost to Tool Caller on Distinctiveness — would be the 4th security report-card after SkillScan/MCP-Auditor/Blast-Radius) |
 | 16 | Foundry Residency Advisor | `foundry-residency` | Pick a model + your compliance region and see which Azure AI Foundry region + catalogue models keep data in-region, with GDPR / EU AI Act exposure. Rides the MS×Mistral Azure-Europe deal (2026-07-21) + Mistral models added to Foundry. | pages | 9/12 (lost to Tool Caller — overlaps Day 9 Open Model Passport governance ground) |
-| 17 | DeepSeek V4 Price-Floor Board | `price-floor-board` | Pick your current model + monthly token volume and see how far DeepSeek V4's ~$0.44/M output floor (stable 2026-07-24) undercuts it, across the week's open-weight wave (Kimi K3, Gemini 3.6 Flash). Client-side calculator. | pages | 8/12 (lost to Agent Scratchpad — overlaps Day 4 Token Cost Lab, Distinctiveness 1) |
+| 17 | ~~DeepSeek V4 Price-Floor Board~~ **(STRUCK W36 — superseded by Day 022 token-clock; Distinctiveness permanently 1 against Days 004/022/024)** | `price-floor-board` | Pick your current model + monthly token volume and see how far DeepSeek V4's ~$0.44/M output floor (stable 2026-07-24) undercuts it, across the week's open-weight wave (Kimi K3, Gemini 3.6 Flash). Client-side calculator. | pages | 8/12 (lost to Agent Scratchpad — overlaps Day 4 Token Cost Lab, Distinctiveness 1) |
 | 21 | Loop Guard | `loop-guard` | Paste an agent-loop config (max steps, stop conditions, tool set) and simulate runaway behavior: where it terminates, where it burns its step budget in a tool-call cycle, and a safer rewrite. Client-side simulator, no model. Rides Microsoft's new AB-100/AB-620 agent certifications making loop-safety a named competency. | pages | 9/12 (lost to kb-agent-framework — the framework demo already visualizes the step guard) |
 | 22 | Repricing Exposure Board | `repricing-board` | Paste your monthly token mix and see what the last month of provider repricing did to it: DeepSeek V4 up to +1,100% at peak (16 Aug), GPT-5.6 Luna down 80% (30 Jul), Claude Sonnet 5 $2→$3/M on 1 Sep. A diff view over a moving price list, with switch-cost break-evens. | pages | 9/12 (lost to Token Clock — right signal, but Distinctiveness 1: it is Day 4 Token Cost Lab with a delta column) |
 
@@ -123,6 +123,16 @@ When ≤14 days remain, the weekly audit generates the next 30 ideas following t
 |------|------|-------|-------|
 | skill-collision | *(carried from Day 24, re-scored 9/12 — Timeliness up to 3 as mattpocock/skills hit #1 on GitHub trending with +2,758 stars on 5 Sep 2026.)* Still capped on Distinctiveness: it would be the third skill report card after Day 006 skill-scan, with skill-lint and skill-portability queued. | React + TS + Vite | 9/12 |
 | local-model-fit | Local Model Fit Advisor — describe a machine, see which local models will actually run on it and at what speed. Rides magnitudedev/magnitude trending 5 Sep 2026. Scored 7/12 and NOT appended as a build candidate: Day 025 pair-planner already owns the memory-fit gate and says more with it. Recorded so the loop does not rediscover it. | React + TS + Vite | 7/12 |
+
+### Carry-limit flag (W36 audit)
+
+`skill-collision` has now been slated and scored twice — 8/12 (Day 24), re-scored
+9/12 (Day 25) — and lost both times on the same dimension, Distinctiveness, for
+the same reason: it would be the third skill report card after Day 006
+`skill-scan`. Rising Timeliness cannot fix a Distinctiveness cap. Do not slate it
+again as a report card. Either build it with a genuinely different interaction
+model (e.g. the agent picking the *wrong* skill live, as a simulation), or retire
+it. Same rule proposed for any candidate that loses twice on one dimension.
 
 ### Signal-derived (added Day 26)
 | Slug | Idea | Stack | Score |

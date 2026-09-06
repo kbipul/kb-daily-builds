@@ -7,9 +7,11 @@ import {
   wrapWeekMin,
   MINUTES_PER_WEEK,
 } from "../clock";
-import { cheapestWeekendDay, costForHourlyOnDay, costForWeek } from "../cost";
-import { weekendPlan, weeklyCostAfterIntradayShift } from "../shift";
+import { cheapestWeekendDay, combineHourly, costForHourlyOnDay, costForWeek } from "../cost";
+import { shiftDeferrable, weekendPlan, weeklyCostAfterIntradayShift } from "../shift";
 import { modelById, zoneById } from "../../data/pricing";
+import { profileById } from "../../data/profiles";
+import { leverNote } from "../format";
 import type { UtcWindow, Workload } from "../types";
 
 const PEAK: UtcWindow[] = [
@@ -198,12 +200,80 @@ describe("weekendPlan", () => {
     expect(plan.totalSavedUsd).toBeLessThan(plan.baselineDeferrableUsd);
   });
 
-  it("beats intra-day shifting on flat round-the-clock batch traffic", () => {
-    const workloads = [batch];
-    const baseline = costForWeek(flat(1_000_000), utc, model).weeklyCostUsd;
+  // W36 audit. The original test here passed `{}` as the shifted series, so
+  // shiftDeferrable never ran: it compared the weekend plan against a zero
+  // intra-day saving built from a different baseline, and asserted nothing.
+  // Running it properly shows the two levers share ONE ceiling — every
+  // deferrable token at the off-peak rate — so where intra-day shifting can
+  // reach that ceiling they tie exactly, and the weekend move wins only where
+  // shifting is constrained. That is the real claim, and it is stronger.
+  it("ties with intra-day shifting when shifting is unconstrained", () => {
+    const ws = [batch]; // flat traffic, 6h shift window, 2x headroom
+    const baseline = costForWeek(combineHourly(ws), utc, model).weeklyCostUsd;
+    const shift = shiftDeferrable(ws, utc, model, 2);
     const intraday =
-      baseline - weeklyCostAfterIntradayShift(workloads, {}, utc, model);
-    const plan = weekendPlan(workloads, utc, model);
+      baseline - weeklyCostAfterIntradayShift(ws, shift.shifted, utc, model);
+    const plan = weekendPlan(ws, utc, model);
+    expect(intraday).toBeGreaterThan(0);
+    expect(Math.abs(intraday - plan.totalSavedUsd)).toBeLessThan(0.005);
+  });
+
+  it("beats intra-day shifting when the shift window is too short to escape a peak band", () => {
+    const penned: Workload = { ...batch, maxShiftHours: 1 };
+    const ws = [penned];
+    const baseline = costForWeek(combineHourly(ws), utc, model).weeklyCostUsd;
+    const shift = shiftDeferrable(ws, utc, model, 2);
+    const intraday =
+      baseline - weeklyCostAfterIntradayShift(ws, shift.shifted, utc, model);
+    const plan = weekendPlan(ws, utc, model);
     expect(plan.totalSavedUsd).toBeGreaterThan(intraday);
+  });
+
+  it("beats intra-day shifting when burst headroom is tight", () => {
+    const ws = [batch];
+    const baseline = costForWeek(combineHourly(ws), utc, model).weeklyCostUsd;
+    const shift = shiftDeferrable(ws, utc, model, 1.05);
+    const intraday =
+      baseline - weeklyCostAfterIntradayShift(ws, shift.shifted, utc, model);
+    const plan = weekendPlan(ws, utc, model);
+    expect(plan.totalSavedUsd).toBeGreaterThan(intraday);
+  });
+
+  it("rescues a spike buried inside a peak window that shifting cannot move at all", () => {
+    const spike = new Array(24).fill(0);
+    spike[7] = 10_000_000;
+    spike[8] = 10_000_000; // deep inside 06:00-10:00 UTC
+    const ws: Workload[] = [
+      { id: "spike", name: "Digest", hourlyOutputTokens: spike, deferrable: true, maxShiftHours: 1 },
+    ];
+    const baseline = costForWeek(combineHourly(ws), utc, model).weeklyCostUsd;
+    const shift = shiftDeferrable(ws, utc, model, 2);
+    const intraday =
+      baseline - weeklyCostAfterIntradayShift(ws, shift.shifted, utc, model);
+    const plan = weekendPlan(ws, utc, model);
+    expect(intraday).toBeCloseTo(0, 6); // nowhere off-peak within one hour
+    expect(plan.totalSavedUsd).toBeGreaterThan(0);
+  });
+
+  it("ties with intra-day shifting on the bundled India SaaS profile", () => {
+    // Both levers reach the same off-peak rate, so they land on the same
+    // number. The UI must not call either one smaller.
+    const profile = profileById("india-saas");
+    const ws = profile.workloads;
+    const baseline = costForWeek(combineHourly(ws), ist, model).weeklyCostUsd;
+    const shift = shiftDeferrable(ws, ist, model, 2);
+    const intraday = baseline - weeklyCostAfterIntradayShift(ws, shift.shifted, ist, model);
+    const plan = weekendPlan(ws, ist, model);
+    expect(Math.abs(intraday - plan.totalSavedUsd)).toBeLessThan(0.005);
+    expect(leverNote(intraday, plan.totalSavedUsd, plan.noWeekendEdge)).toBe(
+      "the same saving, on a tighter schedule",
+    );
+  });
+
+  it("leverNote states the relation rather than assuming it", () => {
+    expect(leverNote(100, 50, false)).toBe("the larger lever");
+    expect(leverNote(50, 100, false)).toBe("the smaller lever");
+    expect(leverNote(100, 100, false)).toBe("the same saving, on a tighter schedule");
+    expect(leverNote(100, 0, true)).toBe("the only lever on this model");
   });
 });

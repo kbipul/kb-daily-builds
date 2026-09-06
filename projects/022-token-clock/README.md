@@ -22,7 +22,7 @@ Here is what `src/data/pricing.ts` carries, in USD per million output tokens:
 | V4-Flash | $0.28 | $1.32 | $0.66 |
 | V4-Pro | $0.87 | $3.96 | $1.98 |
 
-That second change is the one worth building for. It moves the cheapest available lever from *run this batch at 3 a.m.* to *run it on Saturday*, a scheduling change most teams can actually make, against one they mostly cannot.
+That second change is the one worth building for. It moves the most *reachable* lever from *run this batch at 3 a.m.* to *run it on Saturday*, a scheduling change most teams can actually make, against one they mostly cannot. The two are worth the same when you can pull either; the weekend move is the one you can usually pull.
 
 Token Clock takes the shape of your week (hourly output-token volumes, split into workloads, each marked deferrable or not) and prices all seven days against the bands **in your timezone**. It reports weekly peak exposure, what the repricing costs against the old flat rate, what an intra-day scheduler could save, and what the weekend exemption is worth on your traffic.
 
@@ -89,7 +89,11 @@ What makes that worth writing down is *how* the error survived. The loop re-chec
 
 Re-verifying a snapshot is not a freshness check. The fix was to search for *changes since* the launch instead of re-reading the launch itself. That is a change of habit, and no test covers it, which is the part I am least sure of. Nothing in the loop distinguishes "I looked and it has not changed" from "I looked at the same three pages again", and I have not worked out what would.
 
-The technical work the amendment forced turned out to be an upgrade rather than a patch. Adding a day dimension moved the headline from "shift your batch a few hours", a lever most teams cannot pull because a 3 a.m. slot has its own constraints, to "move it to Saturday", an ordinary scheduling decision. The saving is also simply larger. On round-the-clock batch traffic the weekend move beats everything intra-day shifting can find, and *beats intra-day shifting on flat round-the-clock batch traffic* is a real test in `weekend.test.ts`, so the claim cannot rot.
+The technical work the amendment forced turned out to be an upgrade rather than a patch. Adding a day dimension moved the headline from "shift your batch a few hours", a lever most teams cannot pull because a 3 a.m. slot has its own constraints, to "move it to Saturday", an ordinary scheduling decision.
+
+**Correction (W36 audit).** This section used to claim the weekend saving is "simply larger" than intra-day shifting, and cited a test as proof. Both were wrong. The test passed `{}` as the shifted series, so `shiftDeferrable` never ran: it compared the weekend plan against a zero intra-day saving computed from a different baseline, and could not have failed. Running it properly shows the two levers share **one ceiling** — every deferrable token billed at the off-peak rate, with no third and cheaper rate to reach — so wherever intra-day shifting can reach that ceiling, the two tie to the cent. On the bundled India SaaS profile both are worth exactly $792.00 a week, which is why the UI no longer labels either one "the smaller lever".
+
+The real advantage is reachability, not magnitude, and it is the stronger claim: the weekend move needs no burst headroom and no shift window, so it reaches the ceiling in cases where shifting cannot get near it. Four tests in `weekend.test.ts` now pin both regimes — the tie when shifting is unconstrained, and the win when the shift window is one hour, when burst headroom is 1.05x, and when a spike sits deep inside 06:00–10:00 UTC where intra-day shifting saves nothing at all and the weekend move still saves in full.
 
 The half-hour offset was the part that nearly went out wrong in the first version. Integer `localHour → utcHour` arithmetic passed every test I had and was quietly incorrect for exactly the timezone the project is about. Minute-resolution fractional coverage cost about twenty lines and turned a wrong tool into a right one. The day-of-week work sits on top of that same minute walk, which is the only reason the Pacific Friday-evening case was cheap to get right.
 
