@@ -123,3 +123,9 @@ When ≤14 days remain, the weekly audit generates the next 30 ideas following t
 |------|------|-------|-------|
 | skill-collision | *(carried from Day 24, re-scored 9/12 — Timeliness up to 3 as mattpocock/skills hit #1 on GitHub trending with +2,758 stars on 5 Sep 2026.)* Still capped on Distinctiveness: it would be the third skill report card after Day 006 skill-scan, with skill-lint and skill-portability queued. | React + TS + Vite | 9/12 |
 | local-model-fit | Local Model Fit Advisor — describe a machine, see which local models will actually run on it and at what speed. Rides magnitudedev/magnitude trending 5 Sep 2026. Scored 7/12 and NOT appended as a build candidate: Day 025 pair-planner already owns the memory-fit gate and says more with it. Recorded so the loop does not rediscover it. | React + TS + Vite | 7/12 |
+
+### Signal-derived (added Day 26)
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| recall-cliff | Recall Cliff — GPT-6 Astra (3 Sep 2026) ships a 1.05M-token window, but the useful question is not price, it is where retrieval reliability collapses inside it. A placement advisor: paste your prompt layout, see where instructions should sit given published long-context degradation curves. Tied at 11/12 with the winner; tie went to the backlog item per Step 1.5D, and its demo score was capped at 2 because an honest version needs the user's own eval data rather than numbers I would have to invent. | React + TS + Vite | 11/12 |
+| astra-cliff-risk | Astra Cliff Risk — GPT-6 Astra re-prices the *entire* request once input crosses 272,000 tokens ($10/$50 to $20/$75), so a pipeline that usually sits at 250K and occasionally spills does not pay 12% more, it pays ~2x on those runs. Models the distribution rather than a point estimate. Scored 9/12: Distinctiveness capped at 1 — it would be the fourth cost calculator after Day 004 token-cost-lab, Day 022 token-clock and Day 024 cache-cliff. | React + TS + Vite | 9/12 |
