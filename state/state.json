@@ -472,7 +472,7 @@
       "title": "RAG Injection Scanner — What Did Your Retriever Just Hand the Model?",
       "tagline": "Agent stacks now ingest whole corpora into context automatically — OpenViking and ai-memory both trended on 6 Sep 2026 for unifying memory, RAG and skills into one self-evolving store. Paste the chunks your retriever returned and see which of them are talking to the model instead of to you.",
       "description": "Scan retrieved RAG chunks for prompt injection: instruction overrides, role spoofing, tool-call bait, exfiltration beacons and invisible Unicode.",
-      "status": "built",
+      "status": "published",
       "date": "2026-09-06",
       "demo": "pages",
       "stack": [
@@ -488,7 +488,8 @@
       "repoUrl": "https://github.com/kbipul/rag-injection-scanner",
       "demoUrl": "https://kbipul.github.io/rag-injection-scanner/",
       "publishedAt": "2026-09-06T03:53:56.625Z",
-      "revisedAt": "2026-09-06T00:00:00.000Z"
+      "revisedAt": "2026-09-06T00:00:00.000Z",
+      "refreshedAt": "2026-09-06T03:57:24.591Z"
     }
   ]
 }
