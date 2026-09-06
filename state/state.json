@@ -375,7 +375,7 @@
       "title": "Token Clock — Your AI Bill Now Depends on What Day You Run It",
       "tagline": "DeepSeek made API tokens peak-priced on 16 Aug 2026, then exempted the whole weekend on 23 Aug. Price a full week of your traffic against the weekday bands and the weekend exemption, in your timezone, and see what moving batch work to Saturday is worth. 100% in your browser, no API key.",
       "description": "Price a full week of LLM traffic against DeepSeek's weekday peak bands and weekend exemption, in your timezone.",
-      "status": "built",
+      "status": "published",
       "date": "2026-08-16",
       "demo": "pages",
       "stack": [
@@ -392,7 +392,7 @@
       "repoUrl": "https://github.com/kbipul/token-clock",
       "demoUrl": "https://kbipul.github.io/token-clock/",
       "publishedAt": "2026-09-02T12:56:28.178Z",
-      "refreshedAt": "2026-09-05T05:51:40.703Z",
+      "refreshedAt": "2026-09-06T13:47:41.727Z",
       "auditedAt": "2026-09-06T00:00:00.000Z"
     },
     {
