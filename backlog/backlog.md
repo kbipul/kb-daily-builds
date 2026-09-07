@@ -139,3 +139,14 @@ it. Same rule proposed for any candidate that loses twice on one dimension.
 |------|------|-------|-------|
 | recall-cliff | Recall Cliff — GPT-6 Astra (3 Sep 2026) ships a 1.05M-token window, but the useful question is not price, it is where retrieval reliability collapses inside it. A placement advisor: paste your prompt layout, see where instructions should sit given published long-context degradation curves. Tied at 11/12 with the winner; tie went to the backlog item per Step 1.5D, and its demo score was capped at 2 because an honest version needs the user's own eval data rather than numbers I would have to invent. | React + TS + Vite | 11/12 |
 | astra-cliff-risk | Astra Cliff Risk — GPT-6 Astra re-prices the *entire* request once input crosses 272,000 tokens ($10/$50 to $20/$75), so a pipeline that usually sits at 250K and occasionally spills does not pay 12% more, it pays ~2x on those runs. Models the distribution rather than a point estimate. Scored 9/12: Distinctiveness capped at 1 — it would be the fourth cost calculator after Day 004 token-cost-lab, Day 022 token-clock and Day 024 cache-cliff. | React + TS + Vite | 9/12 |
+
+### Signal-derived (added Day 27)
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| skill-router-sim | Skill Router Simulator — load a set of SKILL.md descriptions, type a request, and watch a description-similarity router pick a skill live, showing the near-misses and the margin it won by. Rides mattpocock/skills at #1 on GitHub trending (+2,207 stars, 7 Sep 2026) with openai/skills and humanlayer/skills behind it. Scored 9/12: Timeliness 3, Demo-ability 3, Positioning 2, but **Distinctiveness 1** — a router demo duplicates Day 008 `prompt-router`, and the W36 carry-limit flag already bars further skill report cards. Only worth building if the *wrong* pick is the whole point of the interaction. | React + TS + Vite | 9/12 |
+
+Note on the carried candidates: `recall-cliff` re-scored **10/12** today (Timeliness 3→2 — the
+1.05M-context angle is no longer the live Astra conversation; Demo-ability still capped at 2 for
+the same honest reason: it needs the user's own eval data, not degradation curves invented here).
+`eval-treadmill` re-scored **9/12** (no fresh benchmark-saturation signal, and Day 020
+`contamination-scanner` already occupies benchmark-trust ground). Both shift forward.

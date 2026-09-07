@@ -1,0 +1,10 @@
+{
+  "day": 27,
+  "repo": "silent-reasoning",
+  "title": "Silent Reasoning — What Breaks When the Model Stops Thinking Out Loud",
+  "tagline": "GPT-6 Astra shipped on 3 Sep 2026 reasoning in latent space instead of writing its chain of thought down, and OpenAI's own system card puts its rate of successfully hiding that reasoning from a monitor at 60.9% against 16.1% for GPT-5.6 Sol. Set your safety stack, drag the visibility dial, and watch which of your controls stop working.",
+  "description": "Simulator: see which of your AI safety controls stop working when a model reasons in latent space instead of visible chain-of-thought.",
+  "topics": ["ai-safety", "chain-of-thought", "monitorability", "llm", "agents", "ai-governance", "typescript", "react"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}
