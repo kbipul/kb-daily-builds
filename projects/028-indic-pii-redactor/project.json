@@ -1,0 +1,10 @@
+{
+  "day": 28,
+  "repo": "indic-pii-redactor",
+  "title": "Indic PII Redactor — Aadhaar, PAN and GSTIN Detection That Never Leaves the Browser",
+  "tagline": "India's DPDP Rules put Phase 1 obligations on the calendar for November 2026, and the first thing every team hits is that you cannot send an Aadhaar number to a cloud API to have it removed. This does the detection in your tab — Verhoeff-validated Aadhaar, mod-36 GSTIN, PAN, UPI, IFSC, mobile, PIN, vehicle and voter ID, in Latin and Devanagari digits — and grades every hit into certain, likely or possible instead of pretending to a confidence it does not have.",
+  "description": "Client-side detection and redaction of Indian personal identifiers, with checksum validation and honest false-positive tiers.",
+  "topics": ["pii", "data-privacy", "dpdp", "aadhaar", "india", "ai-governance", "privacy-by-design", "typescript", "react"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}

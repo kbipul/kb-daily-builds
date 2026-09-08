@@ -19,7 +19,7 @@ Rules for the loop (see PLAYBOOK.md Step 1.5 — the selection protocol governs)
 | [F] UPI Guard | `upi-guard` | ML.NET anomaly detection on synthetic UPI-scale transaction streams; pattern dashboard | cli |
 | [F] India AI Pulse | `india-ai-pulse` | Live tracker: IndiaAI mission milestones, Indian model/startup releases, auto-updated weekly | pages |
 | [F] Indic OCR Lab | `indic-ocr-lab` | Devanagari + Tamil OCR fully client-side; drop an image, get text | pages |
-| [F] Indic PII Redactor | `indic-pii-redactor` | Client-side redaction tuned for Indian identifiers — Aadhaar, PAN, UPI VPA, Indian phone/PIN — across Latin + Devanagari; honest false-positive tiers | pages |
+| ~~[F] Indic PII Redactor~~ **(BUILT Day 028, 2026-09-08)** | `indic-pii-redactor` | Client-side redaction tuned for Indian identifiers — Aadhaar, PAN, UPI VPA, Indian phone/PIN — across Latin + Devanagari; honest false-positive tiers | pages |
 | [F] Anuvaad Checker | `anuvaad-checker` | Client-side quality inspector for Indic machine-translation output: script-consistency, code-mix leakage, and number/date/currency localization errors — no reference translation needed | pages |
 
 Refill rule: audits keep ≥4 unbuilt ideas here — India-scale problems,
@@ -63,7 +63,7 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 43 `webcam-object-detect` — real-time detection w/ ONNX runtime web (pages) · 44 `doodle-classifier` — draw-and-classify sketches (pages) · 45 `whisper-in-browser` — client-side speech-to-text (pages) · 46 `image-captioner` — describe any uploaded image (pages) · 47 `face-blur-tool` — privacy tool: auto-blur faces client-side (pages) · 48 `ocr-anywhere` — screenshot-to-text (pages) · 49 [F] `vision-playground` — unified multi-model vision workbench (pages)
 
 ## Week 8 — Evals, safety & guardrails
-50 `prompt-injection-dojo` — attack/defense playground (pages) · 51 `llm-eval-harness-ts` — assertion-based eval runner (cli) · 52 `hallucination-detector` — claim-vs-source NLI checking (pages) · 53 `pii-scrubber` — client-side PII detection/redaction (pages) · 54 `jailbreak-taxonomy` — interactive catalog + tests (pages) · 55 `output-validator` — schema-constrained generation patterns (cli) · 56 [F] `ai-redteam-kit` — scripted red-team suite w/ scoring + report generator (cli)
+50 `prompt-injection-dojo` — attack/defense playground (pages) · 51 `llm-eval-harness-ts` — assertion-based eval runner (cli) · 52 `hallucination-detector` — claim-vs-source NLI checking (pages) · 53 ~~`pii-scrubber`~~ **(STRUCK Day 028 — subsumed by `indic-pii-redactor`, which ships the same mechanic with checksum validation and a sharper angle; a second generic scrubber would be capped on Distinctiveness)** · 54 `jailbreak-taxonomy` — interactive catalog + tests (pages) · 55 `output-validator` — schema-constrained generation patterns (cli) · 56 [F] `ai-redteam-kit` — scripted red-team suite w/ scoring + report generator (cli)
 
 ## Week 9 — Data engineering for AI
 57 `etl-ts-pipeline` — typed ETL w/ validation (cli) · 58 `synthetic-data-gen` — LLM-based synthetic tabular data (byok) · 59 `dedupe-embeddings` — near-duplicate detection at scale (cli) · 60 `data-quality-scanner` — profiling + drift reports (cli) · 61 `vector-db-bench` — compare 4 embedded vector stores (cli) · 62 `parquet-explorer` — browser Parquet viewer (pages) · 63 [F] `dataset-kitchen` — end-to-end corpus prep pipeline for RAG (cli)
@@ -150,3 +150,23 @@ Note on the carried candidates: `recall-cliff` re-scored **10/12** today (Timeli
 the same honest reason: it needs the user's own eval data, not degradation curves invented here).
 `eval-treadmill` re-scored **9/12** (no fresh benchmark-saturation signal, and Day 020
 `contamination-scanner` already occupies benchmark-trust ground). Both shift forward.
+
+### Flagship-day slate (Day 028, 2026-09-08)
+
+Day 028 was an India Flagship day, so the slate came only from the India Flagship
+Pool. Scores, so the loop does not re-derive them next fortnight:
+
+| Candidate | Score | Why it lost |
+|---|---|---|
+| **Indic PII Redactor** | **11/12** | **WON** — Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 3 |
+| Anuvaad Checker | 10/12 | Demo-ability 2 — judging translation quality needs a translation pair and a reader of the script, and reference-free quality is soft where PII validation has arithmetic ground truth. Strongest remaining flagship candidate; slate it first on Day 042. |
+| India AI Pulse | 9/12 | A hand-curated "live tracker" goes stale the week after publish. Only build it with a real auto-update path, otherwise the README claim becomes false. |
+| Indic OCR Lab | — | **DISQUALIFIED on the feasibility gate**, not on score (would have been 9/12): needs 10–20 MB of Tesseract traineddata per script at runtime and there is no browser in the sandbox to verify recognition accuracy. Revisit only if accuracy can be verified some other way. |
+| Hinglish Bridge | 8/12 | Timeliness 1; Google and Microsoft input tools already do transliteration well. |
+| Kisan Sahayak | 8/12 | Needs a real agri-scheme corpus — hand-copying government text is a licensing and accuracy risk, inventing it is disqualifying. Needs a licensed open dataset first. |
+| UPI Guard | 7/12 | Demo-ability 1 as a CLI with no live demo, and .NET SDK availability in the sandbox is unverified. |
+
+**Flagship pool now holds 6 unbuilt ideas** — above the ≥4 floor, but Indic OCR Lab
+and Kisan Sahayak are both blocked on inputs rather than on effort, so the effective
+count is 4. The W37 audit should add two India-scale ideas that need no external
+corpus and no runtime model download.
