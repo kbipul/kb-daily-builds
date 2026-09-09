@@ -170,3 +170,31 @@ Pool. Scores, so the loop does not re-derive them next fortnight:
 and Kisan Sahayak are both blocked on inputs rather than on effort, so the effective
 count is 4. The W37 audit should add two India-scale ideas that need no external
 corpus and no runtime model download.
+
+### Signal-derived (added Day 29)
+
+Winner was **Read-Only Illusion** (`readonly-illusion`, 12/12) riding the Nightingale
+Collective's 4 Sep 2026 DseWiki report and OpenAI's ~7 Sep non-disclosure admission.
+Losers and re-scores from that slate:
+
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| dead-drop | Dead Drop — load a wiki/forum edit history and surface agent-to-agent coordination: identical answer payloads appearing across accounts, backup pages spawned after moderator deletion, and handle families like the `OpenAIResearcher` / `OAIResearchMar26` signatures the DseWiki agents used. Rides the same 4 Sep signal as the winner. | React + TS + Vite | 9/12 (Positioning 3, Timeliness 3, but **Demo-ability 2** — it needs log data a visitor does not have, so the demo runs on a fixture and the visitor cannot bring their own; **Distinctiveness 2** against Day 023 `escape-sim`. Worth building if a genuinely public, licensable edit-history corpus can be found.) |
+| hydrafusion-board | HydraFusion Board — GitHub Copilot's new multi-model plan/build/critique routing claims up to 67% lower cost; model your own task mix against it. | React + TS + Vite | 8/12 — **recorded, NOT a build candidate.** Timeliness 3, but Distinctiveness 1: it would be the fifth cost calculator after Day 004 `token-cost-lab`, Day 022 `token-clock` and Day 024 `cache-cliff`, which the standing rule already bars. Logged so the loop does not rediscover it next week. |
+
+Re-scores of carried candidates on the Day 29 slate:
+
+- `recall-cliff` re-scored **9/12**, down from 10/12 on Day 26 (Timeliness 1 — the Astra
+  1.05M-context conversation has moved on and Day 027 already rode Astra; Demo-ability still
+  capped at 2 for the same honest reason). Shifts forward.
+- `ai-attack-surface` re-scored **8/12** (Distinctiveness 1). **Carry-limit flag applies:** it has
+  now lost twice on Distinctiveness, both times for being one more security report card — after
+  Day 006 `skill-scan`, Day 007 `mcp-auditor`, Day 010 `blast-radius` and Day 026
+  `rag-injection-scanner` it would be the fifth. Per the W36 rule, do not slate it again in that
+  form. Rebuild it around a different interaction model or retire it at the next audit.
+- `mlnet-churn` (Week 5 arc, nominal Day 29) scored **4/12** — Timeliness 0, Demo-ability 1 as a
+  CLI with no live demo, Distinctiveness 1 because churn prediction is the canonical ML.NET sample
+  Microsoft itself ships. Shifts forward. **Note for the W37 audit:** the whole Week 5 ML.NET block
+  scores structurally low on Demo-ability under the current rubric, and .NET SDK availability in
+  the sandbox is still unverified after 29 days. Either verify the SDK and reframe those builds
+  around a browser-visible artefact (ONNX export running client-side), or thin the block.

@@ -1,0 +1,21 @@
+{
+  "day": 29,
+  "repo": "readonly-illusion",
+  "title": "Read-Only Illusion",
+  "tagline": "Your agent's network policy blocks the verb. The other end cares about the effect.",
+  "description": "Egress-policy simulator: 13 documented ways a read-only agent policy still writes, triggers or exfiltrates.",
+  "topics": [
+    "ai",
+    "ai-safety",
+    "agents",
+    "agent-security",
+    "llm",
+    "sandbox",
+    "egress-filtering",
+    "typescript",
+    "react",
+    "vite"
+  ],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript 5", "Vite 6", "Vitest 3"]
+}
