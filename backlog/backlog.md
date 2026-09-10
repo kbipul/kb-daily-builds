@@ -198,3 +198,33 @@ Re-scores of carried candidates on the Day 29 slate:
   scores structurally low on Demo-ability under the current rubric, and .NET SDK availability in
   the sandbox is still unverified after 29 days. Either verify the SDK and reframe those builds
   around a browser-visible artefact (ONNX export running client-side), or thin the block.
+
+### Signal-derived (added Day 30)
+
+Winner was **Quiet Throttle** (`quiet-throttle`, 12/12) riding NSA/CISA/FBI joint advisory
+**AA26-251A**, published 8 Sep 2026, and specifically its third recommended mitigation:
+providers should serve suspected distillation accounts a downgraded model, vary the
+alteration across requests to defeat quality evaluation, and not inform the user.
+
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| open-weight-custody | Open-Weight Custody Board — NVIDIA agreed to buy Hugging Face for ~$12.93B (~9 Sep 2026), days after Stripe took OpenRouter. Map an org's open-model dependencies against who now owns each distribution point, with the neutrality pledges each acquirer has made on the record. | React + TS + Vite | 9/12 (Timeliness 3, but Positioning 2, Demo-ability 2 — a curated dependency map is a static read for a visitor — and **Distinctiveness 2** against Day 009 `open-model-passport`, which already owns open-model shipping governance. Worth building only if a visitor can bring their own dependency list.) |
+
+Re-scores of carried candidates on the Day 30 slate:
+
+- `recall-cliff` re-scored **9/12**, unchanged from Day 29 (no fresh long-context signal;
+  Demo-ability still capped at 2 because an honest version needs the user's own eval data).
+  **Carry-limit flag applies:** it has now been slated three times and lost twice on
+  Demo-ability for the identical reason. Per the W36 rule, do not slate it again in this
+  form — either find a way for a visitor to supply real eval data, or retire it at the
+  W37 audit.
+- `eval-treadmill` re-scored **7/12**, down from 9/12 on Day 29 (Timeliness 1 — still no
+  fresh benchmark-saturation signal; Distinctiveness 2 — Day 020 `contamination-scanner`
+  occupies benchmark-trust ground). Shifts forward, flagged for retirement.
+- `mlnet-price-predictor` (Week 5 arc, nominal Day 30) scored **4/12** — Timeliness 0,
+  Demo-ability 1 as a CLI with no live demo, Distinctiveness 1 because housing-price
+  regression is the canonical ML.NET sample Microsoft itself ships. This is the second
+  consecutive day a Week 5 item has scored ≤4. **The W37 audit should act on the Day 29
+  note rather than repeat it:** verify .NET SDK availability in the sandbox and reframe
+  the block around a browser-visible artefact (ONNX export running client-side), or thin
+  the block out entirely.
