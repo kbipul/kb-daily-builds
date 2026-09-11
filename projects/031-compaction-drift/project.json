@@ -1,0 +1,18 @@
+{
+  "day": 31,
+  "repo": "compaction-drift",
+  "title": "Compaction Drift — The Harness Keeps What the Agent Needs to Continue. Your Rule Isn't It.",
+  "tagline": "OpenAI's Agents API went to public beta on 10 September 2026 and now compacts your session for you, preserving information the agent needs to continue. A standing rule is not that. Lay out a long session and watch which of your rules is still in context at the moment the agent is about to break it.",
+  "description": "Simulate a long agent session: see which of your rules survive repeated context compaction, and which are gone by the time they matter.",
+  "topics": [
+    "ai",
+    "agents",
+    "llm",
+    "context-engineering",
+    "ai-governance",
+    "typescript",
+    "react"
+  ],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}

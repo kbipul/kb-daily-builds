@@ -228,3 +228,32 @@ Re-scores of carried candidates on the Day 30 slate:
   note rather than repeat it:** verify .NET SDK availability in the sandbox and reframe
   the block around a browser-visible artefact (ONNX export running client-side), or thin
   the block out entirely.
+
+### Signal-derived (added Day 31)
+
+Winner was **Compaction Drift** (`compaction-drift`, 12/12) riding OpenAI's Agents API public beta,
+10 Sep 2026 — specifically the published compaction contract: the harness "automatically compacts
+earlier context as a session approaches its context limit, preserving information the agent needs
+to continue."
+
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| tool-search-roulette | Tool Search Roulette — the Agents API loads tool definitions only as needed, so the dangerous tool may or may not be in context when the model reaches for it. Map your tool surface and see which definitions are resident at the moment of the call. | React + TS + Vite | 9/12 — **recorded, NOT a build candidate.** Timeliness 3 and Positioning 3, but **Distinctiveness 1**: it would be the sixth security report card after Days 006, 007, 010, 026 and 029, which the standing W36 carry-limit rule bars. Logged so the loop does not rediscover it. Only worth building around a different interaction model. |
+| sandbox-residency | Sandbox Residency Picker — the Agents API names nine self-hosted sandbox partners (Blaxel, Cloudflare, Daytona, DigitalOcean, E2B, Modal, Oracle, Runloop, Vercel) plus the OpenAI-hosted option. Pick a compliance region and see where agent code and artefacts actually execute. | React + TS + Vite | 7/12 — Distinctiveness 2 against Day 009 `open-model-passport`, Demo-ability 2 as a curated static table a visitor cannot bring their own data to. Shifts forward. |
+
+Re-scores of carried candidates on the Day 31 slate:
+
+- `open-weight-custody` re-scored **8/12**, down from 9 on Day 30 (Timeliness 2 — the
+  NVIDIA / Hugging Face story is now two days old; Demo-ability still 2 because a visitor
+  cannot bring their own dependency list). Shifts forward.
+- `mlnet-anomaly` (Week 5 arc, nominal Day 31) scored **4/12** — Timeliness 0, Demo-ability 1
+  as a CLI with no live demo, Distinctiveness 1 because anomaly detection on server metrics is
+  the canonical ML.NET sample Microsoft itself ships. `mlnet-recommender` scored 4/12 for the
+  same structural reasons. **This is the third consecutive day a Week 5 item has scored ≤4.**
+  The W37 audit must now act on the Day 29 and Day 30 notes rather than repeat them a third
+  time: either verify .NET SDK availability in the sandbox and reframe the block around a
+  browser-visible artefact (ONNX export running client-side), or thin the block out entirely.
+- `recall-cliff` was **not slated** this run. It has lost three times, twice on Demo-ability,
+  and the W36 carry-limit rule applies. Day 031 also settles its ground from a different
+  direction: compaction policies are documented algorithms that can be simulated mechanically,
+  which is exactly what retrieval-degradation curves are not. Recommend retiring it at W37.
