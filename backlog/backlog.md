@@ -257,3 +257,39 @@ Re-scores of carried candidates on the Day 31 slate:
   and the W36 carry-limit rule applies. Day 031 also settles its ground from a different
   direction: compaction policies are documented algorithms that can be simulated mechanically,
   which is exactly what retrieval-degradation curves are not. Recommend retiring it at W37.
+
+### Signal-derived (added Day 32)
+
+Winner was **Burial Depth** (`burial-depth`, 12/12) riding `ayghri/i-have-adhd` taking #1 on
+GitHub trending on 11 Sep 2026 with +4,624 stars in twenty-four hours — a `SKILL.md` whose
+entire content is rules about the *shape* of agent output (answer first, no preamble, no
+closer, one bounded action per numbered step, time in units). A second implementation,
+`rmorse/i-have-adhd-skill`, was trending alongside it. The winning angle: thousands of people
+starred a document that *asserts* agents bury the answer, and nobody was measuring whether a
+given response does.
+
+| Slug | Idea | Stack | Score |
+|---|---|---|---|
+| agent-sponsor-map | Agent Sponsor Map — Microsoft Agent 365 is GA as the cross-cloud agent control plane (Microsoft, AWS, GCP) and Entra Agent ID requires every agent identity to have a human sponsor and a lifecycle policy. Load an agent inventory and see which agents have no sponsor, no access package and no expiry. | React + TS + Vite | 8/12 — Positioning 3 (squarely the IT-Director lane), but **Timeliness 1**: Agent 365 went GA on 1 May 2026 and this is four-month-old ground. Demo-ability 2 (a visitor has no agent inventory to paste, so it runs on a fixture), Distinctiveness 2 against Day 009 `open-model-passport`. Appended; slate it again only if a fresh Agent 365 announcement lands. |
+| skill-output-lint | Skill Output Contract Linter — validate the output rules inside a SKILL.md against the conventions the trending skills converged on. | React + TS + Vite | **DISQUALIFIED before scoring** under the standing W36 carry-limit rule: it would be the fourth skill report card after Day 006 `skill-scan`, with `skill-lint` and `skill-router-sim` already logged and barred for the same reason. Logged so the loop does not rediscover it a fourth time. |
+
+Re-scores of carried candidates on the Day 32 slate:
+
+- `sandbox-residency` re-scored **7/12**, unchanged from Day 31 (Timeliness 1 — the Agents API
+  beta is now two days old and Day 031 already rode it; Demo-ability 2 as a curated static table).
+  Shifts forward.
+- `open-weight-custody` re-scored **7/12**, down from 8 on Day 31 (Timeliness 1 — the
+  NVIDIA / Hugging Face story is now three days old). **Carry-limit watch:** it has now been
+  slated twice and lost both times with Demo-ability capped at 2 for the same reason — a visitor
+  cannot bring their own dependency list. One more loss on that dimension and the W36 rule applies.
+- `mlnet-recommender` (Week 5 arc, nominal Day 32) scored **4/12** — Timeliness 0, Demo-ability 1
+  as a CLI with no live demo, Distinctiveness 1 because matrix-factorization recommendation is the
+  canonical ML.NET sample Microsoft itself ships. **This is the fourth consecutive day a Week 5
+  item has scored ≤4**, after Days 29, 30 and 31. The W37 audit has now deferred this three times.
+  Act on it: either verify .NET SDK availability in the sandbox and reframe the block around a
+  browser-visible artefact (ONNX export running client-side), or delete the Week 5 block and
+  backfill those days from the signal-derived pool.
+
+**Unreachable sources this run:** direct fetches of Hugging Face and reddit.com/r/LocalLLaMA were
+not attempted beyond search (per the playbook fallback); `github.com/trending` fetched cleanly and
+supplied the winning signal.

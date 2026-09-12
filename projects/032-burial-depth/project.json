@@ -1,0 +1,18 @@
+{
+  "day": 32,
+  "repo": "burial-depth",
+  "title": "Burial Depth — How Far Into the Answer Is the Answer?",
+  "tagline": "The most-starred repo on GitHub yesterday was a set of rules telling coding agents to stop burying the answer. Rules are assertions. Paste a response and measure how many words of preamble, scaffolding and hedging sit in front of the first sentence that actually answers.",
+  "description": "Measure how many words of preamble sit before an agent response actually answers, and check it against the published output conventions.",
+  "topics": [
+    "ai",
+    "agents",
+    "llm",
+    "developer-experience",
+    "text-analysis",
+    "typescript",
+    "react"
+  ],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}
