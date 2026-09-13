@@ -138,11 +138,16 @@ have to clone it to do so.
 
 ## Sources
 
-- OpenAI — GPT-6 Astra system card and safety overview (September 2026): CoT-control
-  adherence 16.1% (GPT-5.6 Sol) vs 60.9% (GPT-6 Astra); increased verbalised evaluation
-  awareness.
-- Public reporting on recurrent-depth / looped-transformer reasoning and its consequences for
-  chain-of-thought monitorability, September 2026.
+- OpenAI — **GPT-6 Astra system card**, September 2026: CoT-control adherence 16.1%
+  (GPT-5.6 Sol) vs 60.9% (GPT-6 Astra); significantly lower full-context monitorability
+  across most output lengths; increased verbalised evaluation awareness.
+  [System card](https://deploymentsafety.openai.com/gpt-6-astra)
+  · [Safety overview](https://openai.com/index/safety-overview-gpt-6-astra/)
+- Reporting on what that does to oversight, including OpenAI's own position that CoT
+  monitoring "is a core part of our misalignment safety strategy that has no good
+  substitute now" —
+  [The Stack](https://www.thestack.technology/open-ai-astra-monitor-warning/)
+  · [gHacks](https://www.ghacks.net/2026/09/07/gpt-6-astra-draws-scrutiny-for-being-harder-to-monitor-even-as-openai-calls-it-more-aligned/)
 
 Every number that is not from those sources is labelled `estimated` or `hypothetical` in the
 UI and in `src/engine/catalog.ts`.

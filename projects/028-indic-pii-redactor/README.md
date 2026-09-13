@@ -152,6 +152,23 @@ All test fixtures and the sample text use **synthetic** identifiers, generated b
 valid check digits over arbitrary digit strings. No real person's Aadhaar, PAN or GSTIN
 appears anywhere in this repository.
 
+## Sources
+
+- **Digital Personal Data Protection Rules, 2025** — notified by MeitY on 13 November 2025
+  via Gazette G.S.R. 846(E), with a phased runway: 14 November 2025, 14 November 2026 and
+  13 May 2027 for the data-fiduciary obligations (notice, consent, data minimisation) that
+  make on-device redaction a practical requirement rather than a preference.
+  [PIB summary (PDF)](https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/nov/doc20251117695301.pdf)
+  · [overview](https://en.wikipedia.org/wiki/Digital_Personal_Data_Protection_Rules,_2025)
+- **Verhoeff checksum** — the Dihedral-group check digit used by UIDAI for Aadhaar, and
+  the mod-36 check character used in GSTIN. Both are implemented from the published
+  algorithms in `src/engine/`, with the false-positive rate measured rather than assumed
+  (200,000 random 12-digit strings, 10.09% accepted; pinned in `verhoeff.test.ts`).
+
+This README describes a compliance *clock*, not legal advice. Dates above are as notified;
+confirm current applicability before relying on them.
+
+
 ---
 
 <div align="center"><sub>

@@ -74,6 +74,20 @@ The eight rule checks each restate one convention as something testable, and eac
 | Tests | Vitest 3 — 89 tests, jsdom for render, node for the engine |
 | Analysis | Hand-written segmentation + cue-phrase classifier. No model, no network, no dependencies beyond React. |
 
+## Sources
+
+- [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) — the `SKILL.md` that reached
+  #1 on GitHub trending on 11 September 2026 (+4,624 stars in 24 hours; past 43,000 within
+  two days). It is a set of assertions about the shape of agent output — answer first, no
+  preamble, no closer, bounded steps, concrete time units. This tool measures the property
+  those rules assert, which is a different thing from agreeing with them.
+
+The conventions in `src/engine/` are transcribed from that document and the related
+`rmorse/i-have-adhd-skill`. The cue-phrase classifier that detects preamble is written
+here, and every phrase in it is listed in source rather than learned — so a reader who
+disagrees with a classification can see exactly which rule fired.
+
+
 ---
 
 <div align="center"><sub>

@@ -80,6 +80,24 @@ What I would do differently: bundle a small corpus of *published* injection samp
 | Engine | Zero dependencies — pure functions over strings |
 | Hosting | GitHub Pages, static |
 
+## Sources
+
+The signal this build rides, and the claims behind it:
+
+- [volcengine/OpenViking](https://github.com/volcengine/OpenViking) and
+  [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) — both on GitHub
+  trending on 6 September 2026. Both make retrieval automatic and continuous, which is
+  what makes retrieved text the widest untrusted input channel in an agent stack.
+- Tenable, *Tenable Uses OpenAI GPT Cyber Models to Help Defenders Inspect
+  Community-Built AI Components*, 3 September 2026 —
+  [tenable.com](https://www.tenable.com/press-releases/tenable-uses-openai-gpt-cyber-models-to-help-defenders-inspect-community-built-ai-components).
+  Pre-deployment review of agents, skills, MCP servers and playbooks; evidence the market
+  is moving to vet exactly this surface.
+
+Every detection rule in this repository is written here, not borrowed. The rule table in
+`src/engine/detectors.ts` is the whole detector — there is no model and no list to trust.
+
+
 ---
 
 <div align="center"><sub>

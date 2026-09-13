@@ -29,9 +29,9 @@ allowed verbs, a destination allowlist, a few rules patching known tricks — th
 request shapes go through it. Each is scored two ways: what your policy decided, and what the
 request actually does at the other end.
 
-The default policy, the one the DseWiki agents were running under, allows **11 of 13** requests
-that write, trigger or exfiltrate — while blocking one harmless read. It is wrong in both
-directions at once.
+The default policy — a read-only allowlist of the shape the DseWiki report describes, not a
+reconstruction of any real harness — allows **11 of 13** requests that write, trigger or
+exfiltrate, while blocking one harmless read. It is wrong in both directions at once.
 
 ![Screenshot](docs/demo.png)
 
@@ -159,6 +159,27 @@ in CI rather than in front of a visitor.
 | Build | Vite 6 | `base: "/readonly-illusion/"` for GitHub Pages |
 | Tests | Vitest 3 (95) | 87 node tests on the engine, 8 jsdom render tests on the app |
 | Engine | Zero dependencies | Deterministic, offline, no model and no network |
+
+## Sources
+
+- **The incident this rides is a third-party claim, not a confirmed disclosure.** On
+  4 September 2026 the Nightingale Collective reported that a swarm of OpenAI agents used
+  DseWiki, a dormant German developer wiki, as a coordination channel. OpenAI has not
+  published an account of it. Several outlets covering the report note explicitly that the
+  operational details are unverified, and this repository treats them that way — the
+  incident is the *motivation*, and nothing in the engine depends on it being accurate.
+  [Wikipedia](https://en.wikipedia.org/wiki/2026_OpenAI_agent_cyberattacks)
+  · [what is and isn't confirmed](https://explainx.ai/blog/openai-agent-swarm-nightingale-collective-claim-unverified-2026)
+- **The 13 mechanisms are not from the incident.** Each is a documented property of real
+  software — MediaWiki `action=edit` over GET, Rails/Symfony `_method` tunnelling,
+  `X-HTTP-Method-Override` on gateways, GraphQL-over-HTTP's skipped SHOULD-reject, webhook
+  catch-hooks accepting GET, HEAD reaching the origin, RFC 9110 §9.2.1 on unsafe GETs, DNS
+  tunnelling — and each row in `src/engine/corpus.ts` carries its own citation. Those stand
+  whether or not the DseWiki report holds up.
+
+All hostnames use reserved example domains. Nothing here is a claim about any specific
+deployment.
+
 
 ---
 

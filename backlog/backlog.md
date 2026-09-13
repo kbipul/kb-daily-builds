@@ -16,11 +16,14 @@ Rules for the loop (see PLAYBOOK.md Step 1.5 — the selection protocol governs)
 | ~~[F] Bhasha Detect~~ **(BUILT Day 014, 2026-07-21)** | `bhasha-detect` | Identify all 22 scheduled Indian languages + Hinglish in-browser; confusion-matrix explorer | pages |
 | [F] Hinglish Bridge | `hinglish-bridge` | Real-time Hinglish ⇄ Devanagari transliteration + normalization as you type | pages |
 | [F] Kisan Sahayak | `kisan-sahayak` | Bilingual (Hindi/English) RAG over public agri-scheme documents with citations | pages |
-| [F] UPI Guard | `upi-guard` | ML.NET anomaly detection on synthetic UPI-scale transaction streams; pattern dashboard | cli |
-| [F] India AI Pulse | `india-ai-pulse` | Live tracker: IndiaAI mission milestones, Indian model/startup releases, auto-updated weekly | pages |
-| [F] Indic OCR Lab | `indic-ocr-lab` | Devanagari + Tamil OCR fully client-side; drop an image, get text | pages |
+| [F] UPI Guard ⚠️ | `upi-guard` | ML.NET anomaly detection on synthetic UPI-scale transaction streams; pattern dashboard. **W37: scored 7/12 on Day 028 — CLI with no live demo, and .NET-in-sandbox is still unverified after 33 days. Rebuild as a `pages` demo before slating again.** | cli |
+| ~~[F] India AI Pulse~~ **(STRUCK W37 — Day 028 judged a hand-curated "live tracker" a dishonesty risk: it goes stale the week after publish while the repo keeps claiming to be live. Only revisit with a real automated feed.)** | `india-ai-pulse` | Live tracker: IndiaAI mission milestones and Indian model releases | pages |
+| ~~[F] Indic OCR Lab~~ **(DISQUALIFIED Day 028 — feasibility gate: needs 10–20 MB traineddata per script at runtime and the sandbox has no browser to verify recognition accuracy, so the central claim cannot be made honestly. Do not slate until that changes.)** | `indic-ocr-lab` | Devanagari + Tamil OCR fully client-side | pages |
 | ~~[F] Indic PII Redactor~~ **(BUILT Day 028, 2026-09-08)** | `indic-pii-redactor` | Client-side redaction tuned for Indian identifiers — Aadhaar, PAN, UPI VPA, Indian phone/PIN — across Latin + Devanagari; honest false-positive tiers | pages |
 | [F] Anuvaad Checker | `anuvaad-checker` | Client-side quality inspector for Indic machine-translation output: script-consistency, code-mix leakage, and number/date/currency localization errors — no reference translation needed | pages |
+| [F] Sovereign Stack Passport **(added W37)** | `sovereign-stack-passport` | Pick an Indian deployment scenario and see which released IndiaAI-backed models (Sarvam-30B / 105B, BharatGen Param2 17B MoE, Gnani) can actually serve it: licence, weight availability, Indic language coverage, data residency, and the DPDP duty that attaches. The Day 009 `open-model-passport` mechanic pointed at the sovereign stack. Signal: 20 indigenous models backed under IndiaAI Mission, five released, 93 lakh GPU hours sanctioned. | pages |
+| [F] Consent Ledger **(added W37)** | `consent-ledger` | Build a DPDP-shaped consent record for an AI feature and watch which downstream uses it does and does not authorise — purpose limitation vs model training, retention vs embedding stores, withdrawal vs a vector index you cannot unlearn. The question every Indian AI team hits immediately after redaction. Signal: DPDP Rules 2025, obligations landing 14 Nov 2026 and 13 May 2027. | pages |
+| [F] Script Tax **(added W37)** | `script-tax` | Measure what Indic scripts cost in tokens across published tokenizers, in-browser: the same sentence in English, Hindi, Tamil and Bengali, priced side by side. Makes the structural economics of Indian-language AI visible in ten seconds. Distinct from Days 004/022/024 — those price models, this prices the language. | pages |
 
 Refill rule: audits keep ≥4 unbuilt ideas here — India-scale problems,
 Indic-language AI, IndiaAI-mission-adjacent, always demoable.
@@ -53,8 +56,19 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 ## Week 4 — Azure OpenAI & Semantic Kernel (C#/.NET)
 22 `sk-hello-kernel` — Semantic Kernel starter: plugins, planners (byok) · 23 `azure-rag-dotnet` — RAG over blob docs w/ Azure AI Search (byok) · 24 `sk-plugins-pack` — 5 reusable SK plugins (mail, calendar, summarize…) (byok) · 25 `token-meter-dotnet` — Azure OpenAI cost/token tracking middleware (cli) · 26 `prompt-templates-cs` — typed prompt template engine for .NET (cli) · 27 `azure-content-safety-demo` — moderation pipeline w/ Azure Content Safety (byok) · 28 [F] `enterprise-copilot-starter` — production-shaped .NET copilot API: auth, streaming, telemetry (byok)
 
-## Week 5 — Classic ML with ML.NET (C#)
-29 `mlnet-churn` — customer churn prediction + explainability (cli) · 30 `mlnet-price-predictor` — regression on housing data (cli) · 31 `mlnet-anomaly` — anomaly detection on server metrics (cli) · 32 `mlnet-recommender` — matrix-factorization product recommender (cli) · 33 `mlnet-image-classifier` — transfer learning classifier (cli) · 34 `mlnet-forecasting` — time-series SSA forecasting (cli) · 35 [F] `automl-benchmark-dotnet` — AutoML vs hand-tuned across 3 datasets, full writeup (cli)
+## ~~Week 5 — Classic ML with ML.NET (C#)~~ — STRUCK W37
+
+**Retired as a block on 2026-09-13.** `mlnet-*` candidates were slated and scored **4/12 on
+three consecutive days** (029, 030, 031) for identical reasons every time: Timeliness 0,
+Demo-ability 1 (CLI, no live demo), Distinctiveness 1 (Microsoft ships these exact samples
+itself), and .NET-in-sandbox is still unverified after 33 days. Days 029 and 030 both
+recorded that the block was "structurally capped"; Day 031 asked the W37 audit to act
+rather than repeat it. Struck so the loop stops rediscovering this every morning.
+
+`automl-benchmark-dotnet` [F] is **kept** — a real AutoML-vs-hand-tuned comparison across
+three datasets is a different claim from a canonical sample, and it can be revisited if
+.NET-in-sandbox is ever verified.
+~~29 `mlnet-churn` · 30 `mlnet-price-predictor` · 31 `mlnet-anomaly` · 32 `mlnet-recommender` · 33 `mlnet-image-classifier` · 34 `mlnet-forecasting`~~ (all struck, see above) · 35 [F] `automl-benchmark-dotnet` — AutoML vs hand-tuned across 3 datasets, full writeup (cli) — **KEPT**
 
 ## Week 6 — M365, Graph & enterprise AI
 36 `graph-inbox-insights` — Graph API mailbox analytics (byok) · 37 `teams-standup-bot` — Teams bot posting AI standup summaries (byok) · 38 `sharepoint-doc-qa` — RAG over SharePoint libraries (byok) · 39 `m365-usage-dashboard` — React dashboard for Graph usage reports (byok) · 40 `outlook-triage-ai` — priority-classify email w/ rules+LLM hybrid (byok) · 41 `copilot-plugin-demo` — declarative Copilot extension sample (byok) · 42 [F] `m365-ai-toolkit` — CLI + library bundling the week's Graph/AI patterns (byok)
@@ -79,6 +93,41 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 
 ## Week 13 — Capstones
 85 `ai-portfolio-site` — this series as a generated website (pages) · 86 `kb-daily-builds-cli` — scaffold-a-day CLI others can use (cli) · 87 `agent-vs-agent-arena` — tournament w/ leaderboard (pages) · 88 `enterprise-rag-reference` — the definitive .NET RAG reference impl (byok) · 89 `ai-maturity-assessor` — org AI-readiness assessment tool (pages) · 90 [F] `ninety-days-of-ai` — interactive retrospective: every build, metric, lesson (pages)
+
+## The emergent arc — named W37 (2026-09-13)
+
+Pure top-score selection did not dissolve the weekly arc, as the playbook feared it might.
+It found a better one than the numbered weeks ever specified. Six of seven builds in W37
+(Days 026, 027, 029, 030, 031, 032) plus Day 033 are the same argument in different
+clothes:
+
+> **A control you believe you have over an AI system, and the precise reason it does not hold.**
+
+| Day | The control | Why it doesn't hold |
+|--:|---|---|
+| 26 | Your retriever hands the model facts | It hands it whatever someone wrote into the corpus |
+| 27 | You can read the model's reasoning | Not when it reasons in latent space |
+| 29 | Read-only means read-only | It means the verbs writes usually use |
+| 30 | You would notice a worse model | Not inside your own eval noise |
+| 31 | Your standing rule is in context | Not after four compaction rounds |
+| 32 | The agent answered you | Seventy-three words ago it started to |
+| 33 | One key, one tenant | Not if someone else is spending it |
+
+Recorded here so the loop can extend it deliberately rather than rediscover it each
+morning. This is **not** a queue and does not override the selection protocol — the
+highest score still wins. It is a tie-breaker and a source of slate candidates.
+
+Open controls in the same family, unbuilt and unscored:
+
+- **Rate limits are per-key** — until a retry storm, a fallback router and a batch job all
+  share one. What does your quota actually protect?
+- **The model refused** — a refusal in turn 1 and a compliance in turn 40 of the same
+  session are the same policy, differently situated. Which of your red-team results survive
+  being moved down a long transcript?
+- **The audit log is complete** — what does a tool-call log omit that a reviewer would need,
+  and can you tell from the log alone that something is missing?
+- **Deleting the record deletes the data** — it is still in the embedding, the cache and the
+  summary. Trace one user's deletion request through a RAG stack.
 
 ## Signal-derived candidates (appended by the loop — score ≥8, lost the day)
 | Idea | Repo | Scope | Demo | From |

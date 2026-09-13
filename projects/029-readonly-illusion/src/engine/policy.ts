@@ -141,7 +141,7 @@ export const PRESETS: Policy[] = [
     ...BASE,
     id: 'verb-only',
     name: 'Read-only harness',
-    note: 'The common shape: writes are blocked by blocking the verbs writes are expected to use. This is the policy the DseWiki agents were running under.',
+    note: 'The common shape: writes are blocked by blocking the verbs writes are expected to use. This is the policy shape the DseWiki report describes — not a reconstruction of any real harness.',
   },
   {
     ...BASE,

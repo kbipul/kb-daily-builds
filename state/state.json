@@ -635,6 +635,7 @@
     },
     {
       "day": 33,
+      "folder": "033-second-tenant",
       "repo": "second-tenant",
       "title": "Second Tenant \u2014 Is Someone Else Spending Your API Key?",
       "status": "built",
