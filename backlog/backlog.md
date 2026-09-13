@@ -293,3 +293,39 @@ Re-scores of carried candidates on the Day 32 slate:
 **Unreachable sources this run:** direct fetches of Hugging Face and reddit.com/r/LocalLLaMA were
 not attempted beyond search (per the playbook fallback); `github.com/trending` fetched cleanly and
 supplied the winning signal.
+
+### Signal-derived (added Day 33)
+
+Winner was **Second Tenant** (`second-tenant`, 12/12) riding Anthropic's September 2026 threat
+intelligence report (published 10 Sep, 154 pages, fourth in the series) — specifically its finding
+that "access to AI in the form of compromised API keys, session tokens, and devices has
+increasingly become the sole objective of multiple criminal groups," with one hacktivist campaign
+running for a month entirely on stolen keys. The winning angle: if the loot is your inference
+budget, the evidence is already sitting in your usage export, and nobody ships a detector for it.
+It also clears the standing carry-limit bar on security report cards — it is a statistical detector
+over the visitor's own telemetry, not another rule engine producing a scorecard.
+
+| Slug | Idea | Stack | Score |
+|---|---|---|---|
+| fleet-census | Agent Fleet Census — a Russian-speaking actor ran *hundreds* of Codex- and DeepSeek-based agents to exploit CVE-2026-81578/82078 across 440 PaperCut instances at 395 organisations in 48 countries (reported 12 Sep 2026). Inventory the agents actually running against your estate from CI and gateway logs, and flag the ones nobody owns. | React + TS + Vite | 8/12 — Positioning 3, Timeliness 2, but **Demo-ability 1** (the input shape is undefined and a visitor has no such log to bring) and **Distinctiveness 2** against `agent-sponsor-map`, which occupies the same unowned-agent ground. Appended; only worth building once a concrete, public log format is chosen. |
+
+Re-scores of carried candidates on the Day 33 slate:
+
+- `agent-sponsor-map` re-scored **8/12**, unchanged from Day 32 (Positioning 3, Timeliness 1 — still
+  no fresh Agent 365 announcement; Demo-ability 2, Distinctiveness 2). **This is its second loss, and
+  both times Demo-ability was capped at 2 for the same reason: a visitor has no agent inventory to
+  paste.** Per the W36 carry-limit rule, do not slate it again in this form — either give it a
+  bring-your-own-data path or retire it at the W37 audit.
+- `mlnet-image-classifier` (Week 5 arc, nominal Day 33) scored **4/12** — Timeliness 0, Demo-ability 1
+  as a CLI with no live demo, Distinctiveness 1 because transfer-learning image classification is the
+  canonical ML.NET sample Microsoft itself ships. **This is the fifth consecutive day a Week 5 item
+  has scored ≤4**, after Days 29, 30, 31 and 32. The W37 audit has now deferred this four times.
+  Recommendation, stated plainly so it can be actioned without re-deriving it: **delete the Week 5
+  ML.NET block** and backfill those days from the signal-derived pool. The block's problem is
+  structural, not incidental — a CLI cannot score above 1 on Demo-ability under the current rubric,
+  and every idea in it is a Microsoft-published sample, which caps Distinctiveness at 1. Reframing
+  around a browser-visible ONNX export would fix Demo-ability but not Distinctiveness.
+
+**Unreachable sources this run:** `github.com/trending` fetched cleanly (13 repos; agent-harness
+tooling dominant — `affaan-m/ECC` +1,151, `Tencent/teamai-cli` +1,083, `obra/superpowers` +690).
+Hugging Face and reddit.com/r/LocalLLaMA were covered via search only, per the playbook fallback.

@@ -1,0 +1,10 @@
+{
+  "day": 33,
+  "repo": "second-tenant",
+  "title": "Second Tenant",
+  "tagline": "Is someone else spending your API key?",
+  "description": "Separate an API usage export into behavioural workloads and see whether one key is carrying two tenants.",
+  "topics": ["ai", "security", "api-keys", "anomaly-detection", "typescript", "react", "finops", "llmops"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}
