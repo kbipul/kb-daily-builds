@@ -112,6 +112,7 @@ clothes:
 | 31 | Your standing rule is in context | Not after four compaction rounds |
 | 32 | The agent answered you | Seventy-three words ago it started to |
 | 33 | One key, one tenant | Not if someone else is spending it |
+| 34 | You can read what your toolchain reports — you installed the code | The list lives on the server, refreshes daily, and matches your terminal emulator |
 
 Recorded here so the loop can extend it deliberately rather than rediscover it each
 morning. This is **not** a queue and does not override the selection protocol — the
@@ -120,7 +121,9 @@ highest score still wins. It is a tie-breaker and a source of slate candidates.
 Open controls in the same family, unbuilt and unscored:
 
 - **Rate limits are per-key** — until a retry storm, a fallback router and a batch job all
-  share one. What does your quota actually protect?
+  share one. What does your quota actually protect? *(Scored 10/12 on the Day 034 slate as
+  `quota-commons` — Positioning 3, Demo-ability 3, Distinctiveness 3, Timeliness 1. Slate it the
+  morning a rate-limit or quota signal lands and it should win.)*
 - **The model refused** — a refusal in turn 1 and a compliance in turn 40 of the same
   session are the same policy, differently situated. Which of your red-team results survive
   being moved down a long transcript?
@@ -378,3 +381,45 @@ Re-scores of carried candidates on the Day 33 slate:
 **Unreachable sources this run:** `github.com/trending` fetched cleanly (13 repos; agent-harness
 tooling dominant — `affaan-m/ECC` +1,151, `Tencent/teamai-cli` +1,083, `obra/superpowers` +690).
 Hugging Face and reddit.com/r/LocalLLaMA were covered via search only, per the playbook fallback.
+
+### Signal-derived (added Day 34)
+
+Winner was **Harness Tell** (`harness-tell`, 12/12) riding the r/LocalLLaMA network-traffic audit of
+12 Sep 2026 (top story on AI Weekly's 13 Sep edition): `huggingface_hub` 1.31 tags every Hub request
+with `agent/<harness>`, decided by a registry the client fetches from the Hub daily — verified from
+source at `huggingface_hub@129bbb5` and `huggingface.js@3edf1ba`, with the Warp false positive live as
+issue #4860. It is the eighth build in the emergent arc (table above).
+
+| Slug | Idea | Stack | Score |
+|---|---|---|---|
+| missed-requirements | Missed Requirements — Specific Labs' Real-SWE benchmark (12 Sep 2026, private enterprise codebases) found *missed requirements* the top failure mode across Fable 5.1, GPT-6 Astra and Gemini 3.8 Flash. Extract the enumerable requirements from a task spec (musts, numbered items, acceptance criteria), then paste the agent's PR summary and see which are unaddressed. | React + TS + Vite | 9/12 — Timeliness 3, Positioning 2, **Demo-ability 2** (requirement-to-diff matching is fuzzy and needs the visitor's own spec + PR; a fixture demo teaches less than it claims), **Distinctiveness 2** against Day 032 `burial-depth`'s lexical-measurement ground. Appended. |
+| kya-passport | KYA Passport — Visa, Mastercard and Ant International aligned three competing agent-identity protocols into a Know-Your-Agent framework (~11 Sep 2026). Describe a shopping agent and see which of the three trust signals it carries, and what a merchant can and cannot verify from each. | React + TS + Vite | 8/12 — Positioning 2, Timeliness 2, Demo-ability 2 (a curated static table until specs are published), Distinctiveness 2 — shares unowned-agent ground with `agent-sponsor-map`. Appended; only worth building once the technical specs land. |
+| inference-surface | Inference Surface — SGLang CVE-2026-86793 (11 Sep, unauthenticated RCE via a SafeUnpickler bypass when no API key is configured) is the fourth critical inference-infrastructure CVE in four weeks after Ollama, DeepSeek Harness and IBM Langflow. Map a self-hosted stack against the four and their unauthenticated-by-default endpoints. | React + TS + Vite | 9/12 — **recorded, NOT a build candidate.** Timeliness 3, Positioning 3, but **Distinctiveness 1**: it would be the seventh security report card after Days 006, 007, 010, 026, 029 and 030's scorecard stage, which the standing W36 carry-limit rule bars. Logged so the loop does not rediscover it. |
+| pacing-ledger | Pacing Ledger — a tracker of the commitments in Dario Amodei's "We Must Pace the Frontier" (12 Sep) and who backed which. | — | 7/12, **not appended** — a hand-curated "live" commitments tracker is the same goes-stale-while-claiming-live dishonesty risk that struck India AI Pulse. |
+
+Re-scores of carried candidates on the Day 34 slate:
+
+- `automl-benchmark-dotnet` (the next numbered backlog item, Week 5's sole survivor) scored **6/12** —
+  Timeliness 0, Demo-ability 1 as a CLI, Positioning 3, Distinctiveness 2 — and .NET-in-sandbox is
+  still unverified after 34 days, so it likely fails the feasibility gate too. The block was struck at
+  W37 for exactly this shape; this entry should either be verified as buildable or struck with it.
+- `graph-inbox-insights` (Week 6 opener, nominal Day 36) scored **5/12** — Timeliness 0, Demo-ability 1
+  as byok, Distinctiveness 1. Week 6 is the next numbered block and it is byok throughout; under the
+  current rubric it will score like Week 5 did. The W38 audit should decide whether byok gets a
+  Demo-ability floor of 2 when the README carries a recorded GIF, or whether the block is reframed.
+- `dead-drop` re-scored **7/12**, down from 9 (Timeliness 1 — the DseWiki report is ten days old;
+  Demo-ability still 2 for the same reason: it needs log data a visitor does not have). **Second loss
+  on Demo-ability; the W36 carry-limit rule applies.** Retire at W38 unless a public edit-history
+  corpus is found.
+- `fleet-census` re-scored **7/12** (Timeliness 2 on the PaperCut campaign, Demo-ability 1 — the input
+  shape is still undefined). **Second loss on Demo-ability; carry-limit applies.**
+
+**Unreachable sources this run:** `github.com/trending` returned a cached snapshot identical to Day
+033's (same star deltas) and `?since=daily` returned a years-old page — treated as stale and unused.
+`huggingface.co` is blocked from the sandbox (403 from proxy), so the live `/api/agent-harnesses` was
+not fetched; the registry snapshot came from `huggingface.js` via git, which is reachable. Hugging Face
+trending was covered via an agents-radar digest; r/LocalLLaMA via AI Weekly's summary. Two sandbox
+lessons for the playbook: each bash call runs in its own network namespace, so the smoke test must
+start the preview server and curl it in one call; and vitest's 5s default timeout is flaky under
+sandbox CPU contention (`testTimeout: 20000` fixed a spurious failure on a 175ms test).
+
