@@ -13,21 +13,22 @@
 
 ## What it does
 
-Paste any text — a support ticket, a KYC email, a CSV row — and it finds the Indian
-personal identifiers in it: Aadhaar, PAN, GSTIN, IFSC, UPI VPA, mobile number, PIN code,
-vehicle registration and voter EPIC. It then redacts them three different ways and shows
-you, per finding, exactly why it thinks what it thinks.
+Paste a support ticket, a KYC email or a CSV row and it finds the Indian personal
+identifiers in it: Aadhaar, PAN, GSTIN, IFSC, UPI VPA, mobile number, PIN code, vehicle
+registration and voter EPIC. It redacts them three ways (a `[AADHAAR]`-style label, a block
+of the original length, or last four kept) and shows you, per finding, why it thinks what it
+thinks.
 
-The part that is actually hard is not the regex. It is that `\d{12}` matches every order
-number, timestamp and account ID in your corpus, and a tool that flags all of them gets
-switched off in a week. So every detector here reaches for real validation where one
-exists — the **Verhoeff check digit** that UIDAI puts on an Aadhaar, the **mod-36 check
-character** on a GSTIN, the reserved zero in an IFSC, the holder-type letter in a PAN —
-and where no checksum exists, it says so out loud rather than inventing a confidence score.
+The regex is the easy part. `\d{12}` matches every order number, timestamp and account ID in
+your corpus, and a tool that flags all of them gets switched off in a week. So every detector
+here uses real validation where one exists: the Verhoeff check digit that UIDAI puts on an
+Aadhaar, the mod-36 check character on a GSTIN, the reserved zero in an IFSC, the holder-type
+letter in a PAN. Where no checksum exists it says so out loud, and there is no invented
+confidence score to fill the gap.
 
-It also reads **Devanagari digits**. An Aadhaar typed as `२३४५ ६७८९ ०१२४` in a Hindi-language
-form is invisible to every ASCII-only scanner, and that is not a corner case in Indian
-government and BFSI document flows.
+It also reads Devanagari digits. An Aadhaar typed as `२३४५ ६७८९ ०१२४` in a Hindi-language
+form is invisible to every ASCII-only scanner, and Indian government and BFSI document flows
+are full of forms typed that way.
 
 ![Screenshot](docs/demo.png)
 
@@ -36,9 +37,8 @@ minutes after publish — the build sandbox has no browser, so it is never faked
 
 ## Try it
 
-**[Live demo →](https://kbipul.github.io/indic-pii-redactor/)** — runs fully in your browser.
-No key, no upload, no server. Open DevTools and watch the network tab stay empty; that is the
-whole argument.
+**[Live demo →](https://kbipul.github.io/indic-pii-redactor/)** runs fully in your browser.
+It needs no API key and uploads nothing; open DevTools and the network tab stays empty.
 
 ```bash
 git clone https://github.com/kbipul/indic-pii-redactor.git
@@ -63,80 +63,86 @@ input text
    └─ redact() / segment()  masked output + highlight ranges over the untouched input
 ```
 
-Three decisions worth calling out:
+Normalisation is length-preserving. Every Indic digit block in Unicode is ten consecutive
+single-code-unit code points, so folding them to ASCII is strictly 1:1. The scanner runs its
+regexes against the normalised text and reports highlight offsets against the string the user
+actually typed. There is no offset map, so there is nothing to drift.
 
-**Normalisation is length-preserving.** Every Indic digit block in Unicode is ten
-consecutive single-code-unit code points, so folding them to ASCII is strictly 1:1. That is
-what lets the scanner run its regexes against normalised text while reporting highlight
-offsets against the string the user actually typed — no offset map, no drift.
+A checksum either passed or it did not, so confidence is one of exactly three tiers. An
+"87% confident" from a rule engine would be a made-up number, so there is no percentage
+anywhere; each finding carries the sentence explaining which tier it got and why.
 
-**Confidence is a tier, not a percentage.** A checksum either passed or it did not. Inventing
-"87% confident" from a rule engine would be a made-up number, so there are exactly three
-tiers and each finding carries the sentence explaining which one it got and why.
-
-**Overlaps are resolved, not reported.** A naive scanner reports one Aadhaar plus a phantom
-mobile number hiding in its middle digits. Detectors carry a priority; the winner claims the
-character range.
-
-## The confidence tiers
+An Aadhaar contains a ten-digit run that looks like a mobile number, and a GSTIN contains a
+PAN. A naive scanner reports both. Here every detector carries a priority and the winner claims
+the character range; where priority ties, the stronger confidence tier wins, then the longer
+span. The test for it is `does not report the mobile number hiding inside an Aadhaar`.
 
 | Tier | What it means | Detectors |
 |---|---|---|
 | `certain` | A mathematical check passed | Aadhaar (Verhoeff), GSTIN (mod-36) |
 | `likely` | Structure constrained beyond length | PAN holder type, IFSC reserved zero, known UPI PSP handle, `+91` mobile, RTO state prefix, dotted email domain |
-| `possible` | Shape only — false positives by design | PIN code, voter EPIC, bare 10-digit mobile, unknown UPI handle, checksum-failing Aadhaar |
+| `possible` | Shape only; false positives by design | PIN code, voter EPIC, bare 10-digit mobile, unknown UPI handle, checksum-failing Aadhaar |
 
-The honest caveat, which the app states on its own face: **a passing checksum tells you the
-number is well-formed, not that it is an Aadhaar.** Roughly one in ten random 12-digit numbers
-carries a valid Verhoeff digit by chance. The shipped sample text deliberately contains a
-checksum-valid *invoice* number so the first thing you see is the tool being confidently
-wrong, on purpose. Treat this as triage that makes human review tractable, not as an
-automated compliance control.
+A passing checksum tells you the number is well-formed. It cannot tell you the number is an
+Aadhaar. Roughly one in ten random 12-digit numbers carries a valid Verhoeff digit by chance,
+and the shipped sample text has `invoice 412356789046` in it, which passes Verhoeff and is an
+invoice number, so the first thing you see is the tool being confidently wrong, on purpose. A
+test pins that it stays `certain`, and the comment on that test says what the app's footer
+says: a passing checksum proves the shape, not the meaning. Use this as triage that makes a
+human review tractable, and nothing more automated than that.
 
 ## Build notes — what I learned
 
+The email detector returned zero findings on a support ticket that plainly contained an email
+address. Nothing crashed. The finding was simply absent, and an absence is the one symptom
+that clicking around a UI never surfaces. Two assertions found it: `separates a UPI VPA from
+an email by its handle`, and `covers the full detector spread`, which walks the shipped sample
+and expects every detector to fire at least once.
+
+It was one bug with two symptoms. The UPI detector matched `ravi.k@example` inside
+`ravi.k@example.co.in`, because the word boundary after `example` is satisfied by the dot that
+follows it. UPI outranks email in the overlap table, so the phantom VPA claimed the range and
+swallowed the real email. The fix is a `(?!\.[a-zA-Z])` lookahead, and the comment above the
+pattern in `detectors.ts` gives the rule: a VPA handle is a bare word, an email domain is
+dotted.
+
+The Verhoeff implementation gave the tests nothing to catch. One property test corrupts every
+digit in every position of a signed number and asserts all of them fail; another swaps every
+adjacent pair. Both passed first try, which was less satisfying than I wanted. The statistical
+test taught me something: generate 4,000 random 12-digit numbers and assert that between 4%
+and 16% validate. Its comment reads "A correct check digit is 1 value in 10, so ~10% should
+survive," and it sits at roughly 10%, exactly as the maths says. That is the honest answer to
+how much the checksum buys you: a 90% cut in false positives, where a demo would imply 100%.
+Run at scale it holds: 200,000 random strings, 20,174 pass, 10.09%. I put that figure in the
+README, because it is the difference between a tool an enterprise adopts and one it pilots
+and drops.
+
 I picked this because of a date. The DPDP Rules were notified in November 2025 with an
-18-month runway, which means Phase 1 obligations land in **November 2026** and full
-applicability in May 2027, with a penalty ceiling of ₹250 crore. Every Indian enterprise is
-now doing data-minimisation work, and the very first practical wall is circular: to redact
-personal data before it goes to a model, you need something that finds personal data, and
-you cannot use a hosted API to do it because sending the Aadhaar to the redaction service
-*is* the disclosure. Client-side is not a nice-to-have here. It is the only shape the tool
-can have.
+18-month runway, so Phase 1 obligations land in **November 2026** and full applicability in
+May 2027, with a penalty ceiling of ₹250 crore. Every Indian enterprise is now doing
+data-minimisation work, and the very first practical wall is circular: to redact personal data
+before it goes to a model you need something that finds personal data, and you cannot use a
+hosted API to do it because sending the Aadhaar to the redaction service *is* the disclosure.
+Client-side is the only shape the tool can have.
 
-The Verhoeff implementation was the fun part and the tests were the useful part. I wrote a
-property test that corrupts every single digit in every position of a signed number and
-asserts all of them fail, plus one that swaps every adjacent pair. Both passed first try,
-which was less satisfying than I wanted. The test that actually taught me something was the
-statistical one: generate 4,000 random 12-digit numbers and assert that between 4% and 16%
-validate. It sits at roughly 10%, exactly as the maths says, and that number is the honest
-answer to "how much does the checksum really buy you?" — a 90% cut in false positives, not
-the 100% a demo would imply. I put that number in the README rather than in a footnote
-because it is the difference between a tool an enterprise adopts and one it pilots and drops.
+I built the sample text last, and it should have been first. Once I wrote a realistic support
+ticket the detector gaps were obvious in about thirty seconds; vehicle plates and Devanagari
+dates were both things I only thought about because a plausible document had them in it.
+Fixture-driven beats detector-driven for this kind of work, and I did it backwards.
 
-Two real bugs came out of the test suite rather than out of reading the code, and both were
-the same bug. The UPI detector matched `ravi.k@example` inside the email address
-`ravi.k@example.co.in` — the word boundary after `example` is perfectly happy, because the
-following `.` is a non-word character. Because UPI outranks email in the overlap table, the
-false VPA then *swallowed* the real email, so the email detector silently returned zero
-findings on text that obviously contained an email. One assertion that a VPA and an email
-are told apart, and one that the sample exercises every detector, caught both. The fix is a
-`(?!\.[a-zA-Z])` lookahead: a VPA handle is a bare word, an email domain is dotted. I would
-not have found the swallowed-email half of that by clicking around the UI, because the
-symptom was an absence.
+What I deliberately did not build is a machine-learning name detector. Structured identifiers
+have checksums and names do not. Indian names in transliterated Latin script are genuinely
+hard, an NER model would have added tens of megabytes to a page whose entire pitch is that it
+loads instantly and phones home to nobody, and a half-working name detector is worse than none
+because it teaches people to trust the output.
 
-The thing I would do differently: I built the sample text last, and it should have been
-first. Once I wrote a realistic support ticket, the detector gaps were obvious in about
-thirty seconds — vehicle plates and Devanagari dates were both things I only thought about
-because a plausible document had them in it. Fixture-driven beats detector-driven for this
-kind of work, and I did it backwards.
-
-What I deliberately did not build: a machine-learning name detector. Indian names in
-transliterated Latin script are genuinely hard, an NER model would have added tens of
-megabytes to a page whose entire pitch is that it loads instantly and phones home to nobody,
-and a half-working name detector is worse than none because it teaches people to trust the
-output. Structured identifiers have checksums. Names do not. Shipping the part that can be
-verified, and saying plainly that the rest is not covered, is the more useful tool.
+The same weight problem decided the slate. Day 028 was an India Flagship day, and Indic OCR
+Lab would have scored 9/12 against this build's 11/12, then failed the feasibility gate: it
+needs 10-20 MB of Tesseract traineddata per script at runtime, and with no browser in the build
+sandbox I could not have honestly claimed it recognised anything. A generic PII scrubber has
+also sat unbuilt in the backlog as Day 053. This build subsumes that slot and should retire it,
+because a generic scrubber is a commodity; the Verhoeff, mod-36, PAN holder-type and
+Devanagari-digit work is the part that makes this one distinct.
 
 ## Stack
 

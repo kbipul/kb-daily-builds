@@ -71,7 +71,7 @@ export const POLICIES: Policy[] = [
     mechanism:
       'Every message the operator typed is kept word for word; assistant messages, reasoning and tool results are replaced by an opaque compacted item.',
     source:
-      "Anthropic's /responses/compact — prior user messages stay verbatim, prior assistant turns, tool calls and reasoning become an encrypted opaque item",
+      "OpenAI's /responses/compact — prior user messages stay verbatim, prior assistant turns, tool calls and reasoning become an encrypted opaque item",
     url: 'https://developers.openai.com/api/docs/guides/compaction',
     compacts: true,
     summarises: true,
