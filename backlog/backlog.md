@@ -120,10 +120,10 @@ highest score still wins. It is a tie-breaker and a source of slate candidates.
 
 Open controls in the same family, unbuilt and unscored:
 
-- **Rate limits are per-key** — until a retry storm, a fallback router and a batch job all
-  share one. What does your quota actually protect? *(Scored 10/12 on the Day 034 slate as
-  `quota-commons` — Positioning 3, Demo-ability 3, Distinctiveness 3, Timeliness 1. Slate it the
-  morning a rate-limit or quota signal lands and it should win.)*
+- ~~**Rate limits are per-key** — until a retry storm, a fallback router and a batch job all
+  share one. What does your quota actually protect?~~ **BUILT Day 036, 2026-09-15, as
+  `quota-commons` (12/12, up from 10/12 on the Day 034 slate once OpenAI's reported 4x Astra
+  usage-limit cut and Google Antigravity's quota blocks landed as a live Timeliness signal).**
 - **The model refused** — a refusal in turn 1 and a compliance in turn 40 of the same
   session are the same policy, differently situated. Which of your red-team results survive
   being moved down a long transcript?
@@ -443,6 +443,13 @@ Re-scores of carried candidates on the Day 35 slate:
   Distinctiveness 3, Timeliness 1). The backlog says to slate it "the morning a rate-limit or quota signal
   lands and it should win" — no such signal landed this window. It remains the strongest unbuilt candidate
   in the pool and shifts forward with its score intact.
+  **Correction, same day:** a second, independent run (this local Cowork scheduled task, unaware Day 035
+  had just been taken by the new cloud routine) ran its own signal scan a few hours later and found the
+  signal the Day 35 scan missed — OpenAI's reported 4× GPT-6 Astra usage-limit cut (6–7 Sep) and Google
+  Antigravity's "individual quota reached" blocks (through 13 Sep). Re-scored at 12/12 and built as Day
+  036. Two automated scans of the same news window reached different conclusions about whether a
+  qualifying signal existed; worth a mention at the next audit rather than treating either scan as
+  authoritative on its own.
 - `missed-requirements` re-scored **8/12**, down from 9 on Day 034 (Timeliness 3→2, as Real-SWE is now three
   days old). Demo-ability still 2 for the unchanged reason: requirement-to-diff matching needs the visitor's
   own spec and PR. First loss on that dimension.

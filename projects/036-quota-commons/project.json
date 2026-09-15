@@ -1,0 +1,10 @@
+{
+  "day": 36,
+  "repo": "quota-commons",
+  "title": "Quota Commons",
+  "tagline": "Whose request pays for whose retry when three consumers share one key?",
+  "description": "Simulate a fallback router, a batch job and a user app silently sharing one API key's rate limit.",
+  "topics": ["ai", "llmops", "rate-limiting", "reliability", "typescript", "react", "finops", "azure-openai"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}
