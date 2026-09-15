@@ -423,3 +423,44 @@ lessons for the playbook: each bash call runs in its own network namespace, so t
 start the preview server and curl it in one call; and vitest's 5s default timeout is flaky under
 sandbox CPU contention (`testTimeout: 20000` fixed a spurious failure on a 175ms test).
 
+
+### Signal-derived (added Day 35)
+
+Winner was **Conduct Gap** (`conduct-gap`, 12/12) riding Microsoft AI's draft **Code of Conduct for MAI
+Models**, published 14 Sep 2026 with a six-week comment window — verified from the primary source
+(microsoft.ai/code-of-conduct), not from the coverage. It is the ninth build in the emergent arc: the
+control you believe you have is *"the vendor wrote the rules down, so I can hold them to it"*, and it does
+not hold because most of the rules are claims about states no customer can observe.
+
+| Slug | Idea | Stack | Score |
+|---|---|---|---|
+| abliteration-ledger | Abliteration Ledger — Abliteration.ai sells guardrail-stripped open-weight models as a hosted service, currently GLM-5.3 at $5/M, with a credit-card record as its only stated customer check (TechCrunch, 3 Sep 2026). Map an org's open-weight dependencies against which of them have a stripped twin on sale, and what that does to a "we use the safe version" claim. | React + TS + Vite | 8/12 — Timeliness 2 (twelve days old), Positioning 2, **Demo-ability 2** (a curated table a visitor cannot bring their own dependency list to), Distinctiveness 2 against Day 009 `open-model-passport`. Appended. |
+| agentic-workflow-surface | Agentic Workflow Surface — GitHub Agentic Workflows run coding agents inside GitHub Actions with safe outputs, sandboxed execution and, since Sep 2026, the built-in `GITHUB_TOKEN`. Map what a workflow can reach. | React + TS + Vite | 6/12 — **recorded, NOT a build candidate.** Timeliness 1: it entered public preview on 11 Jun 2026 and today's "technical preview" framing is a restatement, not news. Distinctiveness 1: it would be the seventh security report card, which the standing W36 carry-limit rule bars. Logged so the loop does not rediscover it. |
+
+Re-scores of carried candidates on the Day 35 slate:
+
+- `quota-commons` was slated and scored **10/12**, unchanged from Day 034 (Positioning 3, Demo-ability 3,
+  Distinctiveness 3, Timeliness 1). The backlog says to slate it "the morning a rate-limit or quota signal
+  lands and it should win" — no such signal landed this window. It remains the strongest unbuilt candidate
+  in the pool and shifts forward with its score intact.
+- `missed-requirements` re-scored **8/12**, down from 9 on Day 034 (Timeliness 3→2, as Real-SWE is now three
+  days old). Demo-ability still 2 for the unchanged reason: requirement-to-diff matching needs the visitor's
+  own spec and PR. First loss on that dimension.
+- `automl-benchmark-dotnet` scored **6/12**, unchanged from Day 034. Timeliness 0, Demo-ability 1 as a CLI,
+  and .NET-in-sandbox is still unverified after 35 days. **This is its second consecutive slate at 6/12 with
+  the feasibility gate unresolved.** The W38 audit should either verify the SDK in one run or strike it with
+  the rest of the Week 5 block.
+- `graph-inbox-insights` scored **5/12**, unchanged. Week 6 is byok throughout and will keep scoring like
+  Week 5 did. The W38 audit still owes the decision the Day 034 run asked for: give byok a Demo-ability floor
+  of 2 when the README carries a recorded GIF, or reframe the block.
+
+**Arc table gains a row** (Day 35): *The vendor published the rules, so you can hold them to it* → *Most of
+them are claims about states you cannot observe, and the ones you can check are the layer the operator is
+allowed to change.*
+
+**Unreachable sources this run:** `github.com/trending` needed a curl fallback with a custom parser
+(`web_fetch` refuses it on token budget, as recorded on Days 028-029) and returned a **fresh** page this
+time, unlike Day 034's cached snapshot. `microsoft.ai/code-of-conduct` fetched but exceeded the inline token
+budget; a subagent read all 743 lines in chunks and returned the clauses verbatim, which is now the standard
+move for a long primary source. The `site:reddit.com` r/LocalLLaMA fallback returned unrelated calendar and
+council pages for the third consecutive run and should be treated as a dead source rather than retried.
