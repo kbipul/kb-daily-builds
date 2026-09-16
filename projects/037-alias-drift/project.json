@@ -1,0 +1,10 @@
+{
+  "day": 37,
+  "repo": "alias-drift",
+  "title": "Alias Drift",
+  "tagline": "Is the model ID you call the model you get?",
+  "description": "Nine identifier types across five AI providers, classified by what happens on deprecation day.",
+  "topics": ["ai", "llmops", "reliability", "typescript", "react", "azure-openai", "model-versioning"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}

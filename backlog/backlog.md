@@ -471,3 +471,52 @@ time, unlike Day 034's cached snapshot. `microsoft.ai/code-of-conduct` fetched b
 budget; a subagent read all 743 lines in chunks and returned the clauses verbatim, which is now the standard
 move for a long primary source. The `site:reddit.com` r/LocalLLaMA fallback returned unrelated calendar and
 council pages for the third consecutive run and should be treated as a dead source rather than retried.
+
+### Signal-derived (added Day 37)
+
+Winner was **Alias Drift** (`alias-drift`, 12/12) riding DeepSeek's 10 Sep 2026 zero-notice
+retirement of `deepseek-v4-flash` and `deepseek-v4-flash-vision-exp`, confirmed silently rerouted
+to their replacement rather than failing — and DeepSeek's own retirement notices proving unstable
+in the same window (a separate deepseek-v4-pro retirement was announced then reversed). It is the
+tenth build in the emergent arc: the control you believe you have is "I pinned the model ID, so its
+behavior is fixed," and the reason it does not hold is that "pinned" is at least four different
+contracts across five providers, verified from each provider's own docs rather than from coverage —
+OpenAI (dated snapshot frozen-then-fails vs undated alias repoints anytime), Anthropic (4.6+
+dateless canonical ID frozen-then-fails vs pre-4.6 convenience alias resolves to the newest dated
+snapshot in its minor version), Azure OpenAI (auto-update-to-default silently switches with 2 weeks'
+notice; even a version-pinned deployment auto-upgrades to the then-current default at ITS OWN
+retirement rather than failing), Google Gemini ("-latest" alias hot-swaps with only breaking changes
+notified; dated stable versions get a published, earliest-possible shutdown date), and DeepSeek
+(zero notice, silent reroute, indefinitely).
+
+Re-scores of carried candidates on the Day 37 slate:
+
+- `missed-requirements` re-scored **7/12**, down from 8 on Day 35 (Timeliness 2→1 — Real-SWE is now
+  six days old; Demo-ability still 2, unchanged reason: requirement-to-diff matching needs the
+  visitor's own spec and PR). Shifts forward.
+- `kya-passport` re-scored **7/12**, down from 8 (Timeliness 2→1 — the Visa/Mastercard/Ant
+  Know-Your-Agent framework is now five days old with no new technical specs published). Shifts
+  forward; only worth re-scoring up once specs land.
+- `automl-benchmark-dotnet` scored **6/12**, unchanged from Day 035. .NET-in-sandbox is now
+  unverified after 37 days. Still awaiting the W38 audit decision (verify the SDK or strike the
+  block).
+- `graph-inbox-insights` scored **5/12**, unchanged. Week 6 is byok throughout; still awaiting the
+  W38 decision on a Demo-ability floor for byok projects with a recorded-GIF README.
+
+**Checked and set aside as stale, not appended:** Microsoft Semantic Kernel prompt-injection-to-RCE
+vulnerabilities (CVE-2026-25592, CVE-2026-26030) — real and severe (CVSS 9.8–10.0, "a single prompt
+was enough to launch calc.exe"), but disclosed 7 May 2026, four months old, not a fresh signal. OWASP
+Top 10 for Agentic Applications 2026 — released 9 Dec 2025, not fresh, and would risk being read as
+another security report card against the standing carry-limit rule regardless.
+
+**Arc table gains a row** (Day 37): *You pinned the model ID, so its behavior is fixed* → *"Pinned"
+is at least four different contracts wearing the same word, and only two providers' pinned
+identifiers fail instead of drifting.*
+
+**Unreachable sources this run:** `github.com/trending` fetched live via curl fallback (`web_fetch`
+still refuses the raw HTML on token budget, consistent with prior days) and returned a fresh page
+(star deltas differ from Day 036's). Hugging Face trending was covered via search-result summaries
+only; direct fetches remain blocked. The `site:reddit.com` r/LocalLLaMA fallback query returned no
+usable recent posts for at least the fourth consecutive run and should be treated as a dead source
+rather than retried each morning — worth a standing note in the playbook rather than rediscovering
+it daily.
