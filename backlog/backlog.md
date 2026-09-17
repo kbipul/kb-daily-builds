@@ -520,3 +520,49 @@ only; direct fetches remain blocked. The `site:reddit.com` r/LocalLLaMA fallback
 usable recent posts for at least the fourth consecutive run and should be treated as a dead source
 rather than retried each morning — worth a standing note in the playbook rather than rediscovering
 it daily.
+
+### Signal-derived (added Day 38)
+
+Winner was **Still Untrusted** (`still-untrusted`, 11/12) built directly from Microsoft's
+"Agent Security with FIDES" documentation for `agent-framework-core` (FIDES = Flow Integrity
+Deterministic Enforcement System). Four security PRs in `microsoft/agent-framework` (#8138,
+#8139, #8141, #8187) were all created 2026-09-08 per GitHub's own API — 9 days old at build
+time, just outside the playbook's <7-day bar for a full Timeliness 3, scored a 2 rather than
+inflated. It is a new angle on the emergent arc rather than a repeat of it: every prior entry
+shows a control silently failing; this one shows a control Microsoft explicitly documents as
+working, but conservatively — "most-restrictive-wins propagation... the rest of the run is
+untrusted unless you explicitly drop it" — and the build makes that cost visible by refusing
+an unrelated privileged action on four-step-old taint. The golden test reproduces Microsoft's
+own worked example (the GitHub-issue-triage agent with the embedded `[SYSTEM]` instruction)
+line for line rather than taking the docs' prose on faith.
+
+`injection-intent-classifier` — client-side classifier distinguishing the three prompt-injection
+goals Microsoft Defender for Office 365's new email protection specifically targets (exfiltrate
+info, discover tools, expose system prompts) instead of generic "ignore previous instructions"
+pattern matching — scored **9/12** (Positioning 3, Timeliness 1, Demo-ability 3, Distinctiveness 2).
+Lost on Timeliness (MC1422060 last substantively updated 2 Sep 2026, 15 days old, GA slipping to
+early October) and Distinctiveness (overlaps existing `rag-injection-scanner`). Appended here per
+the ≥8 carry rule; worth re-scoring if Defender's email protection reaches GA with a sharper
+technical hook.
+
+Re-scores of carried candidates on the Day 38 slate:
+
+- `summarize-this` (Week 1, Day 4) and `lingua-detect` (Week 1, Day 6) — the next 2 unbuilt
+  backlog items in list order — both scored **4/12** (Positioning 1, Timeliness 0, Demo-ability 2,
+  Distinctiveness 1): generic, evergreen, no fresh hook. Both shift forward unbuilt; neither is
+  struck, since a slow morning could still favor them if no signal-derived candidate clears the
+  feasibility gate.
+
+**Arc table gains a row** (Day 38): *Microsoft's own docs say this is handled — deterministic
+label propagation, policy checked before every sensitive call* → *The same conservatism that
+makes it deterministic also means one unrelated untrusted read blocks an unrelated privileged
+action four steps later, and nothing decays it unless you build scoping yourself.*
+
+**Unreachable sources this run:** `github.com/trending` fetched live via curl fallback and
+returned a fresh page (surfaced a visible cluster of agent/skill red-teaming repos —
+`NationalSecurityAgency/ghidra`, `SnailSploit/Claude-Red`, `cloudflare/security-audit-skill` —
+too close to already-built `mcp-auditor`/`skill-scan` to clear Distinctiveness on its own).
+Hugging Face trending was covered via search-result summaries only; direct fetches remain
+blocked. The `site:reddit.com` r/LocalLLaMA fallback returned no usable recent posts for at
+least the fifth consecutive run — confirmed dead source, should stop being retried daily and
+get a standing note in the playbook instead of being rediscovered each morning.
