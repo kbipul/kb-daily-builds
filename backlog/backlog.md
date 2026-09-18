@@ -566,3 +566,13 @@ Hugging Face trending was covered via search-result summaries only; direct fetch
 blocked. The `site:reddit.com` r/LocalLLaMA fallback returned no usable recent posts for at
 least the fifth consecutive run — confirmed dead source, should stop being retried daily and
 get a standing note in the playbook instead of being rediscovered each morning.
+
+### Signal-derived (added Day 39)
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| google-home-mcp-guardrails | Google Home MCP Guardrail Inspector — Google Home now speaks Model Context Protocol, so third-party AI agents (Claude, ChatGPT) can control smart devices with declared safety guardrails; simulate a device set + an agent's proposed tool calls and show which the guardrails allow, block, or should have blocked. Rides Google Home's MCP integration announcement, 16 Sep 2026 (techcrunch.com, engadget.com). Scored 10/12 (Positioning 3, Timeliness 3, Demo-ability 2 — no real Home hardware reachable from the build sandbox, so the demo has to be an honestly-labeled simulator — Distinctiveness 2, overlapping this series' existing MCP/tool-permission builds: mcp-auditor, handoff-inspector, readonly-illusion, still-untrusted). Lost to `disclosure-track` (12/12) on Day 39. Still buildable; worth re-scoring if a sharper angle on the guardrail model itself turns up, since the smart-home framing is fresh even where the MCP-permission mechanic is not. | React + TS + Vite | 10/12 |
+
+**Day 39 note:** winner was `disclosure-track` (Ready for Disclosure), riding OpenAI's misalignment
+disclosure framework published 16 Sep 2026. `summarize-this` and `lingua-detect` (next 2 unbuilt
+Week 1 backlog items) were re-scored at 4/12, unchanged from their Day 038 score — no fresh hook.
+Both shift forward unbuilt. Full selection rationale is in `state/state.json`'s Day 39 entry.
