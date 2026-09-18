@@ -1,0 +1,10 @@
+{
+  "day": 40,
+  "repo": "last-record",
+  "title": "Last Record",
+  "tagline": "Cut the end off a hash-chained audit log and it still verifies.",
+  "description": "Checks an agent tool-call log against the IETF Agent Audit Trail draft, verifies its SHA-256 chain, then shows what the chain cannot prove.",
+  "topics": ["ai", "agents", "audit-log", "typescript", "react", "compliance", "eu-ai-act", "sha256", "observability", "ietf"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}

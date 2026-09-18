@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 39,
+  "dayCounter": 40,
   "projects": [
     {
       "day": 1,
@@ -796,6 +796,29 @@
       "repoUrl": "https://github.com/kbipul/disclosure-track",
       "demoUrl": "https://kbipul.github.io/disclosure-track/",
       "publishedAt": "2026-09-18T00:46:52.925Z"
+    },
+    {
+      "day": 40,
+      "folder": "040-last-record",
+      "repo": "last-record",
+      "title": "Last Record",
+      "tagline": "Cut the end off a hash-chained audit log and it still verifies.",
+      "description": "Checks an agent tool-call log against the IETF Agent Audit Trail draft, verifies its SHA-256 chain, then shows what the chain cannot prove.",
+      "status": "built",
+      "date": "2026-09-18",
+      "demo": "pages",
+      "stack": [
+        "React 18",
+        "TypeScript",
+        "Vite",
+        "Vitest"
+      ],
+      "valueScore": 12,
+      "signal": "Primary signal: the IETF Internet-Draft draft-sharif-agent-audit-trail (R. Sharif, CyberSecAI) — \"Agent Audit Trail: A Standard Logging Format for Autonomous AI Systems\" — is at -03 and expires 29 September 2026, eleven days after this build, so within the fortnight it either advances toward RFC, is revised, or lapses. It specifies twelve mandatory JSON fields per record, seven action classifications (tool_call, tool_response, decision, delegation, escalation, error, lifecycle), trust levels L0-L4, SHA-256 hash chaining over RFC 8785 canonical JSON, and optional ECDSA signatures, and maps itself to EU AI Act Art. 12, SOC 2, ISO/IEC 42001 and PCI DSS v4.0.1. Reinforcing signal: EU AI Act Article 12 record-keeping became binding for high-risk systems on 2 August 2026, six weeks before this build, with deployers required to retain logs at least six months and penalties up to EUR 15M or 3% of turnover. Coverage notes the regulation is \"precise on objectives but thin on operational detail\" about format and integrity, which is the gap this draft aims at. Supporting signal: github.com/trending today is dominated by agent harness and skill frameworks — ayghri/i-have-adhd (+4,624 stars today), cathrynlavery/diagram-design (+2,286), affaan-m/ECC (+1,151, \"the agent harness performance optimization system\"), Tencent/teamai-cli (+1,083), obra/superpowers (+690), vastsa/PI-Desktop (+393). Eleven of the thirteen repos on the page are agent-related. All of them emit tool-call logs and none of them emit a standardised or chained one. Context signal: 2026 agent security incidents keep turning on what the log did or did not record — CVE-2026-22708 against Cursor, where allowlisting made the attack easier because auto-approved commands like `git branch` delivered the payload, and the LiteLLM PyPI backdoor (~47,000 downloads in a three-hour window, affecting CrewAI, DSPy and Microsoft GraphRAG). Post-incident forensics on both depends on logs agents do not reliably keep. Blocked or unreachable sources this run: datatracker.ietf.org served \"This site is currently being upgraded. We'll be back shortly!\" for the entire session, so the draft text was never read and the conformance rule set is reconstructed from secondary descriptions — declared in code as RULESET_PROVENANCE, rendered in the UI, and led with in the README's build notes. huggingface.co and reddit.com direct fetches remain outside the allowlist; HF trending was taken from search summaries (Qwen3.8-27B leading at 15,407 likes, LTX-2.5 and MiniMax-H3 rising) and produced no build-worthy angle. r/LocalLLaMA again returned nothing usable, consistent with Day 038's note that it should be treated as a dead source. Model releases noted and set aside: Atria Dawn Preview (12 Sep), Sakana Fugu Max and Fugu Ultra v2.0 (11 Sep), DeepSeek V4.1 Flash (10 Sep), GPT Image 2.5 (8 Sep).",
+      "rationale": "Won at 12/12 (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). Slate: last-record 12/12 (WON). It is the arc's open control \"the audit log is complete\", carried from the Day 037 run where it also scored 12/12 and was never built because that session stood down on a collision. The IETF draft had not aged out in the interval, and its 29 Sep expiry raised Timeliness rather than lowering it. Also slated: deletion-trace 10/12 (arc open control \"deleting the record deletes the data\" — trace one user's erasure request through a RAG stack's embedding index, retrieval cache and rolled-up summaries; Positioning 3, Timeliness 2, Demo-ability 2, Distinctiveness 3; lost on Timeliness with no fresh event behind it, appended to the backlog per the >=8 carry rule). blast-radius 8/12 (backlog carry; Positioning 2, Timeliness 1, Demo-ability 3, Distinctiveness 2 — shifts forward unbuilt). refusal-position 6/12 (arc open control \"the model refused\" — disqualified on the feasibility gate before scoring mattered: an honest version needs live model calls at turn 1 and turn 40 of one session, which puts a paid key on the demo path). India Flagship Pool not eligible; neither 39 nor 40 is a multiple of 14. Why the winner won: it is the first build in the series to take a named standards-track artefact and check a real log against it, and the demo makes a cryptographic fact visible in one click instead of arguing it. Dropping three records off the end of a sealed chain removes the refund attempt, the escalation and the session close, and the chain still verifies green — same badge, same clean rows, a different head hash that nothing in the log contradicts. It extends the emergent arc (\"a control you believe you have, and the precise reason it does not hold\") to tamper-evidence itself: hash chaining is evident against edits and silent about deletions from the end. The build produced its own strongest evidence. The test `orphans every record after a rewritten one` failed with `expected 'ok' to be 'link_broken'`, exposing that the verifier chained on declared rather than recomputed predecessor hashes — the one-line difference between a chain and a list of unrelated checksums, found inside a project about being precise on what verification proves. NUMBERING NOTE: this was built as Day 039 and renumbered to Day 040 before push. A second schedule published Day 039 (disclosure-track) at 00:46:52Z while this session was mid-build — the fifth such collision, and the third time the local Cowork run has lost the race. Rather than discard a fully gated build, it was renumbered and every gate re-run against the renumbered copy (52 tests, clean build, smoke test at the /last-record/ base path with both dist assets returning 200, secret scan clean, be-human mechanical check at 7 em dashes and 2 bold leads). Same precedent as Day 036 on 2026-09-15. See ACTION-REQUIRED.md.",
+      "builtAt": "2026-09-18T00:49:17.402Z",
+      "repoUrl": "https://github.com/kbipul/last-record",
+      "demoUrl": "https://kbipul.github.io/last-record/"
     }
   ]
 }

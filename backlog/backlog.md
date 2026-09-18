@@ -127,8 +127,11 @@ Open controls in the same family, unbuilt and unscored:
 - **The model refused** — a refusal in turn 1 and a compliance in turn 40 of the same
   session are the same policy, differently situated. Which of your red-team results survive
   being moved down a long transcript?
-- **The audit log is complete** — what does a tool-call log omit that a reviewer would need,
-  and can you tell from the log alone that something is missing?
+- ~~**The audit log is complete** — what does a tool-call log omit that a reviewer would need,
+  and can you tell from the log alone that something is missing?~~ **BUILT Day 040, 2026-09-18,
+  as `last-record` (12/12, riding draft-sharif-agent-audit-trail-03's 29 Sep expiry and EU AI
+  Act Art. 12 going binding on 2 Aug 2026). The answer, for the record: a hash chain proves no
+  record was edited and says nothing at all about records removed from the end.**
 - **Deleting the record deletes the data** — it is still in the embedding, the cache and the
   summary. Trace one user's deletion request through a RAG stack.
 
@@ -191,6 +194,11 @@ it. Same rule proposed for any candidate that loses twice on one dimension.
 |------|------|-------|-------|
 | recall-cliff | Recall Cliff — GPT-6 Astra (3 Sep 2026) ships a 1.05M-token window, but the useful question is not price, it is where retrieval reliability collapses inside it. A placement advisor: paste your prompt layout, see where instructions should sit given published long-context degradation curves. Tied at 11/12 with the winner; tie went to the backlog item per Step 1.5D, and its demo score was capped at 2 because an honest version needs the user's own eval data rather than numbers I would have to invent. | React + TS + Vite | 11/12 |
 | astra-cliff-risk | Astra Cliff Risk — GPT-6 Astra re-prices the *entire* request once input crosses 272,000 tokens ($10/$50 to $20/$75), so a pipeline that usually sits at 250K and occasionally spills does not pay 12% more, it pays ~2x on those runs. Models the distribution rather than a point estimate. Scored 9/12: Distinctiveness capped at 1 — it would be the fourth cost calculator after Day 004 token-cost-lab, Day 022 token-clock and Day 024 cache-cliff. | React + TS + Vite | 9/12 |
+
+### Signal-derived (added Day 40)
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| deletion-trace | Deleting the Record Deletes the Data — trace one user's erasure request through a RAG stack and watch it survive in the embedding index, the retrieval cache and the rolled-up summary. The arc's fourth open control. Scored 10/12 (Positioning 3, Demo-ability 2, Distinctiveness 3) and lost to `last-record` only on Timeliness 2: GDPR Art. 17 and the AAT draft's tombstone-deletion mechanic are both real, neither is news this week. Needs a live signal to win. | React + TS + Vite | 10/12 |
 
 ### Signal-derived (added Day 27)
 | Slug | Idea | Stack | Score |
