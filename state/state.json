@@ -804,7 +804,7 @@
       "title": "Last Record",
       "tagline": "Cut the end off a hash-chained audit log and it still verifies.",
       "description": "Checks an agent tool-call log against the IETF Agent Audit Trail draft, verifies its SHA-256 chain, then shows what the chain cannot prove.",
-      "status": "built",
+      "status": "published",
       "date": "2026-09-18",
       "demo": "pages",
       "stack": [
@@ -818,7 +818,8 @@
       "rationale": "Won at 12/12 (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). Slate: last-record 12/12 (WON). It is the arc's open control \"the audit log is complete\", carried from the Day 037 run where it also scored 12/12 and was never built because that session stood down on a collision. The IETF draft had not aged out in the interval, and its 29 Sep expiry raised Timeliness rather than lowering it. Also slated: deletion-trace 10/12 (arc open control \"deleting the record deletes the data\" — trace one user's erasure request through a RAG stack's embedding index, retrieval cache and rolled-up summaries; Positioning 3, Timeliness 2, Demo-ability 2, Distinctiveness 3; lost on Timeliness with no fresh event behind it, appended to the backlog per the >=8 carry rule). blast-radius 8/12 (backlog carry; Positioning 2, Timeliness 1, Demo-ability 3, Distinctiveness 2 — shifts forward unbuilt). refusal-position 6/12 (arc open control \"the model refused\" — disqualified on the feasibility gate before scoring mattered: an honest version needs live model calls at turn 1 and turn 40 of one session, which puts a paid key on the demo path). India Flagship Pool not eligible; neither 39 nor 40 is a multiple of 14. Why the winner won: it is the first build in the series to take a named standards-track artefact and check a real log against it, and the demo makes a cryptographic fact visible in one click instead of arguing it. Dropping three records off the end of a sealed chain removes the refund attempt, the escalation and the session close, and the chain still verifies green — same badge, same clean rows, a different head hash that nothing in the log contradicts. It extends the emergent arc (\"a control you believe you have, and the precise reason it does not hold\") to tamper-evidence itself: hash chaining is evident against edits and silent about deletions from the end. The build produced its own strongest evidence. The test `orphans every record after a rewritten one` failed with `expected 'ok' to be 'link_broken'`, exposing that the verifier chained on declared rather than recomputed predecessor hashes — the one-line difference between a chain and a list of unrelated checksums, found inside a project about being precise on what verification proves. NUMBERING NOTE: this was built as Day 039 and renumbered to Day 040 before push. A second schedule published Day 039 (disclosure-track) at 00:46:52Z while this session was mid-build — the fifth such collision, and the third time the local Cowork run has lost the race. Rather than discard a fully gated build, it was renumbered and every gate re-run against the renumbered copy (52 tests, clean build, smoke test at the /last-record/ base path with both dist assets returning 200, secret scan clean, be-human mechanical check at 7 em dashes and 2 bold leads). Same precedent as Day 036 on 2026-09-15. See ACTION-REQUIRED.md.",
       "builtAt": "2026-09-18T00:49:17.402Z",
       "repoUrl": "https://github.com/kbipul/last-record",
-      "demoUrl": "https://kbipul.github.io/last-record/"
+      "demoUrl": "https://kbipul.github.io/last-record/",
+      "publishedAt": "2026-09-18T00:49:51.514Z"
     }
   ]
 }
