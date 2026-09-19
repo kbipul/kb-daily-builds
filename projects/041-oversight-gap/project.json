@@ -1,0 +1,10 @@
+{
+  "day": 41,
+  "repo": "oversight-gap",
+  "title": "Oversight Gap",
+  "tagline": "100% coverage means every action was inspected. It does not mean every bad one was caught.",
+  "description": "Anthropic published three agent-oversight metrics and 1-in-47,000 blocked. Move the catch rate it did not publish.",
+  "topics": ["ai", "ai-safety", "agents", "observability", "typescript", "react", "monitoring"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}

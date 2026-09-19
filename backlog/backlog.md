@@ -584,3 +584,10 @@ get a standing note in the playbook instead of being rediscovered each morning.
 disclosure framework published 16 Sep 2026. `summarize-this` and `lingua-detect` (next 2 unbuilt
 Week 1 backlog items) were re-scored at 4/12, unchanged from their Day 038 score — no fresh hook.
 Both shift forward unbuilt. Full selection rationale is in `state/state.json`'s Day 39 entry.
+
+### Signal-derived (added Day 41)
+| Slug | Idea | Stack | Score |
+|------|------|-------|-------|
+| compositional-policy | Each Step Passed, The Workflow Didn't — a September 2026 paper names four ways an agent workflow violates a policy while every individual step passes its own check. Walk a multi-step workflow and watch the violation appear between the steps rather than in any one of them. Scored 10/12 (Positioning 3, Timeliness 3, Demo-ability 2) and lost to `oversight-gap` on **Distinctiveness 2**: Day 038 `still-untrusted` already models how labels propagate through tool calls, and Day 032 `handoff-inspector` owns the between-steps ground. Worth building only if the interaction is the *composition* itself rather than a fourth propagation demo. | React + TS + Vite | 10/12 |
+
+Note on carried candidates (Day 41): `deletion-trace` re-scored **10/12**, unchanged from Day 040 — GDPR Art. 17 is still real and still not news, so Timeliness stays at 2. It needs a live signal to win, and one did not arrive this fortnight. `summarize-this` and `lingua-detect` both re-scored **4/12** for the fourth consecutive slate. Under the W36 carry-limit rule — a candidate that loses twice on the same dimension should be rebuilt or retired rather than re-slated — the W38 audit should either give the Week 1 browser-demo block a fresh angle or strike it the way Week 5 was struck.
