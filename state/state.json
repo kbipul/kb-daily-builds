@@ -828,7 +828,7 @@
       "title": "Oversight Gap",
       "tagline": "100% coverage means every action was inspected. It does not mean every bad one was caught.",
       "description": "Anthropic published three agent-oversight metrics and 1-in-47,000 blocked. Move the catch rate it did not publish.",
-      "status": "built",
+      "status": "published",
       "date": "2026-09-19",
       "demo": "pages",
       "stack": [
@@ -842,7 +842,8 @@
       "rationale": "Won at 12/12 (Positioning 3, Timeliness 3, Demo-ability 3, Distinctiveness 3). Slate: oversight-gap 12/12 (WON); compositional-policy 10/12 (signal-derived, the 2026-09-17 agent-workflow policy-violation paper -- Positioning 3, Timeliness 3, Demo-ability 2, Distinctiveness 2, capped against Day 038 still-untrusted; appended to the backlog per the >=8 carry rule); deletion-trace 10/12 (backlog carry from Day 040, re-scored unchanged -- still no live signal behind GDPR Art. 17, Timeliness 2; shifts forward unbuilt); summarize-this 4/12 and lingua-detect 4/12 (next two unbuilt Week 1 backlog items, unchanged reasoning from Days 038-039: generic client-side tools with no fresh hook, Positioning 1, Timeliness 0, Distinctiveness 1). Both shift forward. Why the winner won: it is the first build in the series to take a set of transparency metrics at face value and ask what they are load-bearing for. The arc so far names a control and the reason it does not hold; this one names a control that genuinely does hold -- 100% of actions really do pass a monitor -- and shows that the metric proving it is invariant to the thing a reader actually wants to know. Coverage, latency and the block count are byte-identical whether the monitor catches 99% of harmful actions or 10%, which is asserted directly by observedSignature() in a test rather than argued in prose. Three findings fell out of arithmetic on the published table rather than out of the slider, which was not the plan. The block rate is printed as \"0.002% ... (about 1 in 47,000)\" in one sentence; those are one in fifty thousand and one in forty-seven thousand, about 6% apart, and every derived count inherits the choice. The stated commitment that \"humans review any blocked actions within one week\" implies a standing queue of roughly 4,804 blocked actions per week, about a hundred times the ~50 offline flags that reach a person. And the offline flag volume (100,000/week) divided by the offline flag rate (1-2 per 1,000) implies 50-100 million transcripts a week, or 1,667-3,333 per agent per week across 30,000 agents -- which the app prints with the verdict left open rather than resolved, because the post does not say whether the two figures share a denominator. The build also produced its own correction: two tests failed on the first run and the test was wrong both times. Math.round(9 * blocked) is 191,489 where 9 * Math.round(blocked) is 191,493, because one billion over 47,000 is 21,276.59. A third test now pins both numbers side by side, since every headline figure in this app is a rounded action count derived from a non-integer rate. Scope cut, noted in Build notes: sweepRecall() ships with a test but nothing renders it as a chart -- the slider plus a self-relabelling ledger makes the point in less space.",
       "builtAt": "2026-09-19T04:49:55.619Z",
       "repoUrl": "https://github.com/kbipul/oversight-gap",
-      "demoUrl": "https://kbipul.github.io/oversight-gap/"
+      "demoUrl": "https://kbipul.github.io/oversight-gap/",
+      "publishedAt": "2026-09-19T04:50:37.984Z"
     }
   ]
 }
