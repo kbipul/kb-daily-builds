@@ -16,9 +16,10 @@
 The IETF draft `draft-sharif-agent-audit-trail` proposes a standard record format for what
 autonomous agents do: twelve mandatory fields, seven action classifications, trust levels L0
 through L4, and SHA-256 hash chaining over RFC 8785 canonical JSON so a reviewer can tell
-whether a log was edited after the fact. The draft expires on 29 September 2026, eleven days
-after this build, and EU AI Act Article 12 has required automatic event logging from high-risk
-systems since 2 August. Both of those make the format worth understanding now.
+whether a log was edited after the fact. It is an individual submission with no working-group
+adoption and no formal standing in the IETF process: version -03 was posted on 5 September 2026
+and expires 9 March 2027. EU AI Act Article 12 has required automatic event logging from
+high-risk systems since 2 August, which is the part with a date that has already passed.
 
 This tool takes an agent tool-call log, checks each record against the draft's mandatory
 fields, recomputes the hash chain, and then answers the question the green badge doesn't: what
@@ -124,6 +125,13 @@ different head hash that nothing anywhere contradicts. A hash chain is a backwar
 structure and no record in it knows how many should follow, so the honest version of "tamper-
 evident" is "evident against edits, silent about deletions from the end." Publishing the head
 somewhere the log holder cannot rewrite is what closes that, and almost nobody does it.
+
+Corrected in the 2026-W38 audit. This build said the draft expired on 29 September
+2026, "eleven days after this build", and treated that deadline as a reason to look
+now. It was wrong: version -03 was posted on 5 September 2026 and runs to 9 March
+2027. The urgency in the original framing was mine, not the document's. The one date
+that has actually passed is EU AI Act Article 12, in force since 2 August, and the
+README and the app now lead with that instead.
 
 ## Stack
 

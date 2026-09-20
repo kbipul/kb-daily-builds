@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { SCENARIOS } from './lib/presets';
-import { simulate } from './lib/simulate';
+import { simulate, statsUpTo } from './lib/simulate';
+import { formatClock } from './lib/format';
 import { BudgetMeter } from './components/BudgetMeter';
 import { Timeline } from './components/Timeline';
 import { AttributionFeed } from './components/AttributionFeed';
@@ -12,8 +13,11 @@ export default function App() {
   const [scenarioId, setScenarioId] = useState(SCENARIOS[0].id);
   const scenario = useMemo(() => SCENARIOS.find((s) => s.id === scenarioId)!, [scenarioId]);
   const result = useMemo(() => simulate(scenario.config), [scenario]);
-
   const [currentT, setCurrentT] = useState(0);
+  const statsSoFar = useMemo(
+    () => statsUpTo(result.events, scenario.config.consumers, currentT),
+    [result, scenario, currentT],
+  );
   const [playing, setPlaying] = useState(true);
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(2);
   const rafRef = useRef<number | undefined>(undefined);
@@ -130,8 +134,12 @@ export default function App() {
           <AttributionFeed attributions={result.attributions} consumers={scenario.config.consumers} currentT={currentT} />
         </div>
         <div>
-          <h2>Run totals</h2>
-          <StatsTable consumers={scenario.config.consumers} stats={result.consumerStats} />
+          <h2>Totals so far</h2>
+          <p className="panel-note">
+            Everything the run has done up to {formatClock(currentT)}, which is where the
+            scrubber is. Scrub to the end for the whole {formatClock(scenario.config.durationSec)}.
+          </p>
+          <StatsTable consumers={scenario.config.consumers} stats={statsSoFar} />
         </div>
       </section>
 

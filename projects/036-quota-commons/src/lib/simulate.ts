@@ -91,6 +91,39 @@ export function simulate(config: SimConfig): SimResult {
 }
 
 /**
+ * Consumer totals restricted to the events at or before `tSec`.
+ *
+ * The full-run totals in `SimResult.consumerStats` answer "what did the whole
+ * three minutes cost each consumer". The table next to the attribution feed
+ * has to answer a different question -- what the run looks like from where the
+ * scrubber is standing -- or it contradicts the feed beside it, which is
+ * time-scoped. (W38 audit: the committed screenshot showed 81 denials next to
+ * "No 429s yet at this point in the run.")
+ */
+export function statsUpTo(
+  events: SimEvent[],
+  consumers: Consumer[],
+  tSec: number,
+): ConsumerStats[] {
+  const map = new Map<string, ConsumerStats>(
+    consumers.map((c) => [c.id, { consumerId: c.id, sent: 0, allowed: 0, denied: 0, tokensConsumed: 0 }]),
+  );
+  for (const e of events) {
+    if (e.tSec > tSec) continue;
+    const s = map.get(e.consumerId);
+    if (!s) continue;
+    s.sent++;
+    if (e.allowed) {
+      s.allowed++;
+      s.tokensConsumed += e.tokens;
+    } else {
+      s.denied++;
+    }
+  }
+  return Array.from(map.values());
+}
+
+/**
  * For every denied event, look back `windowSec` seconds and find which
  * consumer consumed the largest share of ALLOWED token volume in that
  * window. That consumer is the "culprit" the victim's own dashboard cannot

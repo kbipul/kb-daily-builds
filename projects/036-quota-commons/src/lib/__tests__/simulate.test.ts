@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { simulate, attributeDenials } from '../simulate';
+import { simulate, attributeDenials, statsUpTo } from '../simulate';
 import type { Consumer, SimEvent } from '../types';
+import { SCENARIOS } from '../presets';
 
 function oneConsumer(rps: number, tokensPerRequest: number, durationSec = 60): Consumer[] {
   return [
@@ -137,5 +138,40 @@ describe('attributeDenials', () => {
   it('returns no attributions when there are no denials', () => {
     const events: SimEvent[] = [{ tSec: 0, consumerId: 'a', tokens: 10, allowed: true }];
     expect(attributeDenials(events, 5)).toHaveLength(0);
+  });
+});
+
+describe('statsUpTo', () => {
+  const consumers = SCENARIOS[0].config.consumers;
+  const result = simulate(SCENARIOS[0].config);
+
+  it('counts nothing at t=-1 and everything at the end of the run', () => {
+    const none = statsUpTo(result.events, consumers, -1);
+    expect(none.every((s) => s.sent === 0 && s.denied === 0)).toBe(true);
+
+    const all = statsUpTo(result.events, consumers, SCENARIOS[0].config.durationSec);
+    for (const full of result.consumerStats) {
+      const scoped = all.find((s) => s.consumerId === full.consumerId)!;
+      expect(scoped).toEqual(full);
+    }
+  });
+
+  it('never reports a denial before the attribution feed would show one', () => {
+    // The W38 audit defect: the totals table was full-run while the feed beside
+    // it was time-scoped, so the page showed 81 denials next to "No 429s yet".
+    for (let t = 0; t < SCENARIOS[0].config.durationSec; t += 5) {
+      const denied = statsUpTo(result.events, consumers, t).reduce((n, s) => n + s.denied, 0);
+      const visible = result.attributions.filter((a) => a.tSec <= t).length;
+      if (denied > 0) expect(visible).toBeGreaterThan(0);
+    }
+  });
+
+  it('is monotonic in t', () => {
+    let prev = 0;
+    for (let t = 0; t <= SCENARIOS[0].config.durationSec; t += 10) {
+      const sent = statsUpTo(result.events, consumers, t).reduce((n, s) => n + s.sent, 0);
+      expect(sent).toBeGreaterThanOrEqual(prev);
+      prev = sent;
+    }
   });
 });

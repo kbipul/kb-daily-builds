@@ -31,11 +31,11 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 ## Week 1 — AI in the browser (zero-key live demos)
 | Day | Project | Repo | Scope | Demo |
 |--:|---|---|---|---|
-| 1 | Neural Notes | `neural-notes` | Semantic note search with transformers.js embeddings, 100% client-side | pages |
-| 2 | Mood of the Room | `mood-of-the-room` | Real-time sentiment analysis of any pasted text/chat export; per-sentence heatmap | pages |
-| 3 | Zero-Shot Tagger | `zero-shot-tagger` | Classify anything into user-defined labels, no training — zero-shot pipeline | pages |
+| 1 | ~~Neural Notes~~ **(BUILT Day 001, 2026-07-07)** | `neural-notes` | Semantic note search with transformers.js embeddings, 100% client-side | pages |
+| 2 | ~~Mood of the Room~~ **(BUILT Day 002, 2026-07-09)** | `mood-of-the-room` | Real-time sentiment analysis of any pasted text/chat export; per-sentence heatmap | pages |
+| 3 | ~~Zero-Shot Tagger~~ **(BUILT Day 003, 2026-07-09)** | `zero-shot-tagger` | Classify anything into user-defined labels, no training — zero-shot pipeline | pages |
 | 4 | Summarize This | `summarize-this` | Client-side article/email summarizer with length control | pages |
-| 5 | Similar or Not | `similar-or-not` | Embedding playground: visualize cosine similarity between texts on a 2D map | pages |
+| 5 | ~~Similar or Not~~ **(BUILT Day 005, 2026-07-11)** | `similar-or-not` | Embedding playground: visualize cosine similarity between texts on a 2D map | pages |
 | 6 | Lingua Detect | `lingua-detect` | Language identification + confidence for 100 languages, offline | pages |
 | 7 | [F] Ask My Docs | `ask-my-docs` | Full client-side RAG: drop PDFs, chunk, embed, retrieve, answer with WebLLM | pages |
 
@@ -44,10 +44,10 @@ Indic-language AI, IndiaAI-mission-adjacent, always demoable.
 |--:|---|---|---|---|
 | 8 | Chunk Lab | `chunk-lab` | Interactive chunking-strategy visualizer (fixed/sentence/recursive/semantic) | pages |
 | 9 | RAG Scorecard | `rag-scorecard` | Measure retrieval quality: precision@k, MRR on a sample corpus | pages |
-| 10 | Hybrid Search | `hybrid-search-ts` | BM25 + vector fusion with reciprocal rank fusion, side-by-side results | pages |
+| 10 | ~~Hybrid Search~~ **(BUILT Day 013, 2026-07-20)** | `hybrid-search-ts` | BM25 + vector fusion with reciprocal rank fusion, side-by-side results | pages |
 | 11 | Cite Your Sources | `cite-your-sources` | RAG answers with inline citations + hallucination highlighting | pages |
 | 12 | Reranker Demo | `reranker-demo` | Cross-encoder reranking vs raw vector search comparison | pages |
-| 13 | Context Window Packer | `context-packer` | Token-budget optimizer: fit the best context into N tokens | pages |
+| 13 | ~~Context Window Packer~~ **(BUILT Day 012, 2026-07-19)** | `context-packer` | Token-budget optimizer: fit the best context into N tokens | pages |
 | 14 | [F] RAG-in-a-Box | `rag-in-a-box` | Reusable TS library: pluggable chunkers/embedders/stores + docs site | pages |
 
 ## Week 3 — Agents & tool use
@@ -152,9 +152,9 @@ When ≤14 days remain, the weekly audit generates the next 30 ideas following t
 |---|---|---|---|---|---|
 | 8 | ~~Open Model Passport~~ (BUILT day 9, 2026-07-15) | `open-model-passport` | Pick an open/hosted model, get an instant "can I actually ship this?" report: licence terms, commercial use, weight availability, data residency, EU AI Act GPAI obligations. | pages | Won day 9 at 12/12 |
 | 8 | AI Risk Tier Classifier | `ai-risk-tier` | Describe an AI use case, get its EU AI Act risk tier + the obligations that attach, fully client-side. Rides the UN Global Dialogue on AI Governance (Geneva, 6-7 Jul 2026) and China's CAC companion-AI rules (effective 15 Jul 2026). | pages | 9/12 |
-| 9 | Blast Radius | `blast-radius` | Paste a shell/git command an agent wants to run and see a simulated blast-radius preview against a virtual filesystem: what gets destroyed, whether it is reversible, and a safer rewrite. Visual simulator rather than another rule-engine report card. | pages | 11/12 |
+| 9 | ~~Blast Radius~~ **(BUILT Day 010, 2026-07-17)** | `blast-radius` | Paste a shell/git command an agent wants to run and see a simulated blast-radius preview against a virtual filesystem: what gets destroyed, whether it is reversible, and a safer rewrite. Visual simulator rather than another rule-engine report card. | pages | 11/12 |
 | 11 | ~~Skill Portability Checker~~ **(STRUCK W36 — duplicate mechanic of Day 006 skill-scan; `skill-lint` already covers the conformance angle)** | `skill-portability` | Paste a SKILL.md and see which agents will actually run it — Claude Code, Codex, Cursor, Gemini CLI, OpenCode — checked against the `agentskills/agentskills` spec: required frontmatter, naming, and the vendor-specific extensions that silently break portability. | pages | 8/12 |
-| 13 | RAG Injection Scanner | `rag-injection-scanner` | Paste the chunks a RAG pipeline retrieved and get an instant report of prompt-injection / instruction-override payloads hiding in the retrieved context ("ignore previous instructions", tool-call bait, exfiltration lures, zero-width smuggling) before they reach the model. Client-side rule engine, no model needed. | pages | 10/12 |
+| 13 | ~~RAG Injection Scanner~~ **(BUILT Day 026, 2026-09-06)** | `rag-injection-scanner` | Paste the chunks a RAG pipeline retrieved and get an instant report of prompt-injection / instruction-override payloads hiding in the retrieved context ("ignore previous instructions", tool-call bait, exfiltration lures, zero-width smuggling) before they reach the model. Client-side rule engine, no model needed. | pages | 10/12 |
 | 16 | Agent Tool-Call Firewall | `tool-call-firewall` | Paste an agent's proposed tool calls + a least-privilege policy and see which calls a policy would ALLOW vs BLOCK and why (shell/http/file scopes, dangerous combos). Rides OpenAI's 2026-07-20 sandbox-escape disclosure. | pages | 10/12 (lost to Tool Caller on Distinctiveness — would be the 4th security report-card after SkillScan/MCP-Auditor/Blast-Radius) |
 | 16 | Foundry Residency Advisor | `foundry-residency` | Pick a model + your compliance region and see which Azure AI Foundry region + catalogue models keep data in-region, with GDPR / EU AI Act exposure. Rides the MS×Mistral Azure-Europe deal (2026-07-21) + Mistral models added to Foundry. | pages | 9/12 (lost to Tool Caller — overlaps Day 9 Open Model Passport governance ground) |
 | 17 | ~~DeepSeek V4 Price-Floor Board~~ **(STRUCK W36 — superseded by Day 022 token-clock; Distinctiveness permanently 1 against Days 004/022/024)** | `price-floor-board` | Pick your current model + monthly token volume and see how far DeepSeek V4's ~$0.44/M output floor (stable 2026-07-24) undercuts it, across the week's open-weight wave (Kimi K3, Gemini 3.6 Flash). Client-side calculator. | pages | 8/12 (lost to Agent Scratchpad — overlaps Day 4 Token Cost Lab, Distinctiveness 1) |

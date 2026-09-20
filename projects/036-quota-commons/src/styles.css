@@ -148,3 +148,10 @@ h2 { font-size: 1.1rem; margin: 0 0 12px; }
 .page-footer a { color: var(--muted); }
 
 a { color: var(--accent); }
+
+.panel-note {
+  margin: -0.25rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}

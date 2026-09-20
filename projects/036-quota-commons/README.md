@@ -95,6 +95,12 @@ all three presets simulate without throwing and each produces at least one cross
 clean under strict + noUnusedLocals, Vite build clean, `vite base="/quota-commons/"` set, smoke test green
 (title served, both dist assets 200 at `/quota-commons/`), secret scan clean, no unfilled placeholders.
 
+Corrected in the 2026-W38 audit. The totals table beside the attribution feed was
+full-run while the feed was scoped to the scrubber, so the first screenshot of this
+project showed 81 denials next to the sentence "No 429s yet at this point in the run."
+Both panels now read the same clock, `statsUpTo()` is exported and tested, and one of
+those tests asserts the two panels can never disagree again.
+
 ## Stack
 
 | | |

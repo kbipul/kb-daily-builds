@@ -21,7 +21,7 @@ Burial Depth is that measurement. Paste an agent response and it reports how man
 
 ![Screenshot](docs/demo.png)
 
-<sub>The screenshot is captured by CI on a GitHub runner and committed back to this repo minutes after publish — the build sandbox has no browser. If you are reading this in the first few minutes after release, it may not have landed yet.</sub>
+<sub>The screenshot is captured by CI on a GitHub runner and committed back to this repo minutes after publish; the build sandbox has no browser. If you are reading this in the first few minutes after release, it may not have landed yet.</sub>
 
 ## Try it
 

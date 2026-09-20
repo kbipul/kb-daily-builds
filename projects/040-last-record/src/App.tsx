@@ -42,10 +42,11 @@ export default function App() {
         <h1>Last Record</h1>
         <p className="lede">
           The IETF <code>draft-sharif-agent-audit-trail</code> hash-chains agent tool-call
-          records so a reviewer can tell whether a log was edited. The draft expires on 29
-          September 2026, eleven days from this build, while EU AI Act Article 12 has required
-          automatic event logging from high-risk systems since 2 August. So it is worth being
-          exact about what a verified chain actually establishes.
+          records so a reviewer can tell whether a log was edited. It is an individual
+          submission with no working-group adoption; version -03 was posted on 5 September 2026
+          and expires 9 March 2027. EU AI Act Article 12 has required automatic event logging
+          from high-risk systems since 2 August. So it is worth being exact about what a
+          verified chain actually establishes.
         </p>
         <p className="lede">
           Load the sealed session, then press <em>Drop the last record</em> three times. The
