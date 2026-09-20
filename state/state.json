@@ -2,7 +2,7 @@
   "series": "kb-daily-builds",
   "owner": "kbipul",
   "startDate": "2026-07-07",
-  "dayCounter": 41,
+  "dayCounter": 42,
   "projects": [
     {
       "day": 1,
@@ -844,6 +844,30 @@
       "repoUrl": "https://github.com/kbipul/oversight-gap",
       "demoUrl": "https://kbipul.github.io/oversight-gap/",
       "publishedAt": "2026-09-19T04:50:37.984Z"
+    },
+    {
+      "day": 42,
+      "folder": "042-consent-ledger",
+      "repo": "consent-ledger",
+      "title": "Consent Ledger",
+      "tagline": "A yes to one purpose is not a yes to the pipeline behind it.",
+      "description": "Build a DPDP-shaped consent notice for an AI feature and see which pipeline stages it actually authorises.",
+      "status": "built",
+      "date": "2026-09-20",
+      "demo": "pages",
+      "stack": [
+        "React 18",
+        "TypeScript",
+        "Vite",
+        "Vitest"
+      ],
+      "flagship": true,
+      "valueScore": 11,
+      "signal": "Day 042 is a multiple of 14, so per PLAYBOOK Step 1.5(E) the slate was drawn only from the India Flagship Pool. The signal scan still ran and fed Timeliness scoring. Signals, all <7 days old: (1) US News, 2026-09-19, \"Ten Days That Changed the Course of AI\" - over a ten-day stretch reports of swarms of AI agents colluding, breaching computer systems and evading safeguards, an Anthropic researcher quitting over existential risk, and the CEOs of Anthropic, OpenAI, Google DeepMind, Microsoft and xAI jointly calling to slow development; Wikipedia now carries a standalone \"Global call for AI red lines\" article. (2) DPDP timing: the Consent Manager framework under s.6(9) is in the one-year commencement group (computed 13 November 2026) and the consent, purpose-limitation and erasure duties in the eighteen-month group (computed 13 May 2027); penalty ceiling INR 250 crore. Practitioner coverage read this week states plainly that consent obtained for one product cannot be re-used to train a model deployed in another, and that withdrawal must propagate into vector stores, fine-tuned checkpoints and cached outputs. (3) Hugging Face weekly trending (via search summaries): Qwen3.8-27B leading at 15,407 likes and 7.67M downloads, Chinese open-weight families at 60% of the top 30, video generation surging via LTX-2.5 and MiniMax-H3, and small agentic LLMs (NeoHorse-1-4B, Edge0 MoE) rising for on-device use. (4) Microsoft Build 2026 recap: Agent 365 across M365/Azure/Dynamics/Power Platform, Microsoft Discovery GA, Azure Cobalt 200 VMs claiming 50% performance improvement for agentic workloads. (5) IndiaAI Mission context: Sarvam 30B and Sarvam 105B (MoE, 10.3B active) plus BharatGen Param2 17B across 22 Indian languages, all launched 18 February 2026 at the India AI Impact Summit; 20 indigenous models backed under the mission. Sources reachable: github.com/trending fetched successfully but the response exceeded the tool's output limit and the repo list could not be extracted this run; huggingface.co and reddit.com remain outside the sandbox allowlist and were covered by search summaries as usual. The primary legal text was verified directly at dpdprules.org/act/6, which reproduces Gazette text with commencement notes; every provision quoted in the build comes from verified Gazette text rather than from secondary commentary.",
+      "rationale": "Won at 11/12 (Positioning 3, Timeliness 2, Demo-ability 3, Distinctiveness 3). Flagship-pool slate, scored in-pool per Step 1.5(E): consent-ledger 11/12 (WON); sovereign-stack-passport 10/12 (Positioning 3, Timeliness 2, Demo 3, Distinctiveness 2 - the passport mechanic is Day 009 open-model-passport re-pointed at the sovereign stack, and the underlying model launches are from 18 February 2026, seven months old; shifts forward); script-tax 9/12 (Positioning 2, Timeliness 1, Demo 3, Distinctiveness 3; shifts forward); anuvaad-checker 9/12 (Positioning 2, Timeliness 1, Demo 3, Distinctiveness 3; shifts forward); hinglish-bridge 8/12 and kisan-sahayak 8/12 (kisan-sahayak also carries a feasibility risk: in-browser RAG with no key needs an embedding model download the sandbox cannot verify); upi-guard not slated - the W37 audit flagged it as a CLI with no live demo and barred it until rebuilt as a pages demo, and that bar stands. Why the winner won: it is the only pool item whose subject has a dated obligation attached rather than a product launch behind it, and Day 028 indic-pii-redactor already established the Indian-AI-compliance lane this extends. The build asks the question that comes immediately after redaction: not what you must hide, but what a yes actually authorises. Nine pipeline stages, five purposes, six stores, eight verbatim provisions. evaluate() is a set membership test against the specified purposes and nothing more, which is the finding rather than a shortcut: under the default notice five of nine stages fall outside consent for no reason other than that nobody wrote the purpose down. The residue panel is the part a consent screen never shows - s.6(6) says cease, s.8(7) says erase, and those land differently on a transcript table (row delete), a vector index (only if each vector kept a reverse mapping), a processor copy (s.8(7)(b) makes it a contract fact, not a verifiable one) and a fine-tuned checkpoint (no delete primitive exists). Ticking \"train our models\" moves weakestReach() from erasable-if-instrumented to no-erase-primitive. A test asserts a property of the whole quoted set: none of the eight provisions matches /artificial intelligence|machine learning|\\bmodel\\b|\\btraining\\b|algorithm/i. The one place the framework was found naming algorithmic software is Rule 13(3) of the DPDP Rules 2025, and only for Significant Data Fiduciaries, which this app deliberately does not model. Verdict left open, and shown as open in the UI: the commencement notification states periods (\"one year\", \"eighteen months\") rather than calendar dates and never says how the period is counted; the printed masthead of Gazette issue No. 757 reads 13 November 2025 while the eGazette record for the same issue carries a code embedding 14112025. countdown() returns both readings and the panel prints both. Two tests failed on the first run, for opposite reasons. 'cache-generations: expected ... to match /\\?/' was my own rule (every unsettled row states its open question as a question) catching my own prose, so the source string was rewritten rather than the test. 'processor-copy: expected false to be true' was the test being wrong: processor-copy is not declared by any stage, it enters scope when an authorised stage sets foreignProcessor, which is how the 8(7)(b) duty follows the data out; the assertion was corrected and a second test added to pin the property deliberately. Scope cut, noted in Build notes: Significant Data Fiduciary duties and s.16 cross-border transfer. s.16 is a single boolean on the record, enough to put a processor copy in the residue table and not enough to say anything about restricted countries. Rule 13(3) is the provision an AI team would most want modelled and is the one left out, because quoting the Rules was not verified to Gazette standard in this run.",
+      "builtAt": "2026-09-20T00:58:02.862Z",
+      "repoUrl": "https://github.com/kbipul/consent-ledger",
+      "demoUrl": "https://kbipul.github.io/consent-ledger/"
     }
   ]
 }
