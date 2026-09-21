@@ -1,0 +1,10 @@
+{
+  "day": 43,
+  "repo": "pinned-not-checked",
+  "title": "Pinned, Not Checked",
+  "tagline": "The agent checked out the commit the marketplace pinned. Nothing checked that it landed there.",
+  "description": "Drive the four Plugin4Shell install sequences against a hostile plugin repo and watch a SHA pin report green over swapped code.",
+  "topics": ["ai", "security", "supply-chain", "git", "coding-agents", "typescript", "react", "plugin4shell"],
+  "demo": "pages",
+  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+}

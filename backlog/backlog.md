@@ -134,6 +134,11 @@ Open controls in the same family, unbuilt and unscored:
   record was edited and says nothing at all about records removed from the end.**
 - **Deleting the record deletes the data** — it is still in the embedding, the cache and the
   summary. Trace one user's deletion request through a RAG stack.
+- ~~**You pinned the plugin to a reviewed commit** — the agent checks out that commit and never
+  checks it landed there.~~ **BUILT Day 043, 2026-09-21, as `pinned-not-checked` (12/12, riding
+  Plugin4Shell, disclosed 2026-09-17). The answer, for the record: a SHA pin is a promise about
+  which code runs, enforced by a comparison nobody wrote. The hash was correct throughout and was
+  never read back.**
 
 ## Signal-derived candidates (appended by the loop — score ≥8, lost the day)
 | Idea | Repo | Scope | Demo | From |
@@ -591,3 +596,24 @@ Both shift forward unbuilt. Full selection rationale is in `state/state.json`'s 
 | compositional-policy | Each Step Passed, The Workflow Didn't — a September 2026 paper names four ways an agent workflow violates a policy while every individual step passes its own check. Walk a multi-step workflow and watch the violation appear between the steps rather than in any one of them. Scored 10/12 (Positioning 3, Timeliness 3, Demo-ability 2) and lost to `oversight-gap` on **Distinctiveness 2**: Day 038 `still-untrusted` already models how labels propagate through tool calls, and Day 032 `handoff-inspector` owns the between-steps ground. Worth building only if the interaction is the *composition* itself rather than a fourth propagation demo. | React + TS + Vite | 10/12 |
 
 Note on carried candidates (Day 41): `deletion-trace` re-scored **10/12**, unchanged from Day 040 — GDPR Art. 17 is still real and still not news, so Timeliness stays at 2. It needs a live signal to win, and one did not arrive this fortnight. `summarize-this` and `lingua-detect` both re-scored **4/12** for the fourth consecutive slate. Under the W36 carry-limit rule — a candidate that loses twice on the same dimension should be rebuilt or retired rather than re-slated — the W38 audit should either give the Week 1 browser-demo block a fresh angle or strike it the way Week 5 was struck.
+
+### Signal-derived (added Day 43)
+No signal-derived candidate other than the winner scored 8 or above this run, so nothing new was
+appended. Recording the carries instead, because three of them have now been re-scored without
+moving:
+
+**Day 43 note:** winner was `pinned-not-checked` (Pinned, Not Checked) at 12/12, riding the
+Plugin4Shell disclosure of 2026-09-17. Carries: `deletion-trace` **10/12** for the third
+consecutive slate, unchanged — GDPR Art. 17 is still real and still not news, Timeliness stuck at
+2. `compositional-policy` **9/12**, down from 10 on Day 041 as the paper passes two weeks;
+Distinctiveness still capped at 2 against Day 038 `still-untrusted`. `google-home-mcp-guardrails`
+**7/12**, down from 10 on Day 039 — the 16 Sep Google Home MCP announcement has aged out of the
+Timeliness band and the MCP-permission mechanic was already the weak half of its score. All three
+shift forward unbuilt.
+
+**Carry-limit flag, now overdue (W36 rule).** `summarize-this` and `lingua-detect` have scored
+**4/12 on five consecutive slates** (Days 038, 039, 041, 043 and the Day 040 pass), always for the
+same reason: generic client-side browser tools with no fresh hook, Positioning 1, Timeliness 0,
+Distinctiveness 1. The W36 rule says a candidate that loses twice on the same dimension should be
+rebuilt or retired. The W39 audit should either give the Week 1 browser-demo block a fresh angle or
+strike it the way Week 5 was struck, instead of re-slating it a sixth time.
