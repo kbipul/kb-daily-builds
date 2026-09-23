@@ -1,0 +1,88 @@
+:root {
+  --bg: #0e1116;
+  --panel: #161b22;
+  --line: #262d36;
+  --ink: #e6edf3;
+  --dim: #8b949e;
+  --accent: #6fb3ff;
+  --bad: #ff7b72;
+  --good: #56d364;
+  --warn: #e3b341;
+  font-family: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+h1 { font-size: 2rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
+h2 { font-size: 1rem; margin: 0 0 .35rem; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); }
+
+.tagline { font-size: 1.1rem; margin: 0 0 .75rem; color: var(--ink); }
+.source { font-size: .85rem; color: var(--dim); max-width: 74ch; margin: 0 0 1.5rem; }
+a { color: var(--accent); }
+
+.controls { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); margin-bottom: 1.5rem; }
+
+fieldset { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: .75rem .9rem 1rem; margin: 0; }
+legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; color: var(--dim); padding: 0 .35rem; }
+
+.radio { display: flex; gap: .55rem; align-items: flex-start; padding: .4rem 0; cursor: pointer; font-size: .88rem; }
+.radio input { margin-top: .35rem; accent-color: var(--accent); flex: none; }
+.radio span { display: flex; flex-direction: column; gap: .15rem; }
+.radio em { font-style: normal; color: var(--dim); font-size: .78rem; }
+
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82em; background: #0b0e13; border: 1px solid var(--line); border-radius: 4px; padding: .05rem .3rem; }
+
+.binding { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--warn); }
+
+.stage { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-bottom: 1rem; }
+
+.panel { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: 1rem 1.1rem 1.2rem; }
+.hint { font-size: .82rem; color: var(--dim); margin: 0 0 .8rem; }
+.pending { color: var(--dim); font-size: .88rem; }
+
+dl.card { margin: 0; border-top: 1px solid var(--line); }
+dl.card > div { display: grid; grid-template-columns: 7.5rem 1fr; gap: .5rem; padding: .5rem 0; border-bottom: 1px solid var(--line); }
+dt { color: var(--dim); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+dd { margin: 0; font-size: .9rem; word-break: break-word; }
+.absent { color: var(--bad); }
+
+.omitted { font-size: .8rem; color: var(--bad); margin: .7rem 0 0; display: flex; gap: .35rem; flex-wrap: wrap; align-items: center; }
+
+button { margin-top: 1rem; background: var(--accent); color: #0b0e13; border: 0; border-radius: 7px; padding: .5rem 1.1rem; font-size: .9rem; font-weight: 600; cursor: pointer; }
+button:disabled { background: var(--line); color: var(--dim); cursor: default; }
+
+.prompt { font-size: .88rem; color: var(--dim); border-left: 2px solid var(--line); padding-left: .8rem; }
+
+ol.timeline { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+ol.timeline li { display: grid; grid-template-columns: 6rem 1fr; gap: .6rem; padding: .45rem 0; border-bottom: 1px solid var(--line); font-size: .86rem; }
+ol.timeline li:last-child { border-bottom: 0; }
+.stage-name { font-family: ui-monospace, monospace; font-size: .76rem; color: var(--dim); text-transform: uppercase; letter-spacing: .05em; }
+ol.timeline li.mutate .stage-name { color: var(--bad); }
+
+.diff { display: grid; gap: .55rem; margin-bottom: .9rem; }
+.diff > div { display: flex; flex-direction: column; gap: .2rem; }
+.diff-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; color: var(--dim); }
+
+.verdict { font-size: 1rem; font-weight: 600; margin: 0 0 .3rem; }
+.why { font-size: .86rem; color: var(--dim); margin: 0; }
+.irreversible { font-size: .86rem; color: var(--bad); margin: .5rem 0 0; }
+
+.outcome.faithful { border-color: #245c32; }
+.outcome.faithful .verdict { color: var(--good); }
+.outcome.aborted { border-color: #6b5320; }
+.outcome.aborted .verdict { color: var(--warn); }
+.outcome.loopjacked { border-color: #6b2b28; }
+.outcome.loopjacked .verdict { color: var(--bad); }
+
+footer { margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1.25rem; }
+footer p { font-size: .84rem; color: var(--dim); max-width: 78ch; }
+.credit { margin-top: 1.25rem; font-size: .8rem; }
