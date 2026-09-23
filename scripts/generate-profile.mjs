@@ -22,10 +22,39 @@ const logo = existsSync("brand/logo-primary.svg")
   ? `<img src="brand/logo-primary.svg" width="120" alt="kB. — Kumar Bipul" />`
   : "";
 
+// The "What it does" column and the repo link must never come out blank.
+// A state entry can be missing `tagline`, `repoUrl` or `demoUrl` — publish.yml
+// writes the two URLs asynchronously, and the loop has forgotten `tagline` on
+// six days (021, 023, 032, 033, 044, 045). Every project.json carries both a
+// tagline and a <=120-char description, so fall back to the manifest on disk
+// before falling back to nothing. Fixed 2026-09-24 after the blanks reached the
+// public profile board.
+const manifest = p => {
+  if (!p.folder) return {};
+  const f = `projects/${p.folder}/project.json`;
+  if (!existsSync(f)) return {};
+  try { return JSON.parse(readFileSync(f, "utf8")); } catch { return {}; }
+};
+
+const blurb = p => {
+  const m = manifest(p);
+  const text = p.tagline || m.tagline || m.description || p.description || "";
+  return String(text).replace(/\s*\n\s*/g, " ").replace(/\|/g, "\\|").trim();
+};
+
+const repoLink = p => {
+  const url = p.repoUrl || (p.repo ? `https://github.com/kbipul/${p.repo}` : "");
+  return url ? `[${p.title}](${url})` : p.title;
+};
+
+const demoLink = p => {
+  const url = p.demoUrl || (p.demo === "pages" && p.repo ? `https://kbipul.github.io/${p.repo}/` : "");
+  return url ? `[Live demo](${url})` : "—";
+};
+
 const rows = pub.slice(0, 30).map(p => {
-  const demo = p.demoUrl ? `[Live demo](${p.demoUrl})` : "—";
   const date = istDay(p.publishedAt || p.date);
-  return `| ${String(p.day).padStart(3, "0")} | [${p.title}](${p.repoUrl}) | ${p.tagline || ""} | ${demo} | ${date} |`;
+  return `| ${String(p.day).padStart(3, "0")} | ${repoLink(p)} | ${blurb(p)} | ${demoLink(p)} | ${date} |`;
 }).join("\n");
 
 console.log(`<div align="center">
@@ -45,7 +74,7 @@ ${logo}
 
 ## 🔴 Latest build${latest ? ` — Day ${String(latest.day).padStart(3, "0")}` : ""}
 
-${latest ? `**[${latest.title}](${latest.repoUrl})** — ${latest.tagline || latest.description || ""}${latest.demoUrl ? `\n\n▶ **[Try it live](${latest.demoUrl})**` : ""}` : "_First build ships tomorrow at 6:00 AM IST._"}
+${latest ? `**${repoLink(latest)}** — ${blurb(latest)}${demoLink(latest) === "—" ? "" : `\n\n▶ **[Try it live](${latest.demoUrl || `https://kbipul.github.io/${latest.repo}/`})**`}` : "_First build ships tomorrow at 6:00 AM IST._"}
 
 ## 📅 The daily board (last 30 days)
 

@@ -39,6 +39,24 @@ for (const p of projects) {
   if (typeof p.day !== "number") errors.push(`${tag}: "day" must be a number`);
   if (typeof p.repo !== "string" || !p.repo.trim()) errors.push(`${tag}: missing "repo"`);
   if (typeof p.title !== "string" || !p.title.trim()) warnings.push(`${tag}: missing "title"`);
+
+  // Added 2026-09-24. A live entry with no "tagline" renders a BLANK "What it
+  // does" cell on the public profile board, and nothing downstream notices:
+  // publish.yml never writes this field, so the loop is its only source. This
+  // shipped blank on days 021, 023, 032, 033, 044 and 045 before anyone looked
+  // at the rendered board. generate-profile.mjs now falls back to the project
+  // manifest, so this is belt and braces rather than the only defence.
+  if (live && (typeof p.tagline !== "string" || !p.tagline.trim())) {
+    errors.push(`${tag}: status "${p.status}" but no "tagline" — the profile board's "What it does" cell will be blank. Copy it from projects/${p.folder || "NNN-slug"}/project.json.`);
+  }
+
+  // publish.yml writes these after the push, so they are only expected once a
+  // project is published. Day 044 lost both to a rebase merge on 2026-09-23 and
+  // its board row lost the repo link and the demo link with them.
+  if (p.status === "published") {
+    if (!p.repoUrl) warnings.push(`${tag}: published but no "repoUrl" — the board row's title will not be a link`);
+    if (p.demo === "pages" && !p.demoUrl) warnings.push(`${tag}: published "pages" demo but no "demoUrl" — the board will show "—"`);
+  }
   if (!DEMOS.has(p.demo)) errors.push(`${tag}: "demo" must be one of ${[...DEMOS].join("|")} (got ${JSON.stringify(p.demo)})`);
 
   // The load-bearing check.
