@@ -83,7 +83,8 @@ filled or claimed today: report that in one line and stop. For each `BUILD` line
 claim before building:
 
 ```bash
-node scripts/claim-slot.mjs --slot <YYYY-MM-DD> --day <N> --by local   # or cloud / dispatch
+RUNNER=local   # SET THIS: "local" (Cowork scheduled task), "cloud" (claude.ai routine), "dispatch" (phone/manual)
+node scripts/claim-slot.mjs --slot <YYYY-MM-DD> --day <N> --by "$RUNNER"
 git add state/claims.json && git commit -qm "claim: <slot> Day <NNN> [skip ci]"
 git push -q "https://x-access-token:${TOKEN}@github.com/kbipul/kb-daily-builds.git" main
 ```
@@ -329,7 +330,8 @@ checked out on `main`, independent of any Mac. Its prompt is
 `ROUTINE-PROMPT.md`. Differences from §3:
 - **Step 0:** no clone, no `.secrets/`, no `hub/` mirror. Work in the checkout.
 - **Claims and pushes:** `git push origin main` with no token in the URL; claim
-  with `--by cloud`. If a push to `main` is rejected by branch protection,
+  with `RUNNER=cloud` (the §3 example defaults to local; on 2026-09-24 the
+  routine copied it and labelled its own claim "local"). If a push to `main` is rejected by branch protection,
   push `claude/day-NNN` and say so (publish.yml only fires on `main`).
 - **Network:** a 403 with `x-deny-reason: host_not_allowed` is the environment
   allowlist; use search results instead and record the host.
