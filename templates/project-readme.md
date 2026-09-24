@@ -1,53 +1,81 @@
-<!-- Template for every daily project README. The loop fills {{PLACEHOLDERS}}.
-     If brand/logo-primary.svg exists in the project folder, keep the <img>;
-     otherwise delete it and keep the text header only. -->
+<!-- Template v2 (2026-09-24). The loop fills every {{PLACEHOLDER}};
+     scripts/check-project.mjs fails the build if any heading below is missing.
+     If brand/logo-primary.svg exists in the project folder, add
+     <img src="brand/logo-primary.svg" width="110" alt="kB." /> above the title;
+     otherwise leave it out. Never fake the mark with text. -->
 
 <div align="center">
-
-<img src="brand/logo-primary.svg" width="110" alt="kB." />
 
 # {{TITLE}}
 
 **{{TAGLINE}}**
 
 [![CI](https://github.com/kbipul/{{REPO}}/actions/workflows/ci.yml/badge.svg)](https://github.com/kbipul/{{REPO}}/actions/workflows/ci.yml)
-{{DEMO_BADGE}}
+[![Live demo](https://img.shields.io/badge/demo-live-{{BADGE_HEX}})](https://kbipul.github.io/{{REPO}}/)
+![Lane](https://img.shields.io/badge/lane-{{LANE_NAME_URLENCODED}}-555)
 
-`Day {{DAY}}` of **[kb-daily-builds](https://github.com/kbipul/kb-daily-builds)** — one AI project a day.
+`Day {{DAY}}` of **[kb-daily-builds](https://github.com/kbipul/kb-daily-builds)**, one sharp AI tool a day.
 
 </div>
 
 ## What it does
 
-{{TWO_TO_FOUR_SENTENCES — the problem, the approach, why it's interesting.
-Write for a smart engineer with 30 seconds. No fluff.}}
+{{TWO_TO_FOUR_SENTENCES: the documented behaviour it models, what you put in,
+what you get out. Name the primary source and its date in the first sentence if
+the build rides a signal.}}
 
-{{IF_UI: include `![Screenshot](docs/demo.png)` + the sub-note that CI
-auto-captures it — the sandbox cannot screenshot; the repo's CI screenshot job
-commits docs/demo.png minutes after publish. Never fake or omit silently.}}
+![Screenshot](docs/demo.png)
+
+<sub>The build sandbox has no browser. `docs/demo.png` is captured by Chromium on a GitHub runner by the CI `screenshot` job and committed back a few minutes after publish.</sub>
+
+## Who it's for
+
+{{ONE_OR_TWO_SENTENCES: the role, and the decision they make differently after
+ten seconds with this. "An IT Director deciding X" not "developers".}}
 
 ## Try it
 
-{{IF_PAGES: **[Live demo →](https://kbipul.github.io/{{REPO}}/)** — runs fully
-in your browser, nothing to install.}}
+**[Live demo →](https://kbipul.github.io/{{REPO}}/)** Runs entirely in your browser. Paste or edit your own {{WHAT_THE_USER_BRINGS}}; the default preset shows the finding below.
 
 ```bash
-{{RUN_COMMANDS — the exact commands to run locally, verified to work}}
+npm install
+npm test          # {{N}} tests
+npm run build
+npm run preview   # then open http://localhost:4173/{{REPO}}/
 ```
+
+## The finding
+
+{{ONE_PARAGRAPH: the non-obvious claim this build demonstrates, stated plainly,
+and exactly which preset or input shows it. If the finding is only true under
+assumptions, say which.}}
 
 ## How it works
 
-{{ARCHITECTURE — a short section with the 2–3 key technical decisions.
-A small ASCII or mermaid diagram when the flow isn't obvious.}}
+{{THE_MODEL: which documented rules are implemented, where each lives in src/,
+and which test pins each rule. A small diagram if the flow is not obvious.}}
 
 ## Build notes — what I learned
 
-{{BLOG_STYLE_WRITEUP — 3–6 honest paragraphs: what was hard, what surprised
-me, what I'd do differently. This is the LinkedIn-ready section.}}
+{{HONEST_NOTES: lead with what failed, stalled or was cut. Quote real strings
+(test names, error text). Leave a verdict open where it is open. Never invent a
+fact to fill a hole.}}
+
+## Sources
+
+{{PRIMARY_SOURCES: one bullet each, "Title (publisher, date) - link - the
+fact used, quoted". Retrieved on {{BUILD_DATE}}. Prices and limits that can
+change are editable inputs in the app, not constants.}}
 
 ## Stack
 
-{{STACK_TABLE — e.g. React 18, TypeScript 5, transformers.js, Vite, Vitest}}
+| Layer | Choice |
+|---|---|
+| UI | React 18, hand-written CSS |
+| Language | TypeScript 5 (`strict`) |
+| Build | Vite 5, `base: '/{{REPO}}/'` for Pages |
+| Tests | Vitest 2, {{N}} tests |
+| Runtime deps | react, react-dom |
 
 ---
 

@@ -1,91 +1,109 @@
 #!/usr/bin/env node
 // Pre-push gate for state/state.json. Run from the hub repo root:
 //   node scripts/validate-state.mjs
-// Exit 0 = safe to push. Exit 1 = publish.yml would misbehave; fix before pushing.
+// Exit 0 = safe to push. Exit 1 = publish.yml or the profile board would
+// misbehave; fix before pushing.
 //
-// Why this exists (W36 audit): a state entry with status "built" but no
-// "folder" field makes publish.yml skip the project silently from the loop's
-// point of view — the push succeeds, the Action reports an error nobody reads,
-// and the repo never appears. This landed twice: Day 021 (2026-07-28, which
-// killed the whole fan-out) and again on Day 026 (2026-09-06, contained to one
-// project by the W33 hardening but still needing a follow-up commit).
-// publish.yml catches the malformed entry AFTER the push. This catches it
-// before, which is the only place the loop can still do something about it.
-
-import { readFileSync, existsSync } from "node:fs";
+// History of what this catches, so nobody deletes a check that looks fussy:
+// - no "folder": publish.yml skips the project silently. Days 021 (killed the
+//   whole fan-out on 2026-07-28), 026 and 033.
+// - no "tagline": blank "What it does" cell on the public profile board.
+//   Days 021, 023, 032, 033, 044, 045 (found 2026-09-24).
+// - description > 120 chars: GitHub truncates the repo About line. 26 of 45
+//   projects were over on 2026-09-24.
+// - rubric v2 fields (Day 046+): lane, slotDate, per-dimension scores with a
+//   one-clause note each, and at least one primary source. Scores that are
+//   not written down cannot be audited, and 16 of the 20 winners before the
+//   lane system scored a flat 12/12.
+import { existsSync, readFileSync } from "node:fs";
+import { readJson, STATE, LANES, V2_FROM_DAY, DIMENSIONS, manifest } from "./lib.mjs";
 
 const DEMOS = new Set(["pages", "byok", "cli", "none"]);
+const STATUSES = new Set(["built", "published", "parked", "failed"]);
 const errors = [];
 const warnings = [];
 
 let s;
-try {
-  s = JSON.parse(readFileSync("state/state.json", "utf8"));
-} catch (e) {
-  console.error(`FATAL: state/state.json is not valid JSON — ${e.message}`);
-  process.exit(1);
-}
+try { s = JSON.parse(readFileSync(STATE, "utf8")); }
+catch (e) { console.error(`FATAL: ${STATE} is not valid JSON - ${e.message}`); process.exit(1); }
+const laneKeys = new Set(readJson(LANES).lanes.map(l => l.key));
 
 const projects = Array.isArray(s.projects) ? s.projects : [];
 if (!projects.length) errors.push("state.json has no projects array");
 
 const seenRepo = new Map();
 const seenDay = new Map();
+const seenSlot = new Map();
 
 for (const p of projects) {
   const tag = `day ${p.day ?? "?"} (${p.repo ?? "no repo"})`;
   const live = p.status === "built" || p.status === "published";
 
   if (typeof p.day !== "number") errors.push(`${tag}: "day" must be a number`);
+  if (!STATUSES.has(p.status)) errors.push(`${tag}: unknown status ${JSON.stringify(p.status)}`);
   if (typeof p.repo !== "string" || !p.repo.trim()) errors.push(`${tag}: missing "repo"`);
   if (typeof p.title !== "string" || !p.title.trim()) warnings.push(`${tag}: missing "title"`);
-
-  // Added 2026-09-24. A live entry with no "tagline" renders a BLANK "What it
-  // does" cell on the public profile board, and nothing downstream notices:
-  // publish.yml never writes this field, so the loop is its only source. This
-  // shipped blank on days 021, 023, 032, 033, 044 and 045 before anyone looked
-  // at the rendered board. generate-profile.mjs now falls back to the project
-  // manifest, so this is belt and braces rather than the only defence.
-  if (live && (typeof p.tagline !== "string" || !p.tagline.trim())) {
-    errors.push(`${tag}: status "${p.status}" but no "tagline" — the profile board's "What it does" cell will be blank. Copy it from projects/${p.folder || "NNN-slug"}/project.json.`);
-  }
-
-  // publish.yml writes these after the push, so they are only expected once a
-  // project is published. Day 044 lost both to a rebase merge on 2026-09-23 and
-  // its board row lost the repo link and the demo link with them.
-  if (p.status === "published") {
-    if (!p.repoUrl) warnings.push(`${tag}: published but no "repoUrl" — the board row's title will not be a link`);
-    if (p.demo === "pages" && !p.demoUrl) warnings.push(`${tag}: published "pages" demo but no "demoUrl" — the board will show "—"`);
-  }
   if (!DEMOS.has(p.demo)) errors.push(`${tag}: "demo" must be one of ${[...DEMOS].join("|")} (got ${JSON.stringify(p.demo)})`);
 
-  // The load-bearing check.
   if (live) {
+    // The load-bearing check: publish.yml skips entries without a folder.
     if (typeof p.folder !== "string" || !p.folder.trim()) {
-      errors.push(`${tag}: status "${p.status}" but no "folder" field — publish.yml WILL SKIP this project. Add "folder": "NNN-<slug>".`);
+      errors.push(`${tag}: status "${p.status}" but no "folder" field - publish.yml WILL SKIP this project. Add "folder": "NNN-<slug>".`);
     } else {
       const folder = p.folder.trim();
-      if (!existsSync(`projects/${folder}`)) {
-        errors.push(`${tag}: folder "${folder}" does not exist under projects/`);
-      }
+      if (!existsSync(`projects/${folder}`)) errors.push(`${tag}: folder "${folder}" does not exist under projects/`);
       const m = /^(\d{3})-/.exec(folder);
-      if (!m) {
-        errors.push(`${tag}: folder "${folder}" must start with a zero-padded day, e.g. "026-my-slug"`);
-      } else if (Number(m[1]) !== p.day) {
-        errors.push(`${tag}: folder "${folder}" is prefixed ${m[1]} but day is ${p.day}`);
-      }
-      // pages demos break on GitHub Pages without a matching Vite base path.
+      if (!m) errors.push(`${tag}: folder "${folder}" must start with a zero-padded day, e.g. "026-my-slug"`);
+      else if (Number(m[1]) !== p.day) errors.push(`${tag}: folder "${folder}" is prefixed ${m[1]} but day is ${p.day}`);
+
       if (p.demo === "pages") {
         const cfg = `projects/${folder}/vite.config.ts`;
         if (existsSync(cfg)) {
-          const txt = readFileSync(cfg, "utf8");
-          if (!txt.includes(`/${p.repo}/`)) {
-            errors.push(`${tag}: ${cfg} has no base "/${p.repo}/" — the Pages demo will 404 on its assets`);
-          }
-        } else {
-          warnings.push(`${tag}: demo is "pages" but ${cfg} is missing`);
-        }
+          if (!readFileSync(cfg, "utf8").includes(`/${p.repo}/`))
+            errors.push(`${tag}: ${cfg} has no base "/${p.repo}/" - the Pages demo will 404 on its assets`);
+        } else warnings.push(`${tag}: demo is "pages" but ${cfg} is missing`);
       }
+
+      const man = manifest(folder);
+      if (!man) errors.push(`${tag}: projects/${folder}/project.json is missing`);
+      else {
+        if (man.day !== p.day) errors.push(`${tag}: project.json day is ${man.day}`);
+        const desc = man.description || "";
+        if (!desc || desc.length > 120)
+          errors.push(`${tag}: project.json description is ${desc.length} chars - must be 1-120 (it becomes the GitHub About line)`);
+      }
+    }
+
+    if (typeof p.tagline !== "string" || !p.tagline.trim())
+      errors.push(`${tag}: status "${p.status}" but no "tagline" - the profile board's "What it does" cell will be blank. Use scripts/upsert-entry.mjs.`);
+    if (!laneKeys.has(p.lane))
+      errors.push(`${tag}: "lane" must be one of ${[...laneKeys].join("|")} (got ${JSON.stringify(p.lane)})`);
+
+    if (p.status === "published") {
+      if (!p.repoUrl) warnings.push(`${tag}: published but no "repoUrl" - the board row's title falls back to the slug`);
+      if (p.demo === "pages" && !p.demoUrl) warnings.push(`${tag}: published "pages" demo but no "demoUrl"`);
+    }
+
+    // Rubric v2 and the lane system start at Day 046.
+    if (p.day >= V2_FROM_DAY) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(p.slotDate || "")) errors.push(`${tag}: "slotDate" (YYYY-MM-DD, IST) is required from Day ${V2_FROM_DAY}`);
+      else if (seenSlot.has(p.slotDate)) errors.push(`${tag}: slot ${p.slotDate} is already filled by day ${seenSlot.get(p.slotDate)}`);
+      else seenSlot.set(p.slotDate, p.day);
+
+      const sc = p.scores || {};
+      const bad = DIMENSIONS.filter(k => !Number.isInteger(sc[k]) || sc[k] < 0 || sc[k] > 3);
+      if (bad.length) errors.push(`${tag}: "scores" needs integer 0-3 for ${DIMENSIONS.join(", ")} (bad: ${bad.join(", ")})`);
+      else {
+        const sum = DIMENSIONS.reduce((a, k) => a + sc[k], 0);
+        if (p.valueScore !== sum) errors.push(`${tag}: valueScore ${p.valueScore} != sum of scores ${sum}`);
+      }
+      const notes = p.scoreNotes || {};
+      const missingNotes = DIMENSIONS.filter(k => typeof notes[k] !== "string" || notes[k].trim().length < 8);
+      if (missingNotes.length) errors.push(`${tag}: "scoreNotes" needs a one-clause justification for ${missingNotes.join(", ")}`);
+      if (!Array.isArray(p.sources) || !p.sources.some(u => /^https?:\/\//.test(String(u))))
+        errors.push(`${tag}: "sources" must list at least one primary-source URL`);
+      if (typeof p.signal !== "string" || !p.signal.trim()) warnings.push(`${tag}: no "signal" recorded`);
+      if (typeof p.rationale !== "string" || !p.rationale.trim()) errors.push(`${tag}: no "rationale" recorded`);
     }
   }
 
@@ -100,14 +118,12 @@ for (const p of projects) {
 }
 
 const maxDay = Math.max(0, ...projects.map(p => (typeof p.day === "number" ? p.day : 0)));
-if (s.dayCounter !== maxDay) {
-  errors.push(`dayCounter is ${s.dayCounter} but the highest project day is ${maxDay}`);
-}
+if (s.dayCounter !== maxDay) errors.push(`dayCounter is ${s.dayCounter} but the highest project day is ${maxDay}`);
 
 for (const w of warnings) console.warn(`warn: ${w}`);
 if (errors.length) {
-  console.error(`\nvalidate-state: ${errors.length} error(s) — DO NOT PUSH\n`);
+  console.error(`\nvalidate-state: ${errors.length} error(s) - DO NOT PUSH\n`);
   for (const e of errors) console.error(`  - ${e}`);
   process.exit(1);
 }
-console.log(`validate-state: OK — ${projects.length} projects, dayCounter ${s.dayCounter}, ${seenRepo.size} live repos, ${warnings.length} warning(s).`);
+console.log(`validate-state: OK - ${projects.length} projects, dayCounter ${s.dayCounter}, ${seenRepo.size} live repos, ${warnings.length} warning(s).`);

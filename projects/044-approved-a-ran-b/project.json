@@ -3,8 +3,23 @@
   "repo": "approved-a-ran-b",
   "title": "Approved A, Ran B",
   "tagline": "A human approved one action. Mutable workflow state supplied a different one.",
-  "description": "Step through both Loopjacking routes against four approval-binding shapes and watch which ones let a substituted action run.",
-  "topics": ["ai", "security", "ai-agents", "human-in-the-loop", "loopjacking", "typescript", "react", "langgraph"],
+  "description": "Step through both Loopjacking routes against four approval-binding shapes and see which let a swapped action run.",
+  "topics": [
+    "ai",
+    "security",
+    "ai-agents",
+    "human-in-the-loop",
+    "loopjacking",
+    "typescript",
+    "react",
+    "langgraph"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "controls"
 }

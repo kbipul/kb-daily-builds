@@ -4,7 +4,23 @@
   "title": "Conduct Gap",
   "tagline": "The rules are written down. Which ones could you ever catch a violation of?",
   "description": "Falsifiability triage over Microsoft's MAI Code of Conduct: which clauses your evidence could ever test.",
-  "topics": ["ai", "ai-governance", "ai-safety", "microsoft", "evaluation", "typescript", "react", "llmops", "responsible-ai"],
+  "topics": [
+    "ai",
+    "ai-governance",
+    "ai-safety",
+    "microsoft",
+    "evaluation",
+    "typescript",
+    "react",
+    "llmops",
+    "responsible-ai"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "azure"
 }

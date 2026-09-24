@@ -14,8 +14,7 @@
     "pricing",
     "scheduling",
     "typescript",
-    "react",
-    "azure"
+    "react"
   ],
   "demo": "pages",
   "stack": [
@@ -23,5 +22,6 @@
     "TypeScript",
     "Vite",
     "Vitest"
-  ]
+  ],
+  "lane": "director"
 }

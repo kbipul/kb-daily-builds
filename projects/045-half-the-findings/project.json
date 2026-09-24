@@ -3,8 +3,23 @@
   "repo": "half-the-findings",
   "title": "Half the Findings",
   "tagline": "Independent verification bounds what the report got wrong. It says nothing about what was never found.",
-  "description": "Run an audit pipeline against a repo with known ground truth and watch verified findings accumulate without ever closing the gap.",
-  "topics": ["ai", "security", "ai-agents", "code-audit", "coding-agents", "verification", "typescript", "react"],
+  "description": "Run an audit pipeline on a repo with known ground truth and watch verified findings accumulate without closing the gap.",
+  "topics": [
+    "ai",
+    "security",
+    "ai-agents",
+    "code-audit",
+    "coding-agents",
+    "verification",
+    "typescript",
+    "react"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "controls"
 }

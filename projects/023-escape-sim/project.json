@@ -3,8 +3,21 @@
   "repo": "escape-sim",
   "title": "Escape Sim — Would Your AI Containment Survive Astra?",
   "tagline": "Configure your AI containment. Watch a simulated Astra-class model try to break out.",
-  "description": "Interactive AI containment simulator — define sandbox, network, FS, tool, credential, and monitoring controls, then watch a capability-ladder escalation probe for breaches.",
-  "topics": ["ai", "security", "containment", "typescript", "react", "simulation"],
+  "description": "AI containment simulator: set sandbox, network, credential and monitoring controls, then watch escalation probe them.",
+  "topics": [
+    "ai",
+    "security",
+    "containment",
+    "typescript",
+    "react",
+    "simulation"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "controls"
 }

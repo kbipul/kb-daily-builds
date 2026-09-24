@@ -4,7 +4,23 @@
   "title": "Harness Tell",
   "tagline": "Every Hub request now says which agent runs you. Sometimes it's just your terminal.",
   "description": "Simulate huggingface_hub's agent/<harness> header: registry fetch, env matching, kill switches, exact User-Agent.",
-  "topics": ["ai", "telemetry", "supply-chain", "huggingface", "coding-agents", "typescript", "react", "privacy", "llmops"],
+  "topics": [
+    "ai",
+    "telemetry",
+    "supply-chain",
+    "huggingface",
+    "coding-agents",
+    "typescript",
+    "react",
+    "privacy",
+    "llmops"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "controls"
 }

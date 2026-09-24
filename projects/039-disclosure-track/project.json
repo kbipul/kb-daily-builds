@@ -4,7 +4,22 @@
   "title": "Ready for Disclosure",
   "tagline": "OpenAI just published the rule for when a misalignment incident goes out immediately. Run it.",
   "description": "OpenAI's 3-track misalignment disclosure decision rule, checked against the six incidents it just disclosed under it.",
-  "topics": ["ai", "ai-safety", "typescript", "react", "governance", "openai", "misalignment", "disclosure"],
+  "topics": [
+    "ai",
+    "ai-safety",
+    "typescript",
+    "react",
+    "governance",
+    "openai",
+    "misalignment",
+    "disclosure"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "controls"
 }

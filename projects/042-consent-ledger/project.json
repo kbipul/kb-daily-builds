@@ -4,7 +4,22 @@
   "title": "Consent Ledger",
   "tagline": "A yes to one purpose is not a yes to the pipeline behind it.",
   "description": "Build a DPDP-shaped consent notice for an AI feature and see which pipeline stages it actually authorises.",
-  "topics": ["ai", "privacy", "dpdp", "india", "data-protection", "typescript", "react", "governance"],
+  "topics": [
+    "ai",
+    "privacy",
+    "dpdp",
+    "india",
+    "data-protection",
+    "typescript",
+    "react",
+    "governance"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "india"
 }

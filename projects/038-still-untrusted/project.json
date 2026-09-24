@@ -3,8 +3,24 @@
   "repo": "still-untrusted",
   "title": "Still Untrusted",
   "tagline": "One bad read taints the rest of the run. Nothing decays it automatically.",
-  "description": "A from-scratch TypeScript reimplementation of Microsoft Agent Framework's FIDES label algebra, checked against its own worked example.",
-  "topics": ["ai", "agents", "security", "typescript", "react", "azure", "prompt-injection", "mcp", "information-flow-control"],
+  "description": "From-scratch TypeScript reimplementation of Microsoft Agent Framework's FIDES label algebra, checked against its spec.",
+  "topics": [
+    "ai",
+    "agents",
+    "security",
+    "typescript",
+    "react",
+    "azure",
+    "prompt-injection",
+    "mcp",
+    "information-flow-control"
+  ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript", "Vite", "Vitest"]
+  "stack": [
+    "React 18",
+    "TypeScript",
+    "Vite",
+    "Vitest"
+  ],
+  "lane": "azure"
 }

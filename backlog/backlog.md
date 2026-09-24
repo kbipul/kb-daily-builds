@@ -1,3 +1,7 @@
+> **ARCHIVE (frozen 2026-09-24).** Candidate selection moved to `backlog/lanes.json`
+> when the loop switched to weekday lanes. Daily runs must not read this file.
+> The weekly audit may mine it for ideas worth moving into a lane pool.
+
 # 90-Day Project Backlog
 
 Rules for the loop (see PLAYBOOK.md Step 1.5 — the selection protocol governs):

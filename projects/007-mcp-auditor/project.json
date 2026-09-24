@@ -15,5 +15,11 @@
     "react"
   ],
   "demo": "pages",
-  "stack": ["React 18", "TypeScript 5", "Vite 6", "Vitest 2"]
+  "stack": [
+    "React 18",
+    "TypeScript 5",
+    "Vite 6",
+    "Vitest 2"
+  ],
+  "lane": "controls"
 }

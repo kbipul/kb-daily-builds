@@ -7,7 +7,9 @@ name: Publish daily project
 #   2. Pushes the project folder as that repo's contents
 #   3. Sets topics + enables GitHub Pages (if the project has a live demo)
 #   4. Marks it "published" in state.json
-# Then regenerates the profile README (kbipul/kbipul) with streak + table.
+# Then syncs every published repo's About line, homepage and topics from its
+# project.json, regenerates the profile README (kbipul/kbipul), and raises a
+# GitHub Issue (label loop-alert) if anything failed or PUBLISH_TOKEN is dying.
 # Requires: Actions secret PUBLISH_TOKEN (classic PAT, scopes: repo, workflow)
 
 on:
@@ -15,8 +17,16 @@ on:
     branches: [main]
     paths:
       - "projects/**"
-      - "state/**"
+      - "state/state.json"
+      - "scripts/**"
+      - ".github/workflows/publish.yml"
   workflow_dispatch:
+
+# The job pushes with PUBLISH_TOKEN; the built-in token only files alert issues,
+# which is why alerts still work on the day PUBLISH_TOKEN dies.
+permissions:
+  contents: read
+  issues: write
 
 concurrency:
   group: publish
@@ -43,6 +53,17 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: "22"
+
+      - name: Check PUBLISH_TOKEN
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: |
+          node scripts/token-check.mjs > /tmp/token.json
+          cat /tmp/token.json
+          if grep -q '"token-invalid"' /tmp/token.json; then
+            echo "::error::PUBLISH_TOKEN is missing or rejected - see the loop-alert issue."
+            exit 1
+          fi
 
       - name: Publish pending projects
         id: fanout
@@ -179,6 +200,10 @@ jobs:
             exit 1
           fi
 
+      - name: Sync repo metadata from project.json
+        continue-on-error: true
+        run: node scripts/sync-metadata.mjs
+
       - name: Update profile README (kbipul/kbipul)
         run: |
           set -euo pipefail
@@ -188,6 +213,7 @@ jobs:
 
           git clone -q "https://x-access-token:${GH_TOKEN}@github.com/$OWNER/$OWNER.git" /tmp/profile
           node scripts/generate-profile.mjs > /tmp/profile/README.md
+          node scripts/generate-profile.mjs --index > /tmp/profile/INDEX.md
           # copy brand assets if present
           if [ -d brand ] && ls brand/*.svg >/dev/null 2>&1; then
             mkdir -p /tmp/profile/brand && cp brand/*.svg /tmp/profile/brand/
@@ -198,3 +224,17 @@ jobs:
           git add -A
           git diff --cached --quiet || { git commit -q -m "Update daily-builds board"; git push -q; }
           echo "✅ Profile README updated"
+
+      - name: Raise or clear loop-alert issues
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ "$JOB_STATUS" != "success" ]; then
+            node -e 'console.log(JSON.stringify([{kind:"publish-failed",title:"Publish run failed",body:"The fan-out, profile or token step failed. Read the log: "+process.env.RUN_URL}]))' > /tmp/publish.json
+          else
+            echo "[]" > /tmp/publish.json
+          fi
+          node scripts/raise-alerts.mjs --scope publish-failed,token-invalid,token-expiring /tmp/publish.json /tmp/token.json

@@ -1,0 +1,36 @@
+name: Loop watchdog
+
+# Runs on GitHub every day at 10:00 IST, whether or not any Mac is awake or any
+# Claude session ran. Files a GitHub Issue (label loop-alert, @kbipul
+# mentioned, so it emails) when: no build for 30+ hours, a built project was
+# never published, a claimed slot was abandoned, a run left ACTION-REQUIRED.md
+# at the repo root, or PUBLISH_TOKEN is rejected or expires within 14 days.
+# Closes the issue on its own once the condition clears.
+
+on:
+  schedule:
+    - cron: "30 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - name: Token health
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: node scripts/token-check.mjs > /tmp/token.json && cat /tmp/token.json
+      - name: Loop health
+        run: node scripts/watchdog.mjs > /tmp/watchdog.json && cat /tmp/watchdog.json
+      - name: Raise or clear loop-alert issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/raise-alerts.mjs --scope no-build,fanout-stuck,claim-abandoned,action-required,token-invalid,token-expiring /tmp/watchdog.json /tmp/token.json

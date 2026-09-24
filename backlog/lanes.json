@@ -1,0 +1,648 @@
+{
+  "version": 2,
+  "adopted": "2026-09-24",
+  "about": "Source of truth for what the daily loop may build. One lane per IST weekday. The loop scores ONLY the pool of the slot's lane plus fresh signal-derived ideas that fit that lane. backlog/backlog.md is the pre-2026-09-24 archive and is not read during daily runs.",
+  "rubricVersion": 2,
+  "carryLimit": {
+    "maxLossesOnSameWeakest": 3,
+    "action": "status becomes 'retired' automatically (scripts/today.mjs reports it); the weekly audit may revive with a new angle"
+  },
+  "lanes": [
+    {
+      "key": "azure",
+      "weekday": 1,
+      "name": "Azure & Microsoft AI",
+      "scope": "Azure AI Foundry, Azure OpenAI, Agent Service, AI Search, Content Safety, Entra for AI workloads, Microsoft Agent Framework / Semantic Kernel. The build must model a Microsoft-documented behaviour.",
+      "pool": [
+        {
+          "slug": "spillover-blindspot",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Provisioned throughput with spillover: model a PTU deployment plus its standard spillover target, drive a traffic shape through it, and show cost split and what the PTU's own 429 chart stops showing.",
+          "decision": "A platform lead deciding whether to buy PTUs, enable spillover, and which dashboard to trust afterwards.",
+          "groundIn": [
+            "https://learn.microsoft.com/azure/foundry/openai/how-to/spillover-traffic-management",
+            "https://learn.microsoft.com/azure/foundry/openai/concepts/provisioned-throughput"
+          ],
+          "verified": [
+            {
+              "fact": "Spillover fires on 429 (PTU exhausted), on 400 for long-context requests a PTU cannot take (gpt-4.1 PTU supports <128K), and on 500/503.",
+              "source": "https://learn.microsoft.com/azure/foundry/openai/how-to/spillover-traffic-management",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "Spilled requests are recorded on the standard deployment with IsSpillover=True and are not counted as 429s on the provisioned deployment.",
+              "source": "https://learn.microsoft.com/azure/foundry/openai/how-to/spillover-traffic-management",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "Provisioned requests cost only the hourly PTU charge; spilled requests bill at standard token rates.",
+              "source": "https://learn.microsoft.com/azure/foundry/openai/how-to/spillover-traffic-management",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "Spillover needs a standard deployment in the same resource with a matching data-processing level; non-OpenAI Foundry models (DeepSeek, Llama) do not support it.",
+              "source": "https://learn.microsoft.com/azure/foundry/openai/concepts/provisioned-throughput",
+              "checked": "2026-09-24"
+            }
+          ]
+        },
+        {
+          "slug": "data-zone-map",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Pick a Foundry resource region and a deployment type (Global, Data Zone, Regional x standard, provisioned, batch) and see where prompts are processed versus where data rests, including which combinations do not exist.",
+          "decision": "An architect choosing a deployment type that satisfies a stated residency requirement.",
+          "groundIn": [
+            "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/deployment-types",
+            "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability"
+          ],
+          "verified": [
+            {
+              "fact": "Data Zone deployments process prompts anywhere within the US, EU (Azure EU Data Boundary, may include EFTA) or APAC zone; Microsoft can add regions to a zone without prior notice.",
+              "source": "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/deployment-types",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "Data at rest stays in the resource's geography for every deployment type; only processing location changes.",
+              "source": "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/deployment-types",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "Regional (Azure geography) processing is not available for batch deployments.",
+              "source": "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability",
+              "checked": "2026-09-24"
+            }
+          ]
+        },
+        {
+          "slug": "content-filter-bench",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Load a labelled sample set (or paste your own) and compare Foundry content-filter configurations by category and severity threshold, annotate vs block, and prompt-shield settings: what each blocks, what it misses, what it wrongly blocks.",
+          "decision": "A product owner choosing filter thresholds before launch, with the false-block cost visible.",
+          "groundIn": [
+            "Microsoft Learn: Foundry content filtering concepts and configurability (verify the current category and severity model at build time)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "ai-search-sizing",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "RAG index sizing for Azure AI Search: documents, chunking, vector dimensions and replicas in, tier and search units out, with the limit that forces each tier jump named.",
+          "decision": "An architect or budget owner choosing an AI Search tier for a RAG workload.",
+          "groundIn": [
+            "Microsoft Learn: Azure AI Search service limits and vector index size limits (verify current per-tier numbers at build time; prices are editable inputs)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "agent-identity-scope",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Model what an AI agent's Microsoft Entra identity can reach under delegated versus application permissions, and what changes when a human is or is not in the loop.",
+          "decision": "A security lead approving an agent's identity design.",
+          "groundIn": [
+            "Microsoft Learn: Microsoft Entra Agent ID and agent identity documentation (verify availability status and permission model at build time)"
+          ],
+          "verified": []
+        }
+      ]
+    },
+    {
+      "key": "controls",
+      "weekday": 2,
+      "name": "Controls that don't hold",
+      "scope": "The series' strongest thread: a control you believe you have over an AI system, and the precise documented reason it does not hold. News-driven; any vendor.",
+      "pool": [
+        {
+          "slug": "attack-window",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 45,
+              "score": 10,
+              "weakest": "timeliness"
+            }
+          ],
+          "idea": "The model refused: a refusal at turn 1 and compliance deeper in the same session are the same policy, differently situated. Walk a transcript and watch where published work puts the weak band.",
+          "decision": "A red-team lead deciding which conversation depths the eval suite must cover.",
+          "groundIn": [
+            "Recent multi-turn jailbreak research (verify dates and figures at build time; do not reuse numbers from this file)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "compositional-policy",
+          "status": "retired",
+          "history": [
+            {
+              "day": 41,
+              "score": 10,
+              "weakest": "distinctiveness"
+            },
+            {
+              "day": 43,
+              "score": 9,
+              "weakest": "distinctiveness"
+            },
+            {
+              "day": 45,
+              "score": 9,
+              "weakest": "distinctiveness"
+            }
+          ],
+          "idea": "Each step passed, the workflow did not: a multi-step agent workflow where the policy violation appears only in the composition.",
+          "decision": "An AI governance lead deciding whether per-step checks are sufficient.",
+          "groundIn": [
+            "The September 2026 compositional-policy paper cited in the Day 041 rationale"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "assessor-access",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 45,
+              "score": 10,
+              "weakest": "demo"
+            }
+          ],
+          "idea": "What your assessor could not check: pick an access tier (API only, logits, fine-tuning, weights, training telemetry, internal docs, right to publish) and see which of OpenAI's four named assessment areas it can test in principle. Needs an interaction that is not a matrix.",
+          "decision": "A board or risk committee judging what a third-party AI assessment actually established.",
+          "groundIn": [
+            "https://openai.com/index/priorities-principles-third-party-assessments/"
+          ],
+          "verified": []
+        }
+      ]
+    },
+    {
+      "key": "multicloud",
+      "weekday": 3,
+      "name": "Azure x AWS x GCP",
+      "scope": "The same decision on three clouds, modelled from each provider's own documentation. Azure is always one of the three.",
+      "pool": [
+        {
+          "slug": "residency-three-clouds",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "One model family, three clouds: where inference is processed under Azure Global/Data Zone/Regional, Bedrock in-region vs cross-region inference profiles, and Vertex AI regional vs global endpoints.",
+          "decision": "An enterprise architect choosing a cloud and deployment option for a residency requirement.",
+          "groundIn": [
+            "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/deployment-types",
+            "AWS Bedrock cross-region inference docs (verify profile types at build time)",
+            "Google Vertex AI locations and global endpoint docs (verify at build time)"
+          ],
+          "verified": [
+            {
+              "fact": "Azure Data Zone processing spans the whole US, EU or APAC zone.",
+              "source": "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/deployment-types",
+              "checked": "2026-09-24"
+            }
+          ]
+        },
+        {
+          "slug": "commitment-compare",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Azure PTU vs Bedrock Provisioned Throughput vs Vertex Provisioned Throughput: commitment unit, term and break-even against on-demand for your own traffic shape. All prices are editable inputs with source and date shown.",
+          "decision": "A FinOps or platform lead deciding whether and where to commit.",
+          "groundIn": [
+            "Each provider's provisioned-throughput docs and pricing pages (verify units and terms at build time)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "guardrails-portability",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Write one policy (denied topics, PII handling, prompt-attack detection, grounding check) and see which clauses Azure AI Content Safety, Amazon Bedrock Guardrails and Google's safety tooling can express, and which silently cannot.",
+          "decision": "A security architect deciding whether a guardrail policy is portable or cloud-bound.",
+          "groundIn": [
+            "Each provider's guardrail/safety configuration docs (verify at build time)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "agent-iam-translate",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "An agent needs a short list of actions. Find the smallest built-in role that grants them on Azure RBAC, AWS managed policies and GCP predefined roles, and show what each over-grants.",
+          "decision": "A cloud security lead approving agent permissions across three clouds.",
+          "groundIn": [
+            "Published built-in role definitions for each cloud (verify at build time)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "batch-window-planner",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Plan an offline inference job across Azure batch, Bedrock batch and Vertex batch: discount, completion window, and which residency options exist for batch at all.",
+          "decision": "A data lead choosing where to run a large offline scoring job.",
+          "groundIn": [
+            "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability",
+            "AWS and GCP batch inference docs (verify at build time)"
+          ],
+          "verified": [
+            {
+              "fact": "Azure regional (Azure geography) processing is not available for batch deployments.",
+              "source": "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability",
+              "checked": "2026-09-24"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "m365",
+      "weekday": 4,
+      "name": "M365, Copilot & Graph",
+      "scope": "Microsoft 365 Copilot readiness and governance, SharePoint/OneDrive oversharing, Purview labels and DLP for AI, Microsoft Graph permissions. The daily reality of an enterprise IT Director.",
+      "pool": [
+        {
+          "slug": "rcd-reality-check",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Restricted SharePoint Search is retiring and Restricted Content Discovery replaces it. Simulate a tenant's sites and users and show what Copilot can still surface under RCD: content a user owns or recently touched, OneDrive (not covered), and sites still propagating.",
+          "decision": "An IT Director planning a Copilot rollout, deciding what RCD buys during remediation and what it does not.",
+          "groundIn": [
+            "https://learn.microsoft.com/sharepoint/restricted-content-discovery",
+            "https://learn.microsoft.com/sharepoint/restricted-sharepoint-search"
+          ],
+          "verified": [
+            {
+              "fact": "Restricted SharePoint Search is retiring: starting July 31, 2026, new enablement is blocked; Microsoft points to Restricted Content Discovery.",
+              "source": "https://learn.microsoft.com/sharepoint/restricted-sharepoint-search",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "RCD does not change permissions; users can still discover content they own or have recently interacted with.",
+              "source": "https://learn.microsoft.com/sharepoint/restricted-content-discovery",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "RCD applies only to SharePoint sites, not OneDrive.",
+              "source": "https://learn.microsoft.com/sharepoint/restricted-content-discovery",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "For sites with more than 500,000 items an RCD update can take more than a week to be reflected in search and Copilot.",
+              "source": "https://learn.microsoft.com/sharepoint/restricted-content-discovery",
+              "checked": "2026-09-24"
+            }
+          ]
+        },
+        {
+          "slug": "label-inheritance",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Draft with Copilot from several labelled files and see which sensitivity label the new document inherits, who can open it, and where the label priority order you configured produces a surprising result.",
+          "decision": "A compliance admin checking label priority order before Copilot drafting goes live.",
+          "groundIn": [
+            "https://learn.microsoft.com/purview/ai-m365-copilot",
+            "https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-architecture-data-protection-auditing"
+          ],
+          "verified": [
+            {
+              "fact": "When Copilot creates content from labelled sources, the highest-priority sensitivity label is inherited, with its protection settings; users can override unless labelling is mandatory.",
+              "source": "https://learn.microsoft.com/purview/ai-m365-copilot",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "With encryption, the user needs EXTRACT and VIEW usage rights for Copilot to use the content; user-defined label permissions block Copilot agents from reading the file.",
+              "source": "https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-architecture-data-protection-auditing",
+              "checked": "2026-09-24"
+            }
+          ]
+        },
+        {
+          "slug": "sites-selected-illusion",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Paste the Graph permissions granted to an app registration and see its effective reach: Sites.Selected stops being a boundary the moment a broader permission such as Files.Read.All is also granted. Suggest the least-privilege set.",
+          "decision": "An identity admin deciding whether to grant admin consent.",
+          "groundIn": [
+            "https://learn.microsoft.com/graph/permissions-reference",
+            "https://learn.microsoft.com/graph/best-practices-graph-permission"
+          ],
+          "verified": [
+            {
+              "fact": "Graph permissions are additive; Sites.Selected does not restrict access when broader permissions like Files.Read.All are also granted.",
+              "source": "https://learn.microsoft.com/answers/a/12354681",
+              "checked": "2026-09-24"
+            }
+          ],
+          "note": "The additive-permissions fact is from a Microsoft Q&A accepted answer. Confirm it against the permissions reference before building."
+        },
+        {
+          "slug": "overshare-radar",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Model sites with inheritance, broken inheritance, 'Everyone except external users', org-wide and Anyone links, and ownerless sites. See which files each persona's Copilot could ground on, ranked by the documented risk signals.",
+          "decision": "An IT Director choosing which sites to remediate first before Copilot rollout.",
+          "groundIn": [
+            "https://learn.microsoft.com/microsoft-365/copilot/get-ready-copilot-sharepoint-advanced-management"
+          ],
+          "verified": [
+            {
+              "fact": "Microsoft lists oversharing risk signals: Anyone/Everyone/org-wide links, large audiences with excessive permissions, broken inheritance, sensitive content with weak protection, unlabelled or public sites, ownerless or inactive sites.",
+              "source": "https://learn.microsoft.com/microsoft-365/copilot/get-ready-copilot-sharepoint-advanced-management",
+              "checked": "2026-09-24"
+            }
+          ]
+        },
+        {
+          "slug": "dlp-for-copilot",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Purview DLP with the Copilot location: which labelled or sensitive items a policy excludes from Copilot grounding, and which interim controls (RCD, DLP, access restriction) overlap or leave a gap.",
+          "decision": "A security lead layering interim Copilot protections.",
+          "groundIn": [
+            "https://learn.microsoft.com/microsoft-365/copilot/configure-secure-governed-data-foundation-microsoft-365-copilot"
+          ],
+          "verified": [
+            {
+              "fact": "Microsoft's Copilot foundation guidance lists RCD and Purview DLP for Copilot as interim protections to exclude sensitive content from Copilot grounding.",
+              "source": "https://learn.microsoft.com/microsoft-365/copilot/configure-secure-governed-data-foundation-microsoft-365-copilot",
+              "checked": "2026-09-24"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "india",
+      "weekday": 5,
+      "name": "India",
+      "scope": "Indic languages, DPDP, IndiaAI Mission models, India's digital public infrastructure, and what global AI platforms mean when the user is in India. Replaces the every-14th-day flagship rule: Friday is the flagship lane every week.",
+      "pool": [
+        {
+          "slug": "apac-is-not-india",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "A Foundry resource in Central India with a Data Zone deployment is processed anywhere in the APAC data zone, not in India; batch has no regional option at all. Pick an Indian workload and see which deployment types keep processing in-country, next to the DPDP duties that attach.",
+          "decision": "An Indian CIO or DPO choosing an Azure AI deployment type for regulated data.",
+          "groundIn": [
+            "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/deployment-types",
+            "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability",
+            "DPDP Act 2023 and DPDP Rules 2025 (verify obligations and dates at build time)"
+          ],
+          "verified": [
+            {
+              "fact": "Data Zone deployments can be processed anywhere in the APAC zone, and Microsoft can add regions to a zone without prior notice.",
+              "source": "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/deployment-types",
+              "checked": "2026-09-24"
+            },
+            {
+              "fact": "Regional processing is not available for batch deployments.",
+              "source": "https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability",
+              "checked": "2026-09-24"
+            }
+          ]
+        },
+        {
+          "slug": "dpdp-erasure-trace",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 40,
+              "score": 10,
+              "weakest": "timeliness"
+            },
+            {
+              "day": 41,
+              "score": 10,
+              "weakest": "timeliness"
+            },
+            {
+              "day": 43,
+              "score": 10,
+              "weakest": "timeliness"
+            },
+            {
+              "day": 45,
+              "score": 10,
+              "weakest": "timeliness"
+            }
+          ],
+          "idea": "Trace one data principal's erasure request under India's DPDP Act through a RAG stack (source store, chunk cache, embeddings, summaries, eval sets, logs) and see which copies the request actually reaches.",
+          "decision": "An Indian DPO or platform lead scoping what a DPDP erasure request has to touch in an AI system.",
+          "groundIn": [
+            "DPDP Act 2023 s12 and DPDP Rules 2025 (verify obligations and commencement dates at build time)",
+            "Vendor docs for each store modelled"
+          ],
+          "verified": [],
+          "note": "Re-angled 2026-09-24 from controls/deletion-trace after 4 losses on Timeliness. History kept so the carry limit still applies.",
+          "reangledAtDay": 45
+        },
+        {
+          "slug": "sovereign-stack-passport",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 42,
+              "score": 10,
+              "weakest": "timeliness"
+            }
+          ],
+          "idea": "Pick an Indian deployment scenario and see which released IndiaAI-backed models can serve it: licence, weight availability, Indic language coverage, residency, and the DPDP duty that attaches.",
+          "decision": "An Indian enterprise choosing between sovereign and global models.",
+          "groundIn": [
+            "IndiaAI Mission announcements and model cards (verify releases at build time)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "script-tax",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 42,
+              "score": 9,
+              "weakest": "timeliness"
+            }
+          ],
+          "idea": "What Indic scripts cost in tokens across published tokenizers, in-browser: the same sentence in English, Hindi, Tamil and Bengali, priced side by side.",
+          "decision": "A product lead budgeting an Indian-language AI feature.",
+          "groundIn": [
+            "Published tokenizer vocabularies loadable in the browser; provider price pages as editable inputs"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "anuvaad-checker",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 28,
+              "score": 10,
+              "weakest": "timeliness"
+            },
+            {
+              "day": 42,
+              "score": 9,
+              "weakest": "timeliness"
+            }
+          ],
+          "idea": "Client-side quality inspector for Indic machine-translation output: script consistency, code-mix leakage, number/date/currency localisation errors, no reference translation needed.",
+          "decision": "A localisation lead deciding whether MT output can ship without human review.",
+          "groundIn": [
+            "Unicode script ranges; Indian numbering and date conventions"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "hinglish-bridge",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 28,
+              "score": 8,
+              "weakest": "distinctiveness"
+            }
+          ],
+          "idea": "Hinglish to Devanagari transliteration and normalisation as you type, with the ambiguity cases shown rather than hidden.",
+          "decision": "A team deciding how to normalise Hinglish input before search or classification.",
+          "groundIn": [
+            "Published transliteration schemes"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "upi-guard",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 28,
+              "score": 7,
+              "weakest": "demo"
+            }
+          ],
+          "idea": "Rebuild as a browser demo: anomaly patterns on a synthetic UPI-scale transaction stream, with the detection rules and false-positive cost visible.",
+          "decision": "A fintech risk lead choosing alert thresholds.",
+          "groundIn": [
+            "NPCI public UPI statistics for scale; synthetic data only"
+          ],
+          "verified": [],
+          "note": "Previously a .NET CLI. Must be a React demo now."
+        },
+        {
+          "slug": "kisan-sahayak",
+          "status": "blocked",
+          "history": [],
+          "idea": "Bilingual Hindi/English retrieval over public agri-scheme documents with citations.",
+          "decision": "n/a until a redistributable corpus exists.",
+          "groundIn": [],
+          "verified": [],
+          "note": "Blocked on a redistributable public corpus small enough to ship in the repo."
+        }
+      ]
+    },
+    {
+      "key": "director",
+      "weekday": 6,
+      "name": "Director's toolkit",
+      "scope": "Tools an IT or AI Director uses to make a call: cost, risk, reliability, evaluation budgets, build-vs-buy. Every number that can change is an editable input with its source.",
+      "pool": [
+        {
+          "slug": "eval-sample-size",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "How many eval cases do you need to detect a regression of X points at confidence Y? Paired vs unpaired, flaky graders, and what your current suite can and cannot detect.",
+          "decision": "An AI lead setting the eval budget and release gate.",
+          "groundIn": [
+            "Standard power-analysis formulas, cited inline"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "ai-sla-math",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Composite availability of an AI application (model endpoint, retrieval, app host, fallback) in series and parallel, with published SLAs as editable inputs.",
+          "decision": "A Director deciding what SLA the business can actually be promised.",
+          "groundIn": [
+            "Each service's published SLA page (editable inputs, dated)"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "ai-risk-tier",
+          "status": "unbuilt",
+          "history": [
+            {
+              "day": 8,
+              "score": 9,
+              "weakest": "distinctiveness"
+            }
+          ],
+          "idea": "Describe an AI use case and get its EU AI Act risk tier, the obligations that attach and their dates, plus the matching NIST AI RMF functions.",
+          "decision": "A governance lead triaging an AI use-case intake.",
+          "groundIn": [
+            "EU AI Act text and implementation timeline; NIST AI RMF 1.0"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "build-buy-copilot",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Three-year TCO: M365 Copilot seats vs a custom Azure OpenAI app vs self-hosting an open model, with a sensitivity chart showing which assumption flips the answer.",
+          "decision": "A CIO choosing how to deliver an internal AI assistant.",
+          "groundIn": [
+            "Vendor price pages as editable, dated inputs"
+          ],
+          "verified": []
+        },
+        {
+          "slug": "ai-chargeback",
+          "status": "unbuilt",
+          "history": [],
+          "idea": "Allocate a shared AI bill (shared key, shared PTU) to teams under showback, proportional, and reserved-plus-burst models, and see how each distorts behaviour.",
+          "decision": "A FinOps lead picking an internal chargeback model for AI spend.",
+          "groundIn": [
+            "FinOps Foundation allocation guidance"
+          ],
+          "verified": []
+        }
+      ]
+    },
+    {
+      "key": "open",
+      "weekday": 0,
+      "name": "Open: best signal of the week",
+      "scope": "Sunday. Any lane's pool plus any fresh signal. The weekly audit also runs this evening.",
+      "pool": []
+    }
+  ],
+  "retired": [
+    {
+      "slug": "summarize-this",
+      "reason": "4/12 on six consecutive slates (Positioning 1, Timeliness 0, Distinctiveness 1). Retired 2026-09-24 with the whole pre-lanes Week 1 block."
+    },
+    {
+      "slug": "lingua-detect",
+      "reason": "4/12 on six consecutive slates; overlaps Day 014 bhasha-detect. Retired 2026-09-24."
+    },
+    {
+      "slug": "google-home-mcp-guardrails",
+      "reason": "Fell 10 -> 7; smart-home framing aged out and the MCP-permission mechanic is covered by Days 007/029/038. Retired 2026-09-24."
+    },
+    {
+      "slug": "aport-vault-gate",
+      "reason": "Distinctiveness 1 against Day 029 and the unbuilt tool-call-firewall. Retired 2026-09-24."
+    },
+    {
+      "slug": "repricing-board",
+      "reason": "Distinctiveness 1 against Days 004/022/024. Retired 2026-09-24."
+    },
+    {
+      "slug": "compositional-policy",
+      "reason": "Lost 3x on distinctiveness (Days 041/043/045) against Day 038 still-untrusted and Day 032 handoff-inspector. Retired under the carry limit on 2026-09-24."
+    }
+  ]
+}
