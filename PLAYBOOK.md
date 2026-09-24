@@ -1,5 +1,8 @@
 # kb-daily-builds — LOOP PLAYBOOK (v2, 2026-09-24)
 
+> **Section numbers changed in v2.** If your prompt says "Section 2 (the daily
+> loop)", read **§3**. If it says "Section 7 (cloud routine mode)", read **§9**.
+
 The single source of truth for the automated daily-project system. Scheduled
 sessions: **follow this document exactly.** It assumes no memory of any
 previous conversation. Read `KNOWN-ENVIRONMENT.md` once per run as well; it
